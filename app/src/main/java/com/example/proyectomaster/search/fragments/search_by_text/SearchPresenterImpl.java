@@ -1,8 +1,8 @@
-package com.example.proyectomaster.search.fragments;
+package com.example.proyectomaster.search.fragments.search_by_text;
 
 import com.example.proyectomaster.lib.EventBus;
-import com.example.proyectomaster.search.fragments.events.SearchEvent;
-import com.example.proyectomaster.search.fragments.ui.SearchBytTextView;
+import com.example.proyectomaster.search.fragments.search_by_text.events.SearchEvent;
+import com.example.proyectomaster.search.fragments.search_by_text.ui.SearchBytTextView;
 
 import org.greenrobot.eventbus.Subscribe;
 

@@ -9,4 +9,6 @@ public interface SearchActivityView {
     void setPlaces(List<Result> data);
 
     void showProgressBar();
+
+    void hideProgressBar();
 }

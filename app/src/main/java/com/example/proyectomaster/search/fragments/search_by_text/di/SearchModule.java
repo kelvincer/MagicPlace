@@ -1,23 +1,22 @@
-package com.example.proyectomaster.search.fragments.di;
+package com.example.proyectomaster.search.fragments.search_by_text.di;
 
-import com.example.proyectomaster.api.PlaceApiClient;
-import com.example.proyectomaster.api.PlaceApiService;
+import com.example.proyectomaster.search.fragments.search_by_text.api.PlaceApiService;
 import com.example.proyectomaster.lib.EventBus;
 import com.example.proyectomaster.lib.di.LibsModule;
-import com.example.proyectomaster.search.fragments.SearchInteractor;
-import com.example.proyectomaster.search.fragments.SearchInteractorImpl;
-import com.example.proyectomaster.search.fragments.SearchPresenter;
-import com.example.proyectomaster.search.fragments.SearchPresenterImpl;
-import com.example.proyectomaster.search.fragments.SearchRepository;
-import com.example.proyectomaster.search.fragments.SearchRepositoryImpl;
-import com.example.proyectomaster.search.fragments.ui.SearchBytTextView;
+import com.example.proyectomaster.search.fragments.search_by_text.SearchInteractor;
+import com.example.proyectomaster.search.fragments.search_by_text.SearchInteractorImpl;
+import com.example.proyectomaster.search.fragments.search_by_text.SearchPresenter;
+import com.example.proyectomaster.search.fragments.search_by_text.SearchPresenterImpl;
+import com.example.proyectomaster.search.fragments.search_by_text.SearchRepository;
+import com.example.proyectomaster.search.fragments.search_by_text.SearchRepositoryImpl;
+import com.example.proyectomaster.search.fragments.search_by_text.ui.SearchBytTextView;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = {LibsModule.class})
+@Module(includes = {LibsModule.class, PlaceApiModule.class})
 public class SearchModule {
 
     SearchBytTextView searchBytTextView;
@@ -50,12 +49,5 @@ public class SearchModule {
     @Provides
     public SearchRepository provideSearchRepository(EventBus eventBus, PlaceApiService service) {
         return new SearchRepositoryImpl(eventBus, service);
-    }
-
-    @Singleton
-    @Provides
-    PlaceApiService providePlaceApiService() {
-        PlaceApiClient client = new PlaceApiClient();
-        return client.getPlaceApiClient();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.proyectomaster.search.fragments.ui;
+package com.example.proyectomaster.search.fragments.search_by_text.ui;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -16,10 +16,10 @@ import com.example.proyectomaster.R;
 import com.example.proyectomaster.lib.di.LibsModule;
 import com.example.proyectomaster.model_place_api.Result;
 import com.example.proyectomaster.search.activity.ui.SearchActivity;
-import com.example.proyectomaster.search.fragments.SearchPresenter;
-import com.example.proyectomaster.search.fragments.di.DaggerSearchComponent;
-import com.example.proyectomaster.search.fragments.di.SearchComponent;
-import com.example.proyectomaster.search.fragments.di.SearchModule;
+import com.example.proyectomaster.search.fragments.search_by_text.SearchPresenter;
+import com.example.proyectomaster.search.fragments.search_by_text.di.DaggerSearchComponent;
+import com.example.proyectomaster.search.fragments.search_by_text.di.SearchComponent;
+import com.example.proyectomaster.search.fragments.search_by_text.di.SearchModule;
 
 import java.util.List;
 
@@ -80,9 +80,14 @@ public class SearchByTextFragment extends Fragment implements SearchBytTextView 
             @Override
             public void onSearchAction(String currentQuery) {
                 Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
+                showProgressBar();
                 searchPresenter.getPlaces(currentQuery);
             }
         });
+    }
+
+    private void showProgressBar() {
+        ((SearchActivity) getActivity()).showProgressBar();
     }
 
     private void setupInjection() {
@@ -107,7 +112,12 @@ public class SearchByTextFragment extends Fragment implements SearchBytTextView 
 
     @Override
     public void setData(List<Result> results) {
+        hideProgressBar();
         ((SearchActivity) getActivity()).setPlaces(results);
+    }
+
+    private void hideProgressBar() {
+        ((SearchActivity) getActivity()).hideProgressBar();
     }
 
     @OnClick(R.id.filter_button)

@@ -1,4 +1,4 @@
-package com.example.proyectomaster.search.fragments.events;
+package com.example.proyectomaster.search.fragments.search_by_text.events;
 
 import com.example.proyectomaster.model_place_api.Result;
 

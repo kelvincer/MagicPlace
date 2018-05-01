@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.SideFilterFragment;
@@ -17,7 +19,7 @@ import com.example.proyectomaster.search.activity.SearchActivityPresenter;
 import com.example.proyectomaster.search.activity.adapters.PlacesApiAdapter;
 import com.example.proyectomaster.search.activity.di.DaggerSearchActivityComponent;
 import com.example.proyectomaster.search.activity.di.SearchActivityModule;
-import com.example.proyectomaster.search.fragments.ui.SearchByTextFragment;
+import com.example.proyectomaster.search.fragments.search_by_text.ui.SearchByTextFragment;
 
 import java.util.List;
 
@@ -38,6 +40,8 @@ public class SearchActivity extends AppCompatActivity implements SideFilterFragm
     SearchActivityPresenter presenter;
     @Inject
     PlacesApiAdapter adapter;
+    @BindView(R.id.progressbar)
+    ProgressBar progressbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +128,11 @@ public class SearchActivity extends AppCompatActivity implements SideFilterFragm
 
     @Override
     public void showProgressBar() {
+        progressbar.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    public void hideProgressBar() {
+        progressbar.setVisibility(View.INVISIBLE);
     }
 }

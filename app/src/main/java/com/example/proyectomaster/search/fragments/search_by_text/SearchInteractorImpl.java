@@ -1,4 +1,4 @@
-package com.example.proyectomaster.search.fragments;
+package com.example.proyectomaster.search.fragments.search_by_text;
 
 public class SearchInteractorImpl implements SearchInteractor {
 
@@ -6,6 +6,7 @@ public class SearchInteractorImpl implements SearchInteractor {
 
     public SearchInteractorImpl(SearchRepository searchRepository) {
         this.searchRepository = searchRepository;
+
     }
 
     @Override

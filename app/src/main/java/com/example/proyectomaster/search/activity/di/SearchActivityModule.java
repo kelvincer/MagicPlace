@@ -1,7 +1,5 @@
 package com.example.proyectomaster.search.activity.di;
 
-import com.example.proyectomaster.api.PlaceApiClient;
-import com.example.proyectomaster.api.PlaceApiService;
 import com.example.proyectomaster.lib.EventBus;
 import com.example.proyectomaster.model_place_api.Result;
 import com.example.proyectomaster.search.activity.SearchActivityInteractor;
@@ -12,7 +10,6 @@ import com.example.proyectomaster.search.activity.SearchActivityRepository;
 import com.example.proyectomaster.search.activity.SearchActivityRepositoryImpl;
 import com.example.proyectomaster.search.activity.adapters.PlacesApiAdapter;
 import com.example.proyectomaster.search.activity.ui.SearchActivityView;
-import com.example.proyectomaster.search.fragments.SearchPresenter;
 
 import java.util.ArrayList;
 import java.util.List;

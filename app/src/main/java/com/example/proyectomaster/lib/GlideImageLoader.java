@@ -9,6 +9,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.proyectomaster.R;
 
 /**
  * Created by ykro.
@@ -26,6 +27,7 @@ public class GlideImageLoader implements ImageLoader {
 
         RequestOptions requestOptions = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.background_blur)
                 .centerCrop();
 
         if (onFinishedImageLoadingListener != null) {

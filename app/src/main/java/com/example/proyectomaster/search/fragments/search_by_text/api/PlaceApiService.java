@@ -1,4 +1,4 @@
-package com.example.proyectomaster.api;
+package com.example.proyectomaster.search.fragments.search_by_text.api;
 
 import com.example.proyectomaster.response.PlaceApiResponse;
 
