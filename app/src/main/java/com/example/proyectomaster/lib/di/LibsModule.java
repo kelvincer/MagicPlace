@@ -2,6 +2,7 @@ package com.example.proyectomaster.lib.di;
 
 import android.app.Activity;
 
+import com.bumptech.glide.Glide;
 import com.example.proyectomaster.lib.EventBus;
 import com.example.proyectomaster.lib.GlideImageLoader;
 import com.example.proyectomaster.lib.GreenRobotEventBus;

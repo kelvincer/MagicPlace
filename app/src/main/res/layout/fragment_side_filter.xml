@@ -1,29 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
     android:padding="4dp"
-    tools:context=".SideFilterFragment">
+    tools:context=".search.fragments.filter.SideFilterFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:id="@+id/lnl_source"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txv_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fuente" />
+
+        <belka.us.androidtoggleswitch.widgets.ToggleSwitch
+            android:id="@+id/tls_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            custom:layout_constraintTop_toBottomOf="@+id/txv_source"
+            custom:textToggleLeft="Google Place"
+            custom:textToggleRight="Geonames"
+            custom:toggleWidth="120dp" />
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:layout_marginTop="8dp"
-        android:orientation="horizontal">
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        custom:layout_constraintTop_toBottomOf="@id/lnl_source">
 
         <TextView
+            android:id="@+id/txv_form"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Buscar por Localización"/>
+            android:text="Forma" />
 
-        <Switch
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
+        <belka.us.androidtoggleswitch.widgets.ToggleSwitch
+            android:id="@+id/tls_form"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            custom:layout_constraintTop_toBottomOf="@+id/txv_source"
+            custom:textToggleLeft="TEXTO"
+            custom:textToggleRight="LOCALIZACIÓN"
+            custom:toggleWidth="120dp" />
 
     </LinearLayout>
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>

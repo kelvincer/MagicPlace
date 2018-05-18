@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.model_place_api.Result;
 
@@ -43,14 +44,24 @@ public class PlacesApiAdapter extends RecyclerView.Adapter<PlacesApiAdapter.View
     }
 
     public void updateData(List<Result> results) {
-        this.results = results;
+        this.results.addAll(results);
         notifyDataSetChanged();
+    }
+
+    public void clearData() {
+        final int size = results.size();
+        results.clear();
+        notifyItemRangeRemoved(0, size);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.txv_name)
         TextView txvName;
+        @BindView(R.id.txv_distance)
+        TextView txvDistance;
+        @BindView(R.id.txv_address)
+        TextView txvAddress;
 
         public ViewHolder(View itemView) {
 
@@ -60,6 +71,8 @@ public class PlacesApiAdapter extends RecyclerView.Adapter<PlacesApiAdapter.View
 
         public void bindItem(Result result) {
             txvName.setText(result.getName());
+            txvDistance.setText((Helper.getDistance(result.getGeometry().getLocation())));
+            txvAddress.setText(result.getFormattedAddress());
         }
     }
 }

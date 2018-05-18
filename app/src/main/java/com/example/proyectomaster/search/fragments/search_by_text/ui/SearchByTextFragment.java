@@ -12,14 +12,15 @@ import android.widget.Toast;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.lib.di.LibsModule;
 import com.example.proyectomaster.model_place_api.Result;
 import com.example.proyectomaster.search.activity.ui.SearchActivity;
-import com.example.proyectomaster.search.fragments.search_by_text.SearchPresenter;
-import com.example.proyectomaster.search.fragments.search_by_text.di.DaggerSearchComponent;
-import com.example.proyectomaster.search.fragments.search_by_text.di.SearchComponent;
-import com.example.proyectomaster.search.fragments.search_by_text.di.SearchModule;
+import com.example.proyectomaster.search.fragments.search_by_text.TextSearchPresenter;
+import com.example.proyectomaster.search.fragments.search_by_text.di.DaggerTextSearchComponent;
+import com.example.proyectomaster.search.fragments.search_by_text.di.TextSearchComponent;
+import com.example.proyectomaster.search.fragments.search_by_text.di.TextSearchModule;
 
 import java.util.List;
 
@@ -34,12 +35,12 @@ public class SearchByTextFragment extends Fragment implements SearchBytTextView 
 
     @BindView(R.id.floating_search_view)
     FloatingSearchView floatingSearchView;
-    @BindView(R.id.filter_button)
+    @BindView(R.id.filter_btn)
     Button filterButton;
     @BindView(R.id.parent_view)
     RelativeLayout parentView;
     @Inject
-    SearchPresenter searchPresenter;
+    TextSearchPresenter searchPresenter;
     Unbinder unbinder;
 
     public static Fragment newInstance() {
@@ -79,11 +80,25 @@ public class SearchByTextFragment extends Fragment implements SearchBytTextView 
 
             @Override
             public void onSearchAction(String currentQuery) {
-                Toast.makeText(getActivity(), "SEARCH", Toast.LENGTH_SHORT).show();
-                showProgressBar();
-                searchPresenter.getPlaces(currentQuery);
+                newSearch(currentQuery);
             }
         });
+    }
+
+    private void newSearch(String currentQuery) {
+        CommonHelper.NEXT_PAGE_TOKEN = null;
+        clearData();
+        showProgressBar();
+        CommonHelper.QUERY = currentQuery;
+        findPlaces(currentQuery);
+    }
+
+    private void clearData() {
+        ((SearchActivity) getActivity()).clearData();
+    }
+
+    public void findPlaces(String query) {
+        searchPresenter.getPlaces(query);
     }
 
     private void showProgressBar() {
@@ -92,8 +107,8 @@ public class SearchByTextFragment extends Fragment implements SearchBytTextView 
 
     private void setupInjection() {
 
-        SearchComponent component = DaggerSearchComponent.builder()
-                .searchModule(new SearchModule(this))
+        TextSearchComponent component = DaggerTextSearchComponent.builder()
+                .textSearchModule(new TextSearchModule(this))
                 .libsModule(new LibsModule(getActivity()))
                 .build();
         component.inject(this);
@@ -111,6 +126,11 @@ public class SearchByTextFragment extends Fragment implements SearchBytTextView 
     }
 
     @Override
+    public void showErrorMessage() {
+        Toast.makeText(getActivity(), "ERROR ON APP", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void setData(List<Result> results) {
         hideProgressBar();
         ((SearchActivity) getActivity()).setPlaces(results);
@@ -120,8 +140,9 @@ public class SearchByTextFragment extends Fragment implements SearchBytTextView 
         ((SearchActivity) getActivity()).hideProgressBar();
     }
 
-    @OnClick(R.id.filter_button)
+    @OnClick(R.id.filter_btn)
     public void onViewClicked() {
+        ((SearchActivity) getActivity()).hideKeyboard();
         ((SearchActivity) getActivity()).openDrawer();
     }
 

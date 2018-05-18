@@ -6,17 +6,17 @@ import com.example.proyectomaster.search.fragments.search_by_text.ui.SearchBytTe
 
 import org.greenrobot.eventbus.Subscribe;
 
-public class SearchPresenterImpl implements SearchPresenter {
+public class TextSearchPresenterImpl implements TextSearchPresenter {
 
     private EventBus eventBus;
     private SearchBytTextView searchBytTextView;
-    private SearchInteractor searchInteractor;
+    private SearchGoogleInteractor searchGoogleInteractor;
 
-    public SearchPresenterImpl(EventBus eventBus, SearchBytTextView searchBytTextView, SearchInteractor searchInteractor) {
+    public TextSearchPresenterImpl(EventBus eventBus, SearchBytTextView searchBytTextView, SearchGoogleInteractor searchGoogleInteractor) {
 
         this.eventBus = eventBus;
         this.searchBytTextView = searchBytTextView;
-        this.searchInteractor = searchInteractor;
+        this.searchGoogleInteractor = searchGoogleInteractor;
     }
 
     @Override
@@ -31,12 +31,20 @@ public class SearchPresenterImpl implements SearchPresenter {
 
     @Override
     public void getPlaces(String query) {
-        searchInteractor.execute(query);
+        searchGoogleInteractor.execute(query);
     }
 
     @Subscribe
     @Override
     public void onEventMainThread(SearchEvent event) {
-        searchBytTextView.setData(event.getData());
+
+        switch (event.getType()) {
+            case SearchEvent.GET_EVENT:
+                searchBytTextView.setData(event.getData());
+                break;
+            case SearchEvent.ERROR:
+                searchBytTextView.showErrorMessage();
+                break;
+        }
     }
 }

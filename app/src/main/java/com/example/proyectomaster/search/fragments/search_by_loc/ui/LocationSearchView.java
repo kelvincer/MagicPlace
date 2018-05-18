@@ -1,12 +1,12 @@
-package com.example.proyectomaster.search.fragments.search_by_text.ui;
+package com.example.proyectomaster.search.fragments.search_by_loc.ui;
 
 import com.example.proyectomaster.model_place_api.Result;
 
 import java.util.List;
 
-public interface SearchBytTextView {
+public interface LocationSearchView {
 
     void showMessage();
-    void showErrorMessage();
+    void showErrorMessage(String error);
     void setData(List<Result> results);
 }

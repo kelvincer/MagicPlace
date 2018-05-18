@@ -1,6 +1,7 @@
-package com.example.proyectomaster.search.fragments.search_by_text.di;
+package com.example.proyectomaster.search.fragments.search_by_loc.di;
 
 import com.example.proyectomaster.ConstantsHelper;
+import com.example.proyectomaster.search.fragments.search_by_loc.api.GooglePlaceLocationApiService;
 import com.example.proyectomaster.search.fragments.search_by_text.api.GooglePlaceTextApiService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,8 +18,8 @@ public class PlaceApiModule {
 
     @Singleton
     @Provides
-    public GooglePlaceTextApiService geonameServiceApi(Retrofit retrofit) {
-        return retrofit.create(GooglePlaceTextApiService.class);
+    public GooglePlaceLocationApiService geonameServiceApi(Retrofit retrofit) {
+        return retrofit.create(GooglePlaceLocationApiService.class);
     }
 
     @Singleton

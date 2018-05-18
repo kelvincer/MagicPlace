@@ -1,4 +1,4 @@
-package com.example.proyectomaster.search.fragments.search_by_text.events;
+package com.example.proyectomaster.search.fragments.search_by_loc.events;
 
 import com.example.proyectomaster.model_place_api.Result;
 
@@ -36,5 +36,4 @@ public class SearchEvent {
     public void setMessage(String message) {
         this.message = message;
     }
-
 }

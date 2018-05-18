@@ -2,7 +2,7 @@ package com.example.proyectomaster.search.fragments.search_by_text;
 
 import com.example.proyectomaster.search.fragments.search_by_text.events.SearchEvent;
 
-public interface SearchPresenter {
+public interface TextSearchPresenter {
 
     void onCreate();
 
