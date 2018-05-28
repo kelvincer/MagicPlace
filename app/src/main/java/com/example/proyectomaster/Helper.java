@@ -1,7 +1,7 @@
 package com.example.proyectomaster;
 
 
-import com.example.proyectomaster.model_place_api.Location;
+import com.example.proyectomaster.search.entities.Location;
 
 public class Helper {
 
@@ -16,5 +16,12 @@ public class Helper {
             return String.format("%.2fkm", d / 1000);
         } else
             return "NO LOCATION";
+    }
+
+    public static String generateUrl(String photoReference) {
+        String url = String.format("https://maps.googleapis.com/maps/api/place/photo?photoreference=%s&key=AIzaSyCwmYvGIV7owfcc7muneajVaIz6cXKA8Wg" +
+                "&maxheight=800", photoReference);
+
+        return url;
     }
 }

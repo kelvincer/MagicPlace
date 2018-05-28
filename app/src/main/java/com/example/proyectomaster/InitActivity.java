@@ -42,13 +42,17 @@ public class InitActivity extends AppCompatActivity {
         searchQuerySection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(InitActivity.this, SearchActivity.class);
-                ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation(InitActivity.this,
-                                searchQuerySection,
-                                ViewCompat.getTransitionName(searchQuerySection));
-                startActivity(intent, options.toBundle());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation(InitActivity.this,
+                                    searchQuerySection,
+                                    ViewCompat.getTransitionName(searchQuerySection));
+                    startActivity(intent, options.toBundle());
+                    //startActivity(intent);
+                } else {
+                    startActivity(intent);
+                }
             }
         });
 

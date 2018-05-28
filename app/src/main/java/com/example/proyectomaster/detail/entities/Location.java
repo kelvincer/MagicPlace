@@ -1,9 +1,11 @@
-package com.example.proyectomaster.model_place_api;
+package com.example.proyectomaster.detail.entities;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Northeast {
+import java.io.Serializable;
+
+public class Location implements Serializable{
 
     @SerializedName("lat")
     @Expose

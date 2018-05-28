@@ -1,7 +1,7 @@
 package com.example.proyectomaster.search.fragments.search_by_loc.di;
 
+import com.example.proyectomaster.ActivityScope;
 import com.example.proyectomaster.lib.EventBus;
-import com.example.proyectomaster.lib.di.LibsModule;
 import com.example.proyectomaster.search.fragments.search_by_loc.LocationSearchInteractor;
 import com.example.proyectomaster.search.fragments.search_by_loc.LocationSearchInteractorImpl;
 import com.example.proyectomaster.search.fragments.search_by_loc.LocationSearchPresenter;
@@ -11,12 +11,10 @@ import com.example.proyectomaster.search.fragments.search_by_loc.LocationSearchR
 import com.example.proyectomaster.search.fragments.search_by_loc.api.GooglePlaceLocationApiService;
 import com.example.proyectomaster.search.fragments.search_by_loc.ui.LocationSearchView;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = {LibsModule.class, PlaceApiModule.class})
+@Module
 public class LocationSearchModule {
 
     LocationSearchView locationSearchView;
@@ -26,26 +24,26 @@ public class LocationSearchModule {
     }
 
     @Provides
-    @Singleton
+    @ActivityScope
     public LocationSearchView provideLocationSearchView() {
         return locationSearchView;
     }
 
     @Provides
-    @Singleton
+    @ActivityScope
     public LocationSearchPresenter provideLocationSearchPresenterImpl(EventBus eventBus, LocationSearchView locationSearchView, LocationSearchInteractor locationSearchInteractor) {
 
         return new LocationSearchPresenterImpl(eventBus, locationSearchView, locationSearchInteractor);
     }
 
     @Provides
-    @Singleton
+    @ActivityScope
     public LocationSearchInteractor provideLocationSearchInteractorImpl(LocationSearchRepository repository) {
         return new LocationSearchInteractorImpl(repository);
     }
 
     @Provides
-    @Singleton
+    @ActivityScope
     public LocationSearchRepository LocationSearchRepositoryImpl(EventBus eventBus, GooglePlaceLocationApiService service) {
         return new LocationSearchRepositoryImpl(eventBus, service);
     }

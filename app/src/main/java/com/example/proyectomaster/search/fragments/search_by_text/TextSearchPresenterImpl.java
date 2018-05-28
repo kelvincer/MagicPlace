@@ -43,7 +43,7 @@ public class TextSearchPresenterImpl implements TextSearchPresenter {
                 searchBytTextView.setData(event.getData());
                 break;
             case SearchEvent.ERROR:
-                searchBytTextView.showErrorMessage();
+                searchBytTextView.showErrorMessage(event.getMessage());
                 break;
         }
     }

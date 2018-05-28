@@ -16,14 +16,12 @@ import android.widget.Toast;
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.lib.di.LibsModule;
-import com.example.proyectomaster.model_place_api.Result;
+import com.example.proyectomaster.search.entities.Result;
 import com.example.proyectomaster.search.activity.ui.SearchActivity;
 import com.example.proyectomaster.search.fragments.search_by_loc.LocationSearchPresenter;
 import com.example.proyectomaster.search.fragments.search_by_loc.di.DaggerLocationSearchComponent;
-import com.example.proyectomaster.search.fragments.search_by_loc.di.LocationSearchComponent;
 import com.example.proyectomaster.search.fragments.search_by_loc.di.LocationSearchModule;
 
-import java.net.CookieHandler;
 import java.util.List;
 
 import javax.inject.Inject;

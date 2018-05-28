@@ -6,7 +6,7 @@ import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.ConstantsHelper;
 import com.example.proyectomaster.search.fragments.search_by_text.api.GooglePlaceTextApiService;
 import com.example.proyectomaster.lib.EventBus;
-import com.example.proyectomaster.model_place_api.Result;
+import com.example.proyectomaster.search.entities.Result;
 import com.example.proyectomaster.response.PlaceApiResponse;
 import com.example.proyectomaster.search.fragments.search_by_text.events.SearchEvent;
 

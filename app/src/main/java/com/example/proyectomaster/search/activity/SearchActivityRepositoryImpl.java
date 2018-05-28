@@ -9,12 +9,9 @@ public class SearchActivityRepositoryImpl implements SearchActivityRepository {
 
     public SearchActivityRepositoryImpl(EventBus eventBus) {
         this.eventBus = eventBus;
-
     }
 
     @Override
     public void getPlaces() {
-
-
     }
 }

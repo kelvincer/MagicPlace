@@ -3,20 +3,25 @@ package com.example.proyectomaster.search.fragments.search_by_text.ui;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arlib.floatingsearchview.FloatingSearchView;
-import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.lib.di.LibsModule;
-import com.example.proyectomaster.model_place_api.Result;
 import com.example.proyectomaster.search.activity.ui.SearchActivity;
+import com.example.proyectomaster.search.entities.Result;
 import com.example.proyectomaster.search.fragments.search_by_text.TextSearchPresenter;
 import com.example.proyectomaster.search.fragments.search_by_text.di.DaggerTextSearchComponent;
 import com.example.proyectomaster.search.fragments.search_by_text.di.TextSearchComponent;
@@ -33,12 +38,16 @@ import butterknife.Unbinder;
 
 public class SearchByTextFragment extends Fragment implements SearchBytTextView {
 
-    @BindView(R.id.floating_search_view)
-    FloatingSearchView floatingSearchView;
     @BindView(R.id.filter_btn)
     Button filterButton;
-    @BindView(R.id.parent_view)
-    RelativeLayout parentView;
+    @BindView(R.id.searchTextView)
+    EditText searchTextView;
+    @BindView(R.id.action_up_btn)
+    ImageButton actionUpBtn;
+    @BindView(R.id.action_empty_btn)
+    ImageButton actionEmptyBtn;
+    @BindView(R.id.action_search_btn)
+    ImageButton actionSearchBtn;
     @Inject
     TextSearchPresenter searchPresenter;
     Unbinder unbinder;
@@ -67,22 +76,57 @@ public class SearchByTextFragment extends Fragment implements SearchBytTextView 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupFloatingSearchView();
+        setupSearchView();
     }
 
-    private void setupFloatingSearchView() {
+    private void setupSearchView() {
 
-        floatingSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+        searchTextView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
-            public void onSearchAction(String currentQuery) {
-                newSearch(currentQuery);
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s.toString().isEmpty()) {
+                    actionEmptyBtn.setVisibility(View.INVISIBLE);
+                    actionSearchBtn.setVisibility(View.VISIBLE);
+                } else {
+                    actionEmptyBtn.setVisibility(View.VISIBLE);
+                    actionSearchBtn.setVisibility(View.INVISIBLE);
+                }
             }
         });
+        searchTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    newSearch(searchTextView.getText().toString());
+                    ((SearchActivity) getActivity()).hideKeyboard();
+                    return true;
+                }
+                return false;
+            }
+        });
+        searchTextView.setText("restaurantes en lima");
+        actionEmptyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchTextView.setText("");
+            }
+        });
+        actionUpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+        searchTextView.setSelection(searchTextView.getText().length());
     }
 
     private void newSearch(String currentQuery) {
@@ -126,8 +170,8 @@ public class SearchByTextFragment extends Fragment implements SearchBytTextView 
     }
 
     @Override
-    public void showErrorMessage() {
-        Toast.makeText(getActivity(), "ERROR ON APP", Toast.LENGTH_SHORT).show();
+    public void showErrorMessage(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

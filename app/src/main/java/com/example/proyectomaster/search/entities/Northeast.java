@@ -1,9 +1,9 @@
-package com.example.proyectomaster.model_place_api;
+package com.example.proyectomaster.search.entities;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Location {
+public class Northeast {
 
     @SerializedName("lat")
     @Expose

@@ -1,6 +1,6 @@
 package com.example.proyectomaster.search.activity.ui;
 
-import com.example.proyectomaster.model_place_api.Result;
+import com.example.proyectomaster.search.entities.Result;
 
 import java.util.List;
 

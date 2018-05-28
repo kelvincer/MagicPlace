@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
-import com.example.proyectomaster.model_place_api.Result;
+import com.example.proyectomaster.search.entities.Result;
 
 import java.util.List;
 
@@ -20,9 +20,11 @@ public class PlacesApiAdapter extends RecyclerView.Adapter<PlacesApiAdapter.View
 
 
     private List<Result> results;
+    OnItemClickListener onItemClickListener;
 
-    public PlacesApiAdapter(List<Result> results) {
+    public PlacesApiAdapter(List<Result> results, OnItemClickListener onItemClickListener) {
         this.results = results;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -36,6 +38,7 @@ public class PlacesApiAdapter extends RecyclerView.Adapter<PlacesApiAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Result result = results.get(position);
         holder.bindItem(result);
+        holder.setOnItemClickListener(onItemClickListener, result.getPlaceId());
     }
 
     @Override
@@ -62,17 +65,28 @@ public class PlacesApiAdapter extends RecyclerView.Adapter<PlacesApiAdapter.View
         TextView txvDistance;
         @BindView(R.id.txv_address)
         TextView txvAddress;
+        private View view;
 
         public ViewHolder(View itemView) {
 
             super(itemView);
             ButterKnife.bind(this, itemView);
+            this.view = itemView;
         }
 
         public void bindItem(Result result) {
             txvName.setText(result.getName());
             txvDistance.setText((Helper.getDistance(result.getGeometry().getLocation())));
             txvAddress.setText(result.getFormattedAddress());
+        }
+
+        public void setOnItemClickListener(final OnItemClickListener listener, final String id) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(id);
+                }
+            });
         }
     }
 }

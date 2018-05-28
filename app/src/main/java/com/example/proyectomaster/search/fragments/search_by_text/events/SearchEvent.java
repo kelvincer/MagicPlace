@@ -1,6 +1,6 @@
 package com.example.proyectomaster.search.fragments.search_by_text.events;
 
-import com.example.proyectomaster.model_place_api.Result;
+import com.example.proyectomaster.search.entities.Result;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.proyectomaster.model_place_api;
+package com.example.proyectomaster.search.entities;
 
 
 import com.google.gson.annotations.Expose;

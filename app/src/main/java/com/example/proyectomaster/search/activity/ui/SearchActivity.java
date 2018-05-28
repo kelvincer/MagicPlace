@@ -3,6 +3,7 @@ package com.example.proyectomaster.search.activity.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -23,16 +24,17 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.proyectomaster.CommonHelper;
-import com.example.proyectomaster.ConstantsHelper;
 import com.example.proyectomaster.R;
+import com.example.proyectomaster.detail.activity.ui.DetailActivity;
+import com.example.proyectomaster.search.activity.adapters.OnItemClickListener;
+import com.example.proyectomaster.search.activity.di.DaggerSearchActivityComponent;
 import com.example.proyectomaster.search.fragments.filter.SideFilterFragment;
 import com.example.proyectomaster.lib.di.LibsModule;
 import com.example.proyectomaster.location.ApiLocationManager;
 import com.example.proyectomaster.location.LocationCallback;
-import com.example.proyectomaster.model_place_api.Result;
+import com.example.proyectomaster.search.entities.Result;
 import com.example.proyectomaster.search.activity.SearchActivityPresenter;
 import com.example.proyectomaster.search.activity.adapters.PlacesApiAdapter;
-import com.example.proyectomaster.search.activity.di.DaggerSearchActivityComponent;
 import com.example.proyectomaster.search.activity.di.SearchActivityModule;
 import com.example.proyectomaster.search.fragments.search_by_loc.ui.LocalizationSearchFragment;
 import com.example.proyectomaster.search.fragments.search_by_text.ui.SearchByTextFragment;
@@ -46,7 +48,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SearchActivity extends AppCompatActivity implements
-        SearchActivityView, LocationCallback {
+        SearchActivityView, LocationCallback, OnItemClickListener {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
     @BindView(R.id.drawer_layout)
@@ -71,7 +73,7 @@ public class SearchActivity extends AppCompatActivity implements
         ButterKnife.bind(this);
 
         setupInjection();
-        setFragments();
+        addFragments();
         setupRecyclerView();
         presenter.onCreate();
         setupPermission();
@@ -87,6 +89,13 @@ public class SearchActivity extends AppCompatActivity implements
                 setUpLocationManager();
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (locationManager != null)
+            locationManager.onPause();
     }
 
     @Override
@@ -134,7 +143,7 @@ public class SearchActivity extends AppCompatActivity implements
 
         DaggerSearchActivityComponent.builder()
                 .libsModule(new LibsModule(this))
-                .searchActivityModule(new SearchActivityModule(this))
+                .searchActivityModule(new SearchActivityModule(this, this))
                 .build()
                 .inject(this);
     }
@@ -167,13 +176,13 @@ public class SearchActivity extends AppCompatActivity implements
             ((LocalizationSearchFragment) fragment).findPlaces(CommonHelper.QUERY);
     }
 
-    private void setFragments() {
-
-        Fragment f = SideFilterFragment.newInstance();
-        getFragmentManager().beginTransaction().add(R.id.side_filter_container, f).commit();
+    private void addFragments() {
 
         Fragment fragment = SearchByTextFragment.newInstance();
-        getFragmentManager().beginTransaction().add(R.id.search_head_container, fragment).commit();
+        getFragmentManager().beginTransaction().replace(R.id.search_head_container, fragment).commit();
+
+        Fragment f = SideFilterFragment.newInstance();
+        getFragmentManager().beginTransaction().replace(R.id.side_filter_container, f).commit();
     }
 
     public void openDrawer() {
@@ -218,6 +227,13 @@ public class SearchActivity extends AppCompatActivity implements
         CommonHelper.QUERY = null;
         CommonHelper.SOURCE = 1;
         CommonHelper.SEARCH_MODE = 1;
+    }
 
+    @Override
+    public void onItemClick(String placeId) {
+
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(CommonHelper.PLACE_ID, placeId);
+        startActivity(intent);
     }
 }

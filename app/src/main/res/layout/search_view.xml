@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_top_bar"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@android:color/white"
+    android:transitionName="simple_activity_transition"
+    tools:targetApi="lollipop">
+
+    <EditText
+        android:id="@+id/searchTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:hint="Busca..."
+        android:imeOptions="actionSearch"
+        android:inputType="textNoSuggestions"
+        android:paddingLeft="@dimen/search_view_text_padding"
+        android:paddingRight="@dimen/search_view_text_padding"
+        android:singleLine="true"
+        android:textColor="#212121"
+        android:textColorHint="#727272"
+        android:textSize="19sp" />
+
+    <ImageButton
+        android:id="@+id/action_up_btn"
+        style="@style/MSV_ImageButton"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_action_navigation_arrow_back" />
+
+    <ImageButton
+        android:id="@+id/action_empty_btn"
+        style="@style/MSV_ImageButton"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_action_navigation_close"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/action_search_btn"
+        style="@style/MSV_ImageButton"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_action_search" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentBottom="true"
+        android:background="#fff"
+        android:backgroundTint="#10000000" />
+</RelativeLayout>

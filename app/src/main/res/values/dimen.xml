@@ -1,4 +1,6 @@
 <resources>
     <dimen name="search_view_inset">5dp</dimen>
     <dimen name="sliding_search_view_header_height">250dp</dimen>
+    <dimen name="search_icon_padding">12dp</dimen>
+    <dimen name="search_view_text_padding">65dp</dimen>
 </resources>

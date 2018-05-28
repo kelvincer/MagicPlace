@@ -1,9 +1,5 @@
 package com.example.proyectomaster.search.activity.events;
 
-import com.example.proyectomaster.model_place_api.Result;
-
-import java.util.List;
-
 public class SearchActivityEvent {
 
     private int type;
