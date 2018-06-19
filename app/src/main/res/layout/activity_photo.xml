@@ -2,11 +2,27 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ctl_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000"
+    android:fitsSystemWindows="true"
     tools:context=".photo.PhotoActivity">
 
-    <com.jsibbold.zoomage.ZoomageView
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary" />
+
+    <!-- <ImageView
+         android:id="@+id/myZoomageView"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:adjustViewBounds="true"
+         tools:src="@drawable/background_blur" />-->
+
+    <!--<com.jsibbold.zoomage.ZoomageView
         android:id="@+id/myZoomageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,12 +31,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <!--<ImageView
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <com.jsibbold.zoomage.ZoomageView
         android:id="@+id/myZoomageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter" />-->
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:zoomage_animateOnReset="true"
+        app:zoomage_autoCenter="true"
+        app:zoomage_autoResetMode="UNDER"
+        app:zoomage_maxScale="8"
+        app:zoomage_minScale="0.6"
+        app:zoomage_restrictBounds="false"
+        app:zoomage_translatable="true"
+        app:zoomage_zoomable="true"
+        tools:src="@drawable/background_blur" />
 
 </android.support.constraint.ConstraintLayout>

@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface SearchActivityView {
 
-    void setPlaces(List<Result> data);
+    void updatePlaces(List<Result> data);
 
     void showProgressBar();
 
     void hideProgressBar();
+
+    void showMessage(String message);
 }

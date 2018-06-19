@@ -13,13 +13,20 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestFutureTarget;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
+import com.example.proyectomaster.detail.fragments.listener.PhotoClickListener;
 
 public class GlideImageLoader implements ImageLoader {
 
@@ -37,13 +44,17 @@ public class GlideImageLoader implements ImageLoader {
 
         RequestOptions requestOptions = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .timeout(10000)
+                .skipMemoryCache(true)
+                /*         .override(1400, 450)*/
                 .placeholder(R.drawable.background_blur);
-                //.centerCrop();
+        //.centerCrop();
 
         if (onFinishedImageLoadingListener != null) {
             glideRequestManager
                     .load(URL)
                     .apply(requestOptions)
+
                     .listener(onFinishedImageLoadingListener)
                     .into(imageView);
         } else {
@@ -52,6 +63,39 @@ public class GlideImageLoader implements ImageLoader {
                     .apply(requestOptions)
                     .into(imageView);
         }
+    }
+
+    @Override
+    public void load(final ImageView imageView, final String photoRef, final PhotoClickListener listener) {
+
+        RequestOptions requestOptions = new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .timeout(10000)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .placeholder(R.drawable.background_blur);
+
+
+        String url = Helper.generateUrl(photoRef);
+
+        Log.d("IMAGE", url);
+
+        glideRequestManager
+                .load(url)
+                .apply(requestOptions)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        listener.setPhoto(photoRef, resource);
+                        return false;
+                    }
+                })
+                .into(imageView);
     }
 
     @Override
@@ -64,31 +108,26 @@ public class GlideImageLoader implements ImageLoader {
     }
 
     @Override
-    public void setBackground(String url, final View view) {
-        glideRequestManager.asBitmap()
-                .load(url)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        Drawable drawable = new BitmapDrawable(activity.getApplicationContext().getResources(), resource);
-                        view.setBackground(drawable);
-                    }
-                });
-    }
+    public void load(final ImageView imageView, final CollapsingToolbarLayout collapsingToolbarLayout, String url) {
 
-    @Override
-    public void setToolbarColor(String url, final CollapsingToolbarLayout collapsingToolbarLayout) {
+        RequestOptions requestOptions = new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .priority(Priority.HIGH)
+                .timeout(10000);
+
         glideRequestManager.asBitmap()
+                .apply(requestOptions)
                 .load(url)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                    public void onResourceReady(@NonNull final Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
                             public void onGenerated(Palette palette) {
                                 int vibrantColor = palette.getVibrantColor(0);
                                 int vibrantDarkColor = palette.getDarkVibrantColor(0);
                                 collapsingToolbarLayout.setContentScrimColor(vibrantColor);
                                 collapsingToolbarLayout.setStatusBarScrimColor(vibrantDarkColor);
+                                imageView.setImageBitmap(resource);
                             }
                         });
                     }

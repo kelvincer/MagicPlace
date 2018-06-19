@@ -1,11 +1,14 @@
 package com.example.proyectomaster.search.activity;
 
-import com.example.proyectomaster.search.activity.events.SearchActivityEvent;
+import com.example.proyectomaster.search.activity.events.SearchEvent;
 
 public interface SearchActivityPresenter {
 
     void onCreate();
+
     void onDestroy();
 
-    void onEventMainThread(SearchActivityEvent event);
+    void getResults(String query);
+
+    void onEventMainThread(SearchEvent event);
 }

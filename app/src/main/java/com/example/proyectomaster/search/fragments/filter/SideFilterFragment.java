@@ -11,8 +11,10 @@ import android.widget.Toast;
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.search.activity.ui.SearchActivity;
-import com.example.proyectomaster.search.fragments.search_by_loc.ui.LocalizationSearchFragment;
-import com.example.proyectomaster.search.fragments.search_by_text.ui.SearchByTextFragment;
+import com.example.proyectomaster.search.fragments.LocOptionalParamFragment;
+import com.example.proyectomaster.search.fragments.TextOptionalParamFragment;
+import com.example.proyectomaster.search.fragments.search_by_loc.NearbySearchFragment;
+import com.example.proyectomaster.search.fragments.search_by_text.TextSearchFragment;
 
 import belka.us.androidtoggleswitch.widgets.ToggleSwitch;
 import butterknife.BindView;
@@ -40,7 +42,7 @@ public class SideFilterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_side_filter, container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -50,6 +52,14 @@ public class SideFilterFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupToggleListeners();
+        addFragment(TextOptionalParamFragment.newInstance());
+        resetTextSearchParam();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     private void setupToggleListeners() {
@@ -58,11 +68,11 @@ public class SideFilterFragment extends Fragment {
             @Override
             public void onToggleSwitchChangeListener(int position, boolean isChecked) {
                 if (position == 0) {
-                    CommonHelper.SOURCE = 1;
+                    CommonHelper.SOURCE_MODE = 1;
                 } else if (position == 1) {
-                    CommonHelper.SOURCE = 2;
+                    CommonHelper.SOURCE_MODE = 2;
                 } else {
-                    Toast.makeText(getActivity(), "ERROR", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "SOURCE_MODE ERROR", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -72,18 +82,30 @@ public class SideFilterFragment extends Fragment {
             @Override
             public void onToggleSwitchChangeListener(int position, boolean isChecked) {
                 if (position == 0) {
-                    changeToolbar(SearchByTextFragment.newInstance());
+                    changeToolbar(TextSearchFragment.newInstance());
+                    resetTextSearchParam();
                     clearRecycleview();
                     CommonHelper.SEARCH_MODE = 1;
+                    addFragment(TextOptionalParamFragment.newInstance());
+
                 } else if (position == 1) {
-                    changeToolbar(LocalizationSearchFragment.newInstance());
+                    changeToolbar(NearbySearchFragment.newInstance());
                     clearRecycleview();
+                    resetLocSearchParam();
                     CommonHelper.SEARCH_MODE = 2;
+                    addFragment(LocOptionalParamFragment.newInstance());
                 } else {
-                    Toast.makeText(getActivity(), "ERROR", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "FORM ERROR", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void addFragment(Fragment fragment) {
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.optional_parameters_container, fragment)
+                .commit();
     }
 
     private void changeToolbar(Fragment f) {
@@ -92,10 +114,26 @@ public class SideFilterFragment extends Fragment {
                 .commit();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    private void resetTextSearchParam() {
+
+        CommonHelper.NEXT_PAGE_TOKEN = null;
+        CommonHelper.QUERY = null;
+
+        CommonHelper.location = null;
+        CommonHelper.radius = null;
+        CommonHelper.opennow = null;
+        CommonHelper.minprice = null;
+    }
+
+    private void resetLocSearchParam() {
+
+        CommonHelper.NEXT_PAGE_TOKEN = null;
+        CommonHelper.location = null;
+        CommonHelper.radius = "1000";
+        CommonHelper.KEYWORD = null;
+        CommonHelper.opennow = null;
+        CommonHelper.RANKYBY = "prominence";
+
     }
 
     private void clearRecycleview() {

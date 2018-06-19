@@ -27,7 +27,7 @@ public class DetailActivityRepositoryImpl implements DetailActivityRepository {
     @Override
     public void fetchDetail(String placeId) {
 
-        Call<DetailResponse> call = detailPlaceApiService.getDetail(placeId, ConstantsHelper.PLACE_API_KEY);
+        Call<DetailResponse> call = detailPlaceApiService.getDetail(placeId, ConstantsHelper.GOOGLE_PLACE_API_KEY);
         call.enqueue(new Callback<DetailResponse>() {
             @Override
             public void onResponse(Call<DetailResponse> call, Response<DetailResponse> response) {

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Parámetros opcionales" />
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="@color/gray">
+
+        <TextView
+            android:id="@+id/txv_radius"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Radio en metros"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/etx_radius"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="1000"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txv_radius" />
+
+        <TextView
+            android:id="@+id/txv_keyword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Palabra clave"
+            app:layout_constraintTop_toBottomOf="@id/etx_radius" />
+
+        <EditText
+            android:id="@+id/etx_keyword"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txv_keyword" />
+
+        <LinearLayout
+            android:id="@+id/lnl_minprice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/etx_keyword">
+
+            <TextView
+                android:id="@+id/txv_minprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Precio mínimo"
+                app:layout_constraintTop_toBottomOf="@id/etx_keyword" />
+
+            <CheckBox
+                android:id="@+id/chb_minprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp" />
+
+        </LinearLayout>
+
+        <com.warkiz.widget.IndicatorSeekBar
+            android:id="@+id/isb_minprice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            app:isb_indicator_type="circular_bubble"
+            app:isb_max="4"
+            app:isb_seek_bar_type="discrete_ticks_texts"
+            app:isb_tick_type="oval"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lnl_minprice" />
+
+
+        <TextView
+            android:id="@+id/txv_opennow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Abierto ahora"
+            app:layout_constraintTop_toBottomOf="@id/isb_minprice" />
+
+        <CheckBox
+            android:id="@+id/ceb_opennow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toRightOf="@id/txv_opennow"
+            app:layout_constraintTop_toBottomOf="@id/isb_minprice" />
+
+        <TextView
+            android:id="@+id/txv_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ordenar por"
+            app:layout_constraintTop_toBottomOf="@id/ceb_opennow" />
+
+        <RadioGroup
+            android:id="@+id/rdg_sortby"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:contentDescription="sfdsfs"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/txv_sort">
+
+            <RadioButton
+                android:id="@+id/rdb_prominence"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Relevancia" />
+
+            <RadioButton
+                android:id="@+id/rdb_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Distancia" />
+
+        </RadioGroup>
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</LinearLayout>

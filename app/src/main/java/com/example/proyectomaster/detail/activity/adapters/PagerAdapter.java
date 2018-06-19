@@ -6,19 +6,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.proyectomaster.detail.entities.Result;
-import com.example.proyectomaster.detail.fragments.ImportantFragment;
-import com.example.proyectomaster.detail.fragments.PhotosFragment;
+import com.example.proyectomaster.detail.fragments.highlight.ui.HighlightsFragment;
+import com.example.proyectomaster.detail.fragments.photos.PhotosFragment;
+import com.example.proyectomaster.lib.ImageLoader;
 
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
     private int numOfTabs;
     private Result result;
+    private ImageLoader imageLoader;
 
-    public PagerAdapter(FragmentManager fm, int numOfTabs, Result result) {
+    public PagerAdapter(FragmentManager fm, int numOfTabs, Result result, ImageLoader imageLoader) {
         super(fm);
         this.numOfTabs = numOfTabs;
         this.result = result;
+        this.imageLoader = imageLoader;
     }
 
     @Override
@@ -26,7 +29,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                return ImportantFragment.getInstance(result);
+                return HighlightsFragment.getInstance(result, imageLoader);
             case 1:
                 return PhotosFragment.getInstance(result);
         }

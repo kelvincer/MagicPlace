@@ -1,5 +1,6 @@
 package com.example.proyectomaster.search.activity.adapters;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -66,6 +67,8 @@ public class PlacesApiAdapter extends RecyclerView.Adapter<PlacesApiAdapter.View
         @BindView(R.id.txv_address)
         TextView txvAddress;
         private View view;
+        @BindView(R.id.txv_rating)
+        TextView txvRating;
 
         public ViewHolder(View itemView) {
 
@@ -78,6 +81,12 @@ public class PlacesApiAdapter extends RecyclerView.Adapter<PlacesApiAdapter.View
             txvName.setText(result.getName());
             txvDistance.setText((Helper.getDistance(result.getGeometry().getLocation())));
             txvAddress.setText(result.getFormattedAddress());
+            if (result.getRating() != null) {
+                txvRating.setText(String.format("%s", result.getRating()));
+            } else {
+                txvRating.setText("--");
+                txvRating.setBackgroundColor(Color.parseColor("#a8a8a8"));
+            }
         }
 
         public void setOnItemClickListener(final OnItemClickListener listener, final String id) {

@@ -59,28 +59,4 @@ public class DetailModule {
     public DetailActivityRepository provideDetailActivityRepositoryImpl(EventBus eventBus, DetailPlaceApiService detailPlaceApiService) {
         return new DetailActivityRepositoryImpl(eventBus, detailPlaceApiService);
     }
-
-    @Provides
-    public PagerAdapter providePagerAdapter(FragmentManager fm, Integer numOfTabs, Result result) {
-        return new PagerAdapter(fm, numOfTabs, result);
-    }
-
-    @Provides
-    public FragmentManager provideFragmentManager() {
-        return detailActivity.getSupportFragmentManager();
-    }
-
-    @Provides
-    public Integer provideNums() {
-        return numTabs;
-    }
-
-    @Provides
-    public Result getResult() {
-
-        Result result = new Result();
-        result.setId("ID");
-        result.setRating(3.5);
-        return new Result();
-    }
 }

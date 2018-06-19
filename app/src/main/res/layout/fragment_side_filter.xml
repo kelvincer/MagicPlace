@@ -34,6 +34,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lnl_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -52,11 +53,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:foreground="?android:attr/selectableItemBackground"
             custom:layout_constraintTop_toBottomOf="@+id/txv_source"
             custom:textToggleLeft="TEXTO"
             custom:textToggleRight="LOCALIZACIÓN"
             custom:toggleWidth="120dp" />
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/optional_parameters_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        custom:layout_constraintLeft_toLeftOf="parent"
+        custom:layout_constraintTop_toBottomOf="@id/lnl_form" />
+
 </android.support.constraint.ConstraintLayout>

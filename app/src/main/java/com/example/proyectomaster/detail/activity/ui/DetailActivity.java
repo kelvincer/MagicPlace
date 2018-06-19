@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.proyectomaster.CommonHelper;
+import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.detail.activity.DetailActivityPresenter;
 import com.example.proyectomaster.detail.activity.adapters.PagerAdapter;
@@ -34,8 +35,7 @@ import butterknife.ButterKnife;
 public class DetailActivity extends AppCompatActivity implements DetailActivityView, TabLayout.OnTabSelectedListener {
 
     private final String[] pageTitle = {"DESTACADOS", "FOTOS"};
-    /*  @BindView(R.id.expandedImage)
-      ImageView expandedImage;*/
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tab_layout)
@@ -48,15 +48,13 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     ViewPager pager;
     @BindView(R.id.fab)
     FloatingActionButton fab;
-
+    @BindView(R.id.header)
+    ImageView header;
     @Inject
     DetailActivityPresenter presenter;
     @Inject
     ImageLoader imageLoader;
-    @BindView(R.id.header)
-    ImageView header;
-   /* @Inject
-    PagerAdapter adapter;*/
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,8 +62,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         setContentView(R.layout.activity_detail_three);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setTitle("MAS");
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Intent intent = getIntent();
         String id = intent.getStringExtra(CommonHelper.PLACE_ID);
@@ -120,14 +117,15 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     @Override
     public void setResult(Result result) {
 
+        setupView(result);
         String photoReference = result.getPhotos().get(0).getPhotoReference();
-        final String url = String.format("https://maps.googleapis.com/maps/api/place/photo?photoreference=%s&key=AIzaSyCwmYvGIV7owfcc7muneajVaIz6cXKA8Wg" +
-                "&maxheight=800", photoReference);
+        imageLoader.load(header, collapsingToolbarLayout, Helper.generateUrl(photoReference));
+        pager.setAdapter(new PagerAdapter(getSupportFragmentManager(), pageTitle.length, result, imageLoader));
+    }
 
-        imageLoader.load(header, url);
-        pager.setAdapter(new PagerAdapter(getSupportFragmentManager(), pageTitle.length, result));
-        //imageLoader.setBackground(url, appBar);
-        imageLoader.setToolbarColor(url, collapsingToolbarLayout);
+    private void setupView(Result result) {
+        getSupportActionBar().setTitle(result.getName());
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
     }
 
     @Override

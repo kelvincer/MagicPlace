@@ -9,7 +9,7 @@ public class SearchActivityInteractorImpl implements SearchActivityInteractor {
     }
 
     @Override
-    public void execute() {
-        searchActivityRepository.getPlaces();
+    public void execute(String query) {
+        searchActivityRepository.getPlaces(query);
     }
 }

@@ -21,23 +21,23 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.detail.activity.ui.DetailActivity;
-import com.example.proyectomaster.search.activity.adapters.OnItemClickListener;
-import com.example.proyectomaster.search.activity.di.DaggerSearchActivityComponent;
-import com.example.proyectomaster.search.fragments.filter.SideFilterFragment;
 import com.example.proyectomaster.lib.di.LibsModule;
 import com.example.proyectomaster.location.ApiLocationManager;
 import com.example.proyectomaster.location.LocationCallback;
-import com.example.proyectomaster.search.entities.Result;
 import com.example.proyectomaster.search.activity.SearchActivityPresenter;
+import com.example.proyectomaster.search.activity.adapters.OnItemClickListener;
 import com.example.proyectomaster.search.activity.adapters.PlacesApiAdapter;
+import com.example.proyectomaster.search.activity.di.DaggerSearchActivityComponent;
 import com.example.proyectomaster.search.activity.di.SearchActivityModule;
-import com.example.proyectomaster.search.fragments.search_by_loc.ui.LocalizationSearchFragment;
-import com.example.proyectomaster.search.fragments.search_by_text.ui.SearchByTextFragment;
+import com.example.proyectomaster.search.entities.Result;
+import com.example.proyectomaster.search.fragments.filter.SideFilterFragment;
+import com.example.proyectomaster.search.fragments.search_by_text.TextSearchFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +61,8 @@ public class SearchActivity extends AppCompatActivity implements
     SearchActivityPresenter presenter;
     @Inject
     PlacesApiAdapter adapter;
+    @BindView(R.id.txv_info)
+    TextView txvInfo;
 
     private List<String> listaPermisos = new ArrayList<>();
     private int SOLICITUD_PERMISO = 100;
@@ -89,6 +91,13 @@ public class SearchActivity extends AppCompatActivity implements
                 setUpLocationManager();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (locationManager != null)
+            locationManager.onInit();
     }
 
     @Override
@@ -125,6 +134,16 @@ public class SearchActivity extends AppCompatActivity implements
         if (accessFineLocationPermission != PackageManager.PERMISSION_GRANTED) {
             listaPermisos.add(Manifest.permission.ACCESS_FINE_LOCATION);
         }
+        int writeExternalStoragePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (writeExternalStoragePermission != PackageManager.PERMISSION_GRANTED) {
+            listaPermisos.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
+        int cameraPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+        if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
+            listaPermisos.add(Manifest.permission.CAMERA);
+        }
+
         return listaPermisos.isEmpty();
     }
 
@@ -167,18 +186,12 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     private void searchAgain() {
-
-        Fragment fragment = getFragmentManager().findFragmentById(R.id.search_head_container);
-
-        if (CommonHelper.SEARCH_MODE == 1)
-            ((SearchByTextFragment) fragment).findPlaces(CommonHelper.QUERY);
-        else if (CommonHelper.SEARCH_MODE == 2)
-            ((LocalizationSearchFragment) fragment).findPlaces(CommonHelper.QUERY);
+        getResults(CommonHelper.QUERY);
     }
 
     private void addFragments() {
 
-        Fragment fragment = SearchByTextFragment.newInstance();
+        Fragment fragment = TextSearchFragment.newInstance();
         getFragmentManager().beginTransaction().replace(R.id.search_head_container, fragment).commit();
 
         Fragment f = SideFilterFragment.newInstance();
@@ -190,7 +203,7 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void setPlaces(List<Result> data) {
+    public void updatePlaces(List<Result> data) {
         adapter.updateData(data);
     }
 
@@ -205,9 +218,27 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void showMessage(String message) {
+
+        switch (message) {
+
+            case "INVALID_REQUEST":
+                showInfoText("Solicitud no válida");
+            case "ZERO_RESULTS":
+                showInfoText("No hay resultados");
+            default:
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public void onLocationChanged(Location location) {
         CommonHelper.MY_LOCATION = location;
         Log.d(TAG, location.toString());
+    }
+
+    public void getResults(String query) {
+        presenter.getResults(query);
     }
 
     public void clearData() {
@@ -220,12 +251,21 @@ public class SearchActivity extends AppCompatActivity implements
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 
+    public void hideInfoText() {
+        txvInfo.setVisibility(View.GONE);
+    }
+
+    public void showInfoText(String message) {
+        txvInfo.setVisibility(View.VISIBLE);
+        txvInfo.setText(message);
+    }
+
     private void initVariables() {
 
         CommonHelper.MY_LOCATION = null;
         CommonHelper.NEXT_PAGE_TOKEN = null;
         CommonHelper.QUERY = null;
-        CommonHelper.SOURCE = 1;
+        CommonHelper.SOURCE_MODE = 1;
         CommonHelper.SEARCH_MODE = 1;
     }
 

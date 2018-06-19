@@ -2,6 +2,7 @@ package com.example.proyectomaster.search.activity.di;
 
 import com.example.proyectomaster.ActivityScope;
 import com.example.proyectomaster.lib.EventBus;
+import com.example.proyectomaster.search.activity.api.PlacesApiService;
 import com.example.proyectomaster.search.entities.Result;
 import com.example.proyectomaster.search.activity.SearchActivityInteractor;
 import com.example.proyectomaster.search.activity.SearchActivityInteractorImpl;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit2.Retrofit;
 
 @Module
 public class SearchActivityModule {
@@ -52,8 +54,8 @@ public class SearchActivityModule {
 
     @ActivityScope
     @Provides
-    SearchActivityRepository provideSearchActivityRepository(EventBus eventBus) {
-        return new SearchActivityRepositoryImpl(eventBus);
+    SearchActivityRepository provideSearchActivityRepository(EventBus eventBus, PlacesApiService service) {
+        return new SearchActivityRepositoryImpl(eventBus, service);
     }
 
     @ActivityScope
@@ -72,5 +74,11 @@ public class SearchActivityModule {
     @Provides
     OnItemClickListener provideOnItemClickListener() {
         return this.onItemClickListener;
+    }
+
+    @ActivityScope
+    @Provides
+    public PlacesApiService providePlacesApiService(Retrofit retrofit) {
+        return retrofit.create(PlacesApiService.class);
     }
 }

@@ -7,13 +7,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.proyectomaster.detail.fragments.listener.PhotoClickListener;
+
 /**
  * Created by ykro.
  */
 public interface ImageLoader {
 
-    void load(ImageView imageView, String URL);
+    void load(ImageView imageView, String Url);
+
+    void load(ImageView imageView, String url, PhotoClickListener listener);
+
     void setOnFinishedImageLoadingListener(Object object);
-    void setBackground(String url, View view);
-    void setToolbarColor(String uri, CollapsingToolbarLayout collapsingToolbarLayout);
+
+    void load(ImageView imageView, CollapsingToolbarLayout collapsingToolbarLayout, String url);
 }
