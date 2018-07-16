@@ -25,7 +25,6 @@ import butterknife.Unbinder;
 
 public class LocOptionalParamFragment extends Fragment {
 
-
     Unbinder unbinder;
     @BindView(R.id.etx_radius)
     EditText etxRadius;
@@ -148,10 +147,10 @@ public class LocOptionalParamFragment extends Fragment {
                 boolean isChecked = checkedRadioButton.isChecked();
                 if (isChecked) {
                     switch (checkedId) {
-                        case R.id.rdb_prominence:
+                        case R.id.rdb_text:
                             CommonHelper.RANKYBY = "prominence";
                             break;
-                        case R.id.rdb_distance:
+                        case R.id.rdb_location:
                             CommonHelper.RANKYBY = "distance";
                             etxRadius.getText().clear();
                             CommonHelper.radius = null;
@@ -164,6 +163,33 @@ public class LocOptionalParamFragment extends Fragment {
             }
         });
 
-        rdgSortby.check(R.id.rdb_prominence);
+        isbMinprice.setOnSeekChangeListener(new IndicatorSeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(IndicatorSeekBar seekBar, int progress, float progressFloat, boolean fromUserTouch) {
+
+            }
+
+            @Override
+            public void onSectionChanged(IndicatorSeekBar seekBar, int thumbPosOnTick, String textBelowTick, boolean fromUserTouch) {
+                if (fromUserTouch) {
+                    Toast.makeText(getActivity(), textBelowTick, Toast.LENGTH_SHORT).show();
+                    CommonHelper.minprice = textBelowTick;
+                } else {
+                    Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(IndicatorSeekBar seekBar, int thumbPosOnTick) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+
+            }
+        });
+
+        rdgSortby.check(R.id.rdb_text);
     }
 }

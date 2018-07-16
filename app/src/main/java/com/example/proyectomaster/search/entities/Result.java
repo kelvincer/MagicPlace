@@ -40,6 +40,9 @@ public class Result {
     @SerializedName("types")
     @Expose
     private List<String> types = null;
+    @SerializedName("vicinity")
+    @Expose
+    private String vicinity;
 
     public String getFormattedAddress() {
         return formattedAddress;
@@ -127,5 +130,13 @@ public class Result {
 
     public void setTypes(List<String> types) {
         this.types = types;
+    }
+
+    public String getVicinity() {
+        return vicinity;
+    }
+
+    public void setVicinity(String vicinity) {
+        this.vicinity = vicinity;
     }
 }

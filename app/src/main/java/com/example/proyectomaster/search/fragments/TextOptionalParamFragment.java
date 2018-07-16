@@ -48,7 +48,6 @@ public class TextOptionalParamFragment extends Fragment {
         return fragment;
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -147,8 +146,12 @@ public class TextOptionalParamFragment extends Fragment {
 
             @Override
             public void onSectionChanged(IndicatorSeekBar seekBar, int thumbPosOnTick, String textBelowTick, boolean fromUserTouch) {
-                Toast.makeText(getActivity(), textBelowTick, Toast.LENGTH_SHORT).show();
-                CommonHelper.minprice = textBelowTick;
+                if (fromUserTouch) {
+                    Toast.makeText(getActivity(), textBelowTick, Toast.LENGTH_SHORT).show();
+                    CommonHelper.minprice = textBelowTick;
+                } else {
+                    Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

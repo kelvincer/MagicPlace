@@ -49,7 +49,6 @@ public class InitActivity extends AppCompatActivity {
                                     searchQuerySection,
                                     ViewCompat.getTransitionName(searchQuerySection));
                     startActivity(intent, options.toBundle());
-                    //startActivity(intent);
                 } else {
                     startActivity(intent);
                 }

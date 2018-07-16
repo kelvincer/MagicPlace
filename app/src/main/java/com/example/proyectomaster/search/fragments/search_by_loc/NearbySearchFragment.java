@@ -1,6 +1,7 @@
 package com.example.proyectomaster.search.fragments.search_by_loc;
 
 import android.app.Fragment;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -41,6 +42,7 @@ public class NearbySearchFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CommonHelper.SEARCH_QUERY_LOCATION = new Location("QUERY_LOCATION");
     }
 
     @Nullable
@@ -82,6 +84,7 @@ public class NearbySearchFragment extends Fragment {
                         Toast.makeText(getActivity(), "Debes ingresar los parámetros requeridos", Toast.LENGTH_SHORT).show();
                         return false;
                     }
+                    CommonHelper.SEARCH_QUERY_LOCATION.setLatitude(Double.valueOf(searchLat.getText().toString()));
                     String query = String.format("%s,%s", searchLat.getText().toString(), searchLong.getText().toString());
                     newSearch(query);
                     return true;
@@ -92,6 +95,8 @@ public class NearbySearchFragment extends Fragment {
 
         searchLat.setText("-12.046374");
         searchLong.setText("-77.042793");
+        CommonHelper.SEARCH_QUERY_LOCATION.setLatitude(Double.valueOf(searchLat.getText().toString()));
+        CommonHelper.SEARCH_QUERY_LOCATION.setLongitude(Double.valueOf(searchLong.getText().toString()));
 
         searchLong.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -103,7 +108,7 @@ public class NearbySearchFragment extends Fragment {
                         Toast.makeText(getActivity(), "Debes ingresar los parámetros requeridos", Toast.LENGTH_SHORT).show();
                         return false;
                     }
-
+                    CommonHelper.SEARCH_QUERY_LOCATION.setLongitude(Double.valueOf(searchLong.getText().toString()));
                     String query = String.format("%s,%s", searchLat.getText().toString(), searchLong.getText().toString());
                     newSearch(query);
                     return true;

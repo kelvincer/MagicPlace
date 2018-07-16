@@ -6,7 +6,8 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.R;
@@ -16,7 +17,6 @@ import com.example.proyectomaster.search.fragments.TextOptionalParamFragment;
 import com.example.proyectomaster.search.fragments.search_by_loc.NearbySearchFragment;
 import com.example.proyectomaster.search.fragments.search_by_text.TextSearchFragment;
 
-import belka.us.androidtoggleswitch.widgets.ToggleSwitch;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -24,11 +24,9 @@ import butterknife.Unbinder;
 
 public class SideFilterFragment extends Fragment {
 
-    @BindView(R.id.tls_source)
-    ToggleSwitch tlsSource;
-    @BindView(R.id.tls_form)
-    ToggleSwitch tlsForm;
     Unbinder unbinder;
+    @BindView(R.id.rdg_sortby)
+    RadioGroup rdgSortby;
 
     public SideFilterFragment() {
         // Required empty public constructor
@@ -51,7 +49,7 @@ public class SideFilterFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupToggleListeners();
+        setupViews();
         addFragment(TextOptionalParamFragment.newInstance());
         resetTextSearchParam();
     }
@@ -62,43 +60,41 @@ public class SideFilterFragment extends Fragment {
         unbinder.unbind();
     }
 
-    private void setupToggleListeners() {
+    private void setupViews() {
 
-        tlsSource.setOnToggleSwitchChangeListener(new ToggleSwitch.OnToggleSwitchChangeListener() {
+        rdgSortby.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onToggleSwitchChangeListener(int position, boolean isChecked) {
-                if (position == 0) {
-                    CommonHelper.SOURCE_MODE = 1;
-                } else if (position == 1) {
-                    CommonHelper.SOURCE_MODE = 2;
-                } else {
-                    Toast.makeText(getActivity(), "SOURCE_MODE ERROR", Toast.LENGTH_SHORT).show();
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if (checkedId == -1)
+                    return;
+
+                RadioButton checkedRadioButton = group.findViewById(checkedId);
+                boolean isChecked = checkedRadioButton.isChecked();
+                if (isChecked) {
+                    switch (checkedId) {
+                        case R.id.rdb_text:
+                            changeToolbar(TextSearchFragment.newInstance());
+                            resetTextSearchParam();
+                            clearRecycleview();
+                            CommonHelper.SEARCH_MODE = 1;
+                            addFragment(TextOptionalParamFragment.newInstance());
+                            break;
+                        case R.id.rdb_location:
+                            changeToolbar(NearbySearchFragment.newInstance());
+                            clearRecycleview();
+                            resetLocSearchParam();
+                            CommonHelper.SEARCH_MODE = 2;
+                            addFragment(LocOptionalParamFragment.newInstance());
+                            break;
+                        default:
+                            throw new RuntimeException("Incorrect radio button id");
+                    }
                 }
             }
         });
 
-        tlsForm.setOnToggleSwitchChangeListener(new ToggleSwitch.OnToggleSwitchChangeListener() {
-
-            @Override
-            public void onToggleSwitchChangeListener(int position, boolean isChecked) {
-                if (position == 0) {
-                    changeToolbar(TextSearchFragment.newInstance());
-                    resetTextSearchParam();
-                    clearRecycleview();
-                    CommonHelper.SEARCH_MODE = 1;
-                    addFragment(TextOptionalParamFragment.newInstance());
-
-                } else if (position == 1) {
-                    changeToolbar(NearbySearchFragment.newInstance());
-                    clearRecycleview();
-                    resetLocSearchParam();
-                    CommonHelper.SEARCH_MODE = 2;
-                    addFragment(LocOptionalParamFragment.newInstance());
-                } else {
-                    Toast.makeText(getActivity(), "FORM ERROR", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        rdgSortby.check(R.id.rdb_text);
     }
 
     private void addFragment(Fragment fragment) {

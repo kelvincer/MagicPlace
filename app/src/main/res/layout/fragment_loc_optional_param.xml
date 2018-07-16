@@ -117,13 +117,13 @@
             app:layout_constraintTop_toBottomOf="@id/txv_sort">
 
             <RadioButton
-                android:id="@+id/rdb_prominence"
+                android:id="@+id/rdb_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Relevancia" />
 
             <RadioButton
-                android:id="@+id/rdb_distance"
+                android:id="@+id/rdb_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Distancia" />

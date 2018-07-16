@@ -9,6 +9,7 @@ public class CommonHelper {
     public static final String PHOTO_REF = "photo_ref";
     public static final String BITMAP_PATH = "bitmap_path";
     public static Location MY_LOCATION;
+    public static Location SEARCH_QUERY_LOCATION;
     public static int SOURCE_MODE = 1;
     public static int SEARCH_MODE = 1;
 

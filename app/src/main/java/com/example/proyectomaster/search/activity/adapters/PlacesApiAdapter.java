@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.search.entities.Result;
@@ -79,10 +80,20 @@ public class PlacesApiAdapter extends RecyclerView.Adapter<PlacesApiAdapter.View
 
         public void bindItem(Result result) {
             txvName.setText(result.getName());
-            txvDistance.setText((Helper.getDistance(result.getGeometry().getLocation())));
-            txvAddress.setText(result.getFormattedAddress());
+
+            if (CommonHelper.SEARCH_MODE == 1) {
+                txvAddress.setText(result.getFormattedAddress());
+                txvDistance.setText((Helper.getDistanceFromMyLocation(result.getGeometry().getLocation())));
+            } else if (CommonHelper.SEARCH_MODE == 2) {
+                txvAddress.setText(result.getVicinity());
+                txvDistance.setText((Helper.getDistanceFromQueryLocation(result.getGeometry().getLocation())));
+            } else {
+                throw new RuntimeException("Illegal SEARCH_MODE");
+            }
+
             if (result.getRating() != null) {
                 txvRating.setText(String.format("%s", result.getRating()));
+                txvRating.setBackgroundColor(Color.parseColor("#129067"));
             } else {
                 txvRating.setText("--");
                 txvRating.setBackgroundColor(Color.parseColor("#a8a8a8"));

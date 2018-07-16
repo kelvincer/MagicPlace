@@ -80,5 +80,4 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="4.5" />
 
-
 </android.support.constraint.ConstraintLayout>
