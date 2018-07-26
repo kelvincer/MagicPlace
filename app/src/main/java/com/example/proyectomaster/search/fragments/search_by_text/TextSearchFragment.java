@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.R;
@@ -80,9 +81,11 @@ public class TextSearchFragment extends Fragment {
                 if (s.toString().isEmpty()) {
                     actionEmptyBtn.setVisibility(View.INVISIBLE);
                     actionSearchBtn.setVisibility(View.VISIBLE);
+                    CommonHelper.QUERY = null;
                 } else {
                     actionEmptyBtn.setVisibility(View.VISIBLE);
                     actionSearchBtn.setVisibility(View.INVISIBLE);
+                    CommonHelper.QUERY = s.toString();
                 }
             }
         });
@@ -90,18 +93,17 @@ public class TextSearchFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    newSearch(searchTextView.getText().toString());
-                    ((SearchActivity) getActivity()).hideKeyboard();
+                    newSearch();
                     return true;
                 }
                 return false;
             }
         });
-        searchTextView.setText("lima");
+        searchTextView.setText("restaurants in new york");
         actionEmptyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchTextView.setText("");
+                searchTextView.getText().clear();
             }
         });
         actionUpBtn.setOnClickListener(new View.OnClickListener() {
@@ -113,25 +115,12 @@ public class TextSearchFragment extends Fragment {
         searchTextView.setSelection(searchTextView.getText().length());
     }
 
-    private void newSearch(String currentQuery) {
-        CommonHelper.NEXT_PAGE_TOKEN = null;
-        clearData();
-        showProgressBar();
-        CommonHelper.QUERY = currentQuery;
-        hideInfoText();
-        ((SearchActivity) getActivity()).getResults(currentQuery);
-    }
-
-    private void clearData() {
-        ((SearchActivity) getActivity()).clearData();
-    }
-
-    private void showProgressBar() {
-        ((SearchActivity) getActivity()).showProgressBar();
-    }
-
-    private void hideInfoText() {
-        ((SearchActivity) getActivity()).hideInfoText();
+    private void newSearch() {
+        if (CommonHelper.QUERY != null) {
+            ((SearchActivity) getActivity()).newSearch(CommonHelper.QUERY);
+        } else {
+            Toast.makeText(getActivity(), "QUERY IS NULL", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

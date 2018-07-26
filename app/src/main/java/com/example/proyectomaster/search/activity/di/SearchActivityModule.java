@@ -2,6 +2,8 @@ package com.example.proyectomaster.search.activity.di;
 
 import com.example.proyectomaster.ActivityScope;
 import com.example.proyectomaster.lib.EventBus;
+import com.example.proyectomaster.lib.ImageLoader;
+import com.example.proyectomaster.search.activity.adapters.RecyclerViewResultAdapter;
 import com.example.proyectomaster.search.activity.api.PlacesApiService;
 import com.example.proyectomaster.search.entities.Result;
 import com.example.proyectomaster.search.activity.SearchActivityInteractor;
@@ -11,7 +13,6 @@ import com.example.proyectomaster.search.activity.SearchActivityPresenterImpl;
 import com.example.proyectomaster.search.activity.SearchActivityRepository;
 import com.example.proyectomaster.search.activity.SearchActivityRepositoryImpl;
 import com.example.proyectomaster.search.activity.adapters.OnItemClickListener;
-import com.example.proyectomaster.search.activity.adapters.PlacesApiAdapter;
 import com.example.proyectomaster.search.activity.ui.SearchActivityView;
 
 import java.util.ArrayList;
@@ -60,8 +61,8 @@ public class SearchActivityModule {
 
     @ActivityScope
     @Provides
-    PlacesApiAdapter providePlacesApiAdapter(List<Result> data, OnItemClickListener onItemClickListener) {
-        return new PlacesApiAdapter(data, onItemClickListener);
+    RecyclerViewResultAdapter providePlacesApiAdapter(List<Result> data, OnItemClickListener onItemClickListener, ImageLoader imageLoader) {
+        return new RecyclerViewResultAdapter(data, onItemClickListener, imageLoader);
     }
 
     @ActivityScope

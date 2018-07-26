@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +12,20 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectomaster.CommonHelper;
+import com.example.proyectomaster.ConstantsHelper;
 import com.example.proyectomaster.R;
-import com.example.proyectomaster.detail.activity.ui.DetailActivity;
+import com.example.proyectomaster.search.activity.ui.SearchActivity;
 import com.warkiz.widget.IndicatorSeekBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class TextOptionalParamFragment extends Fragment {
+public class TextOptionalParamFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = TextOptionalParamFragment.class.getSimpleName();
     Unbinder unbinder;
@@ -42,6 +41,8 @@ public class TextOptionalParamFragment extends Fragment {
     CheckBox chbMinprice;
     @BindView(R.id.isb_minprice)
     IndicatorSeekBar isbMinprice;
+    @BindView(R.id.txv_radius)
+    TextView txvRadius;
 
     public static Fragment newInstance() {
         Fragment fragment = new TextOptionalParamFragment();
@@ -69,8 +70,21 @@ public class TextOptionalParamFragment extends Fragment {
         unbinder.unbind();
     }
 
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.btn_location:
+                getLocation();
+                break;
+            default:
+                break;
+        }
+    }
+
     private void setupViews() {
 
+        btnLocation.setOnClickListener(this);
         etxLocation.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -84,10 +98,27 @@ public class TextOptionalParamFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty())
-                    CommonHelper.location = s.toString();
-                else
+                if (!s.toString().isEmpty()) {
+                    if (ConstantsHelper.LAT_LNG_PATTERN.matcher(s.toString()).matches()) {
+                        CommonHelper.location = s.toString();
+                        enableRadius(true);
+                        if (CommonHelper.radius == null) {
+                            Toast.makeText(getActivity(), "Debes ingresar el radio", Toast.LENGTH_SHORT).show();
+                        } else {
+                            newSearch();
+                        }
+                    } else {
+                        CommonHelper.location = null;
+                        enableRadius(false);
+                        Toast.makeText(getActivity(), "Los datos no son válidos", Toast.LENGTH_LONG).show();
+                    }
+                } else {
                     CommonHelper.location = null;
+                    CommonHelper.radius = null;
+                    etxRadius.getText().clear();
+                    enableRadius(false);
+                    newSearch();
+                }
             }
         });
 
@@ -105,20 +136,30 @@ public class TextOptionalParamFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
 
-                if (!s.toString().isEmpty())
+                if (!s.toString().isEmpty()) {
                     CommonHelper.radius = s.toString();
-                else
+                    if (CommonHelper.location == null) {
+                        Toast.makeText(getActivity(), "Debes ingresar la localización", Toast.LENGTH_SHORT).show();
+                    } else {
+                        newSearch();
+                    }
+                } else {
                     CommonHelper.radius = null;
+                    Toast.makeText(getActivity(), "Debes ingresar el radio", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         chbOpennow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
+                if (isChecked) {
                     CommonHelper.opennow = "";
-                else
+                    newSearch();
+                } else {
                     CommonHelper.opennow = null;
+                    newSearch();
+                }
             }
         });
 
@@ -130,10 +171,12 @@ public class TextOptionalParamFragment extends Fragment {
                 if (isChecked) {
                     isbMinprice.setEnabled(true);
                     CommonHelper.minprice = "0";
+                    newSearch();
                 } else {
                     isbMinprice.setEnabled(false);
                     isbMinprice.setProgress(0);
                     CommonHelper.minprice = null;
+                    newSearch();
                 }
             }
         });
@@ -149,6 +192,7 @@ public class TextOptionalParamFragment extends Fragment {
                 if (fromUserTouch) {
                     Toast.makeText(getActivity(), textBelowTick, Toast.LENGTH_SHORT).show();
                     CommonHelper.minprice = textBelowTick;
+                    newSearch();
                 } else {
                     Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
                 }
@@ -164,5 +208,28 @@ public class TextOptionalParamFragment extends Fragment {
 
             }
         });
+    }
+
+    private void enableRadius(boolean enabled) {
+        etxRadius.setEnabled(enabled);
+        txvRadius.setEnabled(enabled);
+    }
+
+    public void getLocation() {
+
+        if (CommonHelper.MY_LOCATION != null) {
+            etxLocation.setText(String.format("%1$.5f,%2$.5f", CommonHelper.MY_LOCATION.getLatitude(), CommonHelper.MY_LOCATION.getLongitude()));
+        } else {
+            Toast.makeText(getActivity(), "MY LOCATION IS NULL", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void newSearch() {
+
+        if (CommonHelper.QUERY != null) {
+            ((SearchActivity) getActivity()).newSearch(CommonHelper.QUERY);
+        } else {
+            Toast.makeText(getActivity(), "QUERY IS NULL", Toast.LENGTH_SHORT).show();
+        }
     }
 }

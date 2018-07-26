@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,6 +87,7 @@ public class NearbySearchFragment extends Fragment {
                     }
                     CommonHelper.SEARCH_QUERY_LOCATION.setLatitude(Double.valueOf(searchLat.getText().toString()));
                     String query = String.format("%s,%s", searchLat.getText().toString(), searchLong.getText().toString());
+                    Log.d("QUERY", "query " +  query );
                     newSearch(query);
                     return true;
                 }
@@ -110,6 +112,7 @@ public class NearbySearchFragment extends Fragment {
                     }
                     CommonHelper.SEARCH_QUERY_LOCATION.setLongitude(Double.valueOf(searchLong.getText().toString()));
                     String query = String.format("%s,%s", searchLat.getText().toString(), searchLong.getText().toString());
+                    Log.d("QUERY", "query " +  query );
                     newSearch(query);
                     return true;
                 }
@@ -119,34 +122,7 @@ public class NearbySearchFragment extends Fragment {
     }
 
     private void newSearch(String query) {
-
-        CommonHelper.NEXT_PAGE_TOKEN = null;
-        clearData();
-        showProgressBar();
-        CommonHelper.QUERY = query;
-        hideKeyBoard();
-        hideInfoText();
-        ((SearchActivity) getActivity()).getResults(query);
-    }
-
-    private void hideKeyBoard() {
-        ((SearchActivity) getActivity()).hideKeyboard();
-    }
-
-    private void clearData() {
-        ((SearchActivity) getActivity()).clearData();
-    }
-
-    private void showProgressBar() {
-        ((SearchActivity) getActivity()).showProgressBar();
-    }
-
-    private void hideProgressBar() {
-        ((SearchActivity) getActivity()).hideProgressBar();
-    }
-
-    private void hideInfoText() {
-        ((SearchActivity) getActivity()).hideInfoText();
+        ((SearchActivity) getActivity()).newSearch(query);
     }
 
     @Override

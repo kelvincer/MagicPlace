@@ -78,7 +78,7 @@
         <Button
             android:id="@+id/filter_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_marginTop="5dp"
             android:background="#FF7845"
             android:foreground="?android:attr/selectableItemBackground"

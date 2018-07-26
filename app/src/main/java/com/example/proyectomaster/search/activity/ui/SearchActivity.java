@@ -32,7 +32,7 @@ import com.example.proyectomaster.location.ApiLocationManager;
 import com.example.proyectomaster.location.LocationCallback;
 import com.example.proyectomaster.search.activity.SearchActivityPresenter;
 import com.example.proyectomaster.search.activity.adapters.OnItemClickListener;
-import com.example.proyectomaster.search.activity.adapters.PlacesApiAdapter;
+import com.example.proyectomaster.search.activity.adapters.RecyclerViewResultAdapter;
 import com.example.proyectomaster.search.activity.di.DaggerSearchActivityComponent;
 import com.example.proyectomaster.search.activity.di.SearchActivityModule;
 import com.example.proyectomaster.search.entities.Result;
@@ -60,7 +60,7 @@ public class SearchActivity extends AppCompatActivity implements
     @Inject
     SearchActivityPresenter presenter;
     @Inject
-    PlacesApiAdapter adapter;
+    RecyclerViewResultAdapter adapter;
     @BindView(R.id.txv_info)
     TextView txvInfo;
 
@@ -177,7 +177,7 @@ public class SearchActivity extends AppCompatActivity implements
             public void onLoadMore() {
 
                 if (CommonHelper.NEXT_PAGE_TOKEN != null) {
-                    searchAgain();
+                    getNextTokenResult();
                 } else {
                     Toast.makeText(SearchActivity.this, "TOKEN == NULL", Toast.LENGTH_SHORT).show();
                 }
@@ -185,8 +185,8 @@ public class SearchActivity extends AppCompatActivity implements
         });
     }
 
-    private void searchAgain() {
-        getResults(CommonHelper.QUERY);
+    private void getNextTokenResult() {
+        presenter.getNextResults(CommonHelper.QUERY);
     }
 
     private void addFragments() {
@@ -224,10 +224,13 @@ public class SearchActivity extends AppCompatActivity implements
 
             case "INVALID_REQUEST":
                 showInfoText("Solicitud no válida");
+                break;
             case "ZERO_RESULTS":
                 showInfoText("No hay resultados");
+                break;
             default:
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
@@ -237,20 +240,19 @@ public class SearchActivity extends AppCompatActivity implements
         Log.d(TAG, location.toString());
     }
 
-    public void getResults(String query) {
-        presenter.getResults(query);
-    }
-
+    @Override
     public void clearData() {
         adapter.clearData();
     }
 
+    @Override
     public void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         assert imm != null;
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
     }
 
+    @Override
     public void hideInfoText() {
         txvInfo.setVisibility(View.GONE);
     }
@@ -265,7 +267,6 @@ public class SearchActivity extends AppCompatActivity implements
         CommonHelper.MY_LOCATION = null;
         CommonHelper.NEXT_PAGE_TOKEN = null;
         CommonHelper.QUERY = null;
-        CommonHelper.SOURCE_MODE = 1;
         CommonHelper.SEARCH_MODE = 1;
     }
 
@@ -275,5 +276,10 @@ public class SearchActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(CommonHelper.PLACE_ID, placeId);
         startActivity(intent);
+    }
+
+    public void newSearch(String currentQuery) {
+        CommonHelper.NEXT_PAGE_TOKEN = null;
+        presenter.newSearch(currentQuery);
     }
 }

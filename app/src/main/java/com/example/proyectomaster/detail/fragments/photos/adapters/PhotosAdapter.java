@@ -69,7 +69,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    photoClickListener.onPhotoItemClickListner(photo);
+                    photoClickListener.onPhotoItemClickListner(photo, igvPhoto);
                 }
             });
         }

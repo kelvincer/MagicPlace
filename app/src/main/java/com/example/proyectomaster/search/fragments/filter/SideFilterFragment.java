@@ -50,7 +50,7 @@ public class SideFilterFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupViews();
-        addFragment(TextOptionalParamFragment.newInstance());
+        addOptionaParametersFragment(TextOptionalParamFragment.newInstance());
         resetTextSearchParam();
     }
 
@@ -74,18 +74,18 @@ public class SideFilterFragment extends Fragment {
                 if (isChecked) {
                     switch (checkedId) {
                         case R.id.rdb_text:
-                            changeToolbar(TextSearchFragment.newInstance());
+                            addSearchBarFragment(TextSearchFragment.newInstance());
                             resetTextSearchParam();
                             clearRecycleview();
                             CommonHelper.SEARCH_MODE = 1;
-                            addFragment(TextOptionalParamFragment.newInstance());
+                            addOptionaParametersFragment(TextOptionalParamFragment.newInstance());
                             break;
                         case R.id.rdb_location:
-                            changeToolbar(NearbySearchFragment.newInstance());
+                            addSearchBarFragment(NearbySearchFragment.newInstance());
                             clearRecycleview();
                             resetLocSearchParam();
                             CommonHelper.SEARCH_MODE = 2;
-                            addFragment(LocOptionalParamFragment.newInstance());
+                            addOptionaParametersFragment(LocOptionalParamFragment.newInstance());
                             break;
                         default:
                             throw new RuntimeException("Incorrect radio button id");
@@ -97,14 +97,14 @@ public class SideFilterFragment extends Fragment {
         rdgSortby.check(R.id.rdb_text);
     }
 
-    private void addFragment(Fragment fragment) {
+    private void addOptionaParametersFragment(Fragment fragment) {
 
         getFragmentManager().beginTransaction()
                 .replace(R.id.optional_parameters_container, fragment)
                 .commit();
     }
 
-    private void changeToolbar(Fragment f) {
+    private void addSearchBarFragment(Fragment f) {
         getFragmentManager().beginTransaction()
                 .replace(R.id.search_head_container, f)
                 .commit();

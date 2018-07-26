@@ -5,13 +5,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +51,7 @@ import okhttp3.Cache;
 
 public class PhotosFragment extends Fragment implements PhotoClickListener {
 
+    private static final String TAG = PhotosFragment.class.getSimpleName();
     Unbinder unbinder;
     Map<String, Drawable> drawableMap;
     @BindView(R.id.rcv_photos)
@@ -109,7 +114,7 @@ public class PhotosFragment extends Fragment implements PhotoClickListener {
     }
 
     @Override
-    public void onPhotoItemClickListner(final Photo photo) {
+    public void onPhotoItemClickListner(final Photo photo, View view) {
 
         Drawable drawable = drawableMap.get(photo.getPhotoReference());
 
@@ -127,14 +132,30 @@ public class PhotosFragment extends Fragment implements PhotoClickListener {
                 fos.close();
                 Intent intent = new Intent(getActivity(), PhotoActivity.class);
                 intent.putExtra(CommonHelper.BITMAP_PATH, f.getAbsolutePath());
-                startActivity(intent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation(getActivity(),
+                                    view,
+                                    ViewCompat.getTransitionName(view));
+                    startActivity(intent, options.toBundle());
+                } else {
+                    startActivity(intent);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
             Intent intent = new Intent(getActivity(), PhotoActivity.class);
             intent.putExtra(CommonHelper.PHOTO_REF, photo.getPhotoReference());
-            startActivity(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(getActivity(),
+                                view,
+                                ViewCompat.getTransitionName(view));
+                startActivity(intent, options.toBundle());
+            } else {
+                startActivity(intent);
+            }
         }
     }
 

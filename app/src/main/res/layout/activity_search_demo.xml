@@ -65,7 +65,7 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <RelativeLayout
-        android:id="@+id/side_filters_container"
+        android:id="@+id/side_filters"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="end"

@@ -190,6 +190,5 @@ public class LocOptionalParamFragment extends Fragment {
             }
         });
 
-        rdgSortby.check(R.id.rdb_text);
     }
 }

@@ -6,11 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
+import com.example.proyectomaster.lib.ImageLoader;
 import com.example.proyectomaster.search.entities.Result;
 
 import java.util.List;
@@ -18,15 +20,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlacesApiAdapter extends RecyclerView.Adapter<PlacesApiAdapter.ViewHolder> {
+public class RecyclerViewResultAdapter extends RecyclerView.Adapter<RecyclerViewResultAdapter.ViewHolder> {
 
 
     private List<Result> results;
     OnItemClickListener onItemClickListener;
+    ImageLoader imageLoader;
 
-    public PlacesApiAdapter(List<Result> results, OnItemClickListener onItemClickListener) {
+    public RecyclerViewResultAdapter(List<Result> results, OnItemClickListener onItemClickListener, ImageLoader imageLoader) {
         this.results = results;
         this.onItemClickListener = onItemClickListener;
+        this.imageLoader = imageLoader;
     }
 
     @NonNull
@@ -70,6 +74,8 @@ public class PlacesApiAdapter extends RecyclerView.Adapter<PlacesApiAdapter.View
         private View view;
         @BindView(R.id.txv_rating)
         TextView txvRating;
+        @BindView(R.id.igv_photo_item)
+        ImageView igvPhotoItem;
 
         public ViewHolder(View itemView) {
 
@@ -84,9 +90,17 @@ public class PlacesApiAdapter extends RecyclerView.Adapter<PlacesApiAdapter.View
             if (CommonHelper.SEARCH_MODE == 1) {
                 txvAddress.setText(result.getFormattedAddress());
                 txvDistance.setText((Helper.getDistanceFromMyLocation(result.getGeometry().getLocation())));
+
+                if (!result.getPhotos().isEmpty()) {
+                    imageLoader.load(igvPhotoItem, Helper.generateUrl(result.getPhotos().get(0).getPhotoReference()));
+                }
+
             } else if (CommonHelper.SEARCH_MODE == 2) {
                 txvAddress.setText(result.getVicinity());
                 txvDistance.setText((Helper.getDistanceFromQueryLocation(result.getGeometry().getLocation())));
+                if (!result.getPhotos().isEmpty()) {
+                    imageLoader.load(igvPhotoItem, Helper.generateUrl(result.getPhotos().get(0).getPhotoReference()));
+                }
             } else {
                 throw new RuntimeException("Illegal SEARCH_MODE");
             }

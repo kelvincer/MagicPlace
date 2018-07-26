@@ -13,4 +13,10 @@ public interface SearchActivityView {
     void hideProgressBar();
 
     void showMessage(String message);
+
+    void hideInfoText();
+
+    void hideKeyboard();
+
+    void clearData();
 }

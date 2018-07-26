@@ -39,6 +39,7 @@ public class InitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_init);
         ButterKnife.bind(this);
 
+        
         searchQuerySection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

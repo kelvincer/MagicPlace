@@ -30,7 +30,16 @@ public class SearchActivityPresenterImpl implements SearchActivityPresenter {
     }
 
     @Override
-    public void getResults(String query) {
+    public void getNextResults(String query) {
+        searchActivityInteractor.execute(query);
+    }
+
+    @Override
+    public void newSearch(String query) {
+        searchActivityView.clearData();
+        searchActivityView.hideInfoText();
+        searchActivityView.hideKeyboard();
+        searchActivityView.showProgressBar();
         searchActivityInteractor.execute(query);
     }
 

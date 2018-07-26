@@ -8,7 +8,9 @@ public interface SearchActivityPresenter {
 
     void onDestroy();
 
-    void getResults(String query);
+    void getNextResults(String query);
+
+    void newSearch(String query);
 
     void onEventMainThread(SearchEvent event);
 }
