@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item
+            android:id="@+id/id_take_photo"
+            android:checked="false"
+            android:title="@string/string_take_photo"/>
+
+        <item
+            android:id="@+id/id_publish"
+            android:checked="false"
+            android:title="@string/string_publish"/>
+    </group>
+
+</menu>

@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectomaster.CommonHelper;
+import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.detail.activity.ui.DetailActivity;
 import com.example.proyectomaster.lib.di.LibsModule;
@@ -247,9 +248,7 @@ public class SearchActivity extends AppCompatActivity implements
 
     @Override
     public void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        assert imm != null;
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        Helper.hideKeyboard(this, getCurrentFocus().getWindowToken());
     }
 
     @Override

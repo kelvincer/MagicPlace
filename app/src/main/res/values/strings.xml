@@ -11,6 +11,8 @@
     <string name="action_example_sliding_search_bar">Sliding search view</string>
     <string name="action_example_scrolling_search_bar">scrolling behavior</string>
     <string name="filtro_title">Filtros</string>
+    <string name="string_take_photo">Agregar foto</string>
+    <string name="string_publish">Publicar</string>
 
     <string-array name="planets_array">
         <item>Mer</item>

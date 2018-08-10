@@ -39,6 +39,7 @@
         <activity
             android:name=".detail.dialog.DialogActivity"
             android:theme="@style/AppDialogTheme" />
+        <activity android:name=".note.NoteActivity"></activity>
     </application>
 
 </manifest>

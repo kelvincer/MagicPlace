@@ -1,9 +1,14 @@
 package com.example.proyectomaster;
 
 
+import android.content.Context;
+import android.os.IBinder;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 
 import com.example.proyectomaster.search.entities.Location;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class Helper {
 
@@ -39,5 +44,11 @@ public class Helper {
                 "&maxheight=800", photoReference);
 
         return url;
+    }
+
+    public static void hideKeyboard(Context context, IBinder iBinder) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
+        assert imm != null;
+        imm.hideSoftInputFromWindow(iBinder, 0);
     }
 }

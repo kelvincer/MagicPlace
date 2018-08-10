@@ -2,6 +2,7 @@ package com.example.proyectomaster.lib;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -30,6 +31,7 @@ import com.example.proyectomaster.detail.fragments.listener.PhotoClickListener;
 
 public class GlideImageLoader implements ImageLoader {
 
+    private static final String TAG = GlideImageLoader.class.getSimpleName();
     private RequestManager glideRequestManager;
     private RequestListener onFinishedImageLoadingListener;
     private Activity activity;
@@ -46,15 +48,13 @@ public class GlideImageLoader implements ImageLoader {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .timeout(10000)
                 .skipMemoryCache(true)
-                /*         .override(1400, 450)*/
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .placeholder(R.drawable.background_blur);
-        //.centerCrop();
 
         if (onFinishedImageLoadingListener != null) {
             glideRequestManager
                     .load(URL)
                     .apply(requestOptions)
-
                     .listener(onFinishedImageLoadingListener)
                     .into(imageView);
         } else {
@@ -74,7 +74,6 @@ public class GlideImageLoader implements ImageLoader {
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .placeholder(R.drawable.background_blur);
 
-
         String url = Helper.generateUrl(photoRef);
 
         Log.d("IMAGE", url);
@@ -85,7 +84,7 @@ public class GlideImageLoader implements ImageLoader {
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-
+                        e.printStackTrace();
                         return false;
                     }
 
@@ -123,10 +122,12 @@ public class GlideImageLoader implements ImageLoader {
                     public void onResourceReady(@NonNull final Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
                             public void onGenerated(Palette palette) {
-                                int vibrantColor = palette.getVibrantColor(0);
-                                int vibrantDarkColor = palette.getDarkVibrantColor(0);
+                                int vibrantColor = palette.getVibrantColor(Color.parseColor("#FF0000"));
+                                Log.d(TAG, "vibrantColor " + vibrantColor);
+                                int darkVibrantColor = palette.getDarkVibrantColor(Color.parseColor("#000000"));
+                                Log.d(TAG, "darkVibrantColor " + darkVibrantColor);
                                 collapsingToolbarLayout.setContentScrimColor(vibrantColor);
-                                collapsingToolbarLayout.setStatusBarScrimColor(vibrantDarkColor);
+                                collapsingToolbarLayout.setStatusBarScrimColor(darkVibrantColor);
                                 imageView.setImageBitmap(resource);
                             }
                         });

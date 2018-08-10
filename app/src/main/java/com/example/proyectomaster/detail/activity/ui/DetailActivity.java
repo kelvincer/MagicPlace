@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +23,9 @@ import com.example.proyectomaster.detail.activity.di.DetailModule;
 import com.example.proyectomaster.detail.entities.Result;
 import com.example.proyectomaster.lib.ImageLoader;
 import com.example.proyectomaster.lib.di.LibsModule;
+import com.example.proyectomaster.note.NoteActivity;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialView;
 
 import javax.inject.Inject;
 
@@ -34,8 +34,8 @@ import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements DetailActivityView, TabLayout.OnTabSelectedListener {
 
-    private final String[] pageTitle = {"DESTACADOS", "FOTOS"};
-
+    private final String[] pageTitle = {"DESTACADOS", "FOTOS", "NOTAS"};
+    Result result;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tab_layout)
@@ -46,15 +46,12 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     AppBarLayout appBar;
     @BindView(R.id.pager)
     ViewPager pager;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
     @BindView(R.id.header)
     ImageView header;
     @Inject
     DetailActivityPresenter presenter;
     @Inject
     ImageLoader imageLoader;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,13 +72,48 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         tabLayout.addOnTabSelectedListener(this);
         presenter.onCreate();
         presenter.getPlaceDetail(id);
-
     }
 
     private void setupTabLayout() {
         for (int i = 0; i < pageTitle.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(pageTitle[i]));
         }
+
+        setupSpeedDial();
+    }
+
+    private void setupSpeedDial() {
+
+        SpeedDialView speedDialView = findViewById(R.id.speedDial);
+        speedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_photo_label, R.drawable
+                .ic_add_a_photo_white_24dp)
+                .setLabel("Agregar una foto")
+                .setLabelColor(Color.BLACK)
+                .create());
+        speedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_note_label, R.drawable
+                .ic_note_add_white_24dp)
+                .setLabel("Dejar una nota")
+                .setLabelColor(Color.BLACK)
+                .create());
+
+        speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
+            @Override
+            public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
+                switch (speedDialActionItem.getId()) {
+                    case R.id.fab_photo_label:
+                        Toast.makeText(DetailActivity.this, "QO", Toast.LENGTH_SHORT).show();
+                        return false; // true to keep the Speed Dial open
+                    case R.id.fab_note_label:
+                        Toast.makeText(DetailActivity.this, "TO", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(DetailActivity.this, NoteActivity.class);
+                        intent.putExtra(CommonHelper.PLACE_NAME, result.getName());
+                        startActivity(intent);
+                        return false;
+                    default:
+                        return false;
+                }
+            }
+        });
     }
 
     @Override
@@ -117,13 +149,14 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     @Override
     public void setResult(Result result) {
 
-        setupView(result);
+        this.result = result;
+        setupActionBar(result);
         String photoReference = result.getPhotos().get(0).getPhotoReference();
         imageLoader.load(header, collapsingToolbarLayout, Helper.generateUrl(photoReference));
         pager.setAdapter(new PagerAdapter(getSupportFragmentManager(), pageTitle.length, result, imageLoader));
     }
 
-    private void setupView(Result result) {
+    private void setupActionBar(Result result) {
         getSupportActionBar().setTitle(result.getName());
         getSupportActionBar().setDisplayShowTitleEnabled(true);
     }
