@@ -9,8 +9,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -23,21 +21,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectomaster.CommonHelper;
+import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
-import com.example.proyectomaster.detail.dialog.DialogActivity;
+import com.example.proyectomaster.app.MainApplication;
+import com.example.proyectomaster.detail.activity.di.DetailApiModule;
+import com.example.proyectomaster.detail.activity.di.DetailModule;
+import com.example.proyectomaster.detail.activity.ui.DetailActivity;
+import com.example.proyectomaster.dialog.LoginDialogActivity;
 import com.example.proyectomaster.detail.entities.Result;
 import com.example.proyectomaster.detail.entities.StoragePhoto;
 import com.example.proyectomaster.detail.fragments.highlight.HighlightPresenter;
 import com.example.proyectomaster.detail.fragments.highlight.adapters.FavoritosFirestoreAdapter;
-import com.example.proyectomaster.detail.fragments.highlight.di.DaggerHighlightComponent;
-import com.example.proyectomaster.detail.fragments.highlight.di.HighlightModule;
+import com.example.proyectomaster.detail.fragments.highlight.di.HighlightFragmentModule;
 import com.example.proyectomaster.lib.ImageLoader;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.willy.ratingbar.ScaleRatingBar;
-
-import java.io.ByteArrayOutputStream;
 
 import javax.inject.Inject;
 
@@ -52,11 +52,12 @@ public class HighlightsFragment extends Fragment implements View.OnClickListener
 
     private static final String TAG = HighlightsFragment.class.getSimpleName();
     private static final int REQUEST_CAPTURE_IMAGE = 100;
+    private static final int LOGIN_REQUEST_CODE = 101;
     Unbinder unbinder;
     Result result;
 
     Dialog dialog;
-    ImageLoader imageLoader;
+
     FavoritosFirestoreAdapter adapter;
     @BindView(R.id.txv_label_count)
     TextView txvLabelCount;
@@ -71,14 +72,14 @@ public class HighlightsFragment extends Fragment implements View.OnClickListener
 
     @Inject
     HighlightPresenter presenter;
+    @Inject
+    ImageLoader imageLoader;
 
-
-    public static Fragment getInstance(Result result, ImageLoader imageLoader) {
+    public static Fragment getInstance(Result result) {
         HighlightsFragment fragment = new HighlightsFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(CommonHelper.RESULT, result);
         fragment.setArguments(bundle);
-        fragment.imageLoader = imageLoader;
         return fragment;
     }
 
@@ -89,16 +90,19 @@ public class HighlightsFragment extends Fragment implements View.OnClickListener
         Bundle bundle = getArguments();
         result = (Result) bundle.getSerializable(CommonHelper.RESULT);
 
-
         setupInjection();
         presenter.onCreate();
     }
 
     private void setupInjection() {
 
-        DaggerHighlightComponent.builder()
-                .highlightModule(new HighlightModule(this))
+        /*DaggerHighlightFragmentComponent.builder()
+                .highlightModule(new HighlightFragmentModule(this))
                 .build()
+                .inject(this);*/
+        MainApplication.getAppComponent()
+                .newDetailComponent(new DetailApiModule(), new DetailModule(((DetailActivity) getActivity()).getView()))
+                .newHighlightComponent(new HighlightFragmentModule(this))
                 .inject(this);
     }
 
@@ -124,7 +128,7 @@ public class HighlightsFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        if(adapter != null)
+        if (adapter != null)
             adapter.startListening();
     }
 
@@ -146,21 +150,29 @@ public class HighlightsFragment extends Fragment implements View.OnClickListener
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CAPTURE_IMAGE &&
-                resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                uploadToFirebaseStorage(imageBitmap);
-            }
+
+        switch (requestCode) {
+
+            case REQUEST_CAPTURE_IMAGE:
+                if (resultCode == RESULT_OK) {
+                    if (data != null && data.getExtras() != null) {
+                        Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                        uploadToFirebaseStorage(imageBitmap);
+                    }
+                }
+                break;
+            case LOGIN_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    loadFavoritePhotos();
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid request code");
         }
     }
 
     private void uploadToFirebaseStorage(Bitmap bitmap) {
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
-        presenter.uploadPhoto(data, result.getPlaceId());
+        presenter.uploadPhoto(Helper.bitmapToByteArray(bitmap), result.getPlaceId());
     }
 
     private void setupViews() {
@@ -177,9 +189,10 @@ public class HighlightsFragment extends Fragment implements View.OnClickListener
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser == null)
-            startActivity(new Intent(getActivity(), DialogActivity.class));
-        else
+            startActivityForResult(new Intent(getActivity(), LoginDialogActivity.class), LOGIN_REQUEST_CODE);
+        else {
             launchChooserDialog();
+        }
     }
 
     private void launchChooserDialog() {
@@ -222,7 +235,7 @@ public class HighlightsFragment extends Fragment implements View.OnClickListener
     public void setOptions(FirestoreRecyclerOptions<StoragePhoto> options) {
 
         adapter = new FavoritosFirestoreAdapter(options, imageLoader);
-       // ryvFavoritos.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        // ryvFavoritos.setLayoutManager(new GridLayoutManager(getContext(), 2));
         ryvFavoritos.setLayoutManager(new StaggeredGridLayoutManager(3, 1));
         ryvFavoritos.setAdapter(adapter);
         //ryvFavoritos.addItemDecoration(new ItemOffsetDecoration(2));

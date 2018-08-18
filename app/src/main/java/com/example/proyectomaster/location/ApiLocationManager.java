@@ -8,6 +8,9 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.proyectomaster.CommonHelper;
 
 import java.util.List;
 
@@ -20,8 +23,8 @@ import static android.content.Context.LOCATION_SERVICE;
 public class ApiLocationManager implements LocationListener {
 
     private static final String TAG = ApiLocationManager.class.getSimpleName();
-    private static final long TIEMPO_MIN = 60 * 1000; // 60 segundos
-    private static final long DISTANCIA_MIN = 5; // 5 metros
+    private static final long TIEMPO_MIN = 30 * 1000; // 30 segundos
+    private static final long DISTANCIA_MIN = 1; // 1 metros
     private static final String[] A = {"n/d", "preciso", "impreciso"};
     private static final String[] P = {"n/d", "bajo", "medio", "alto"};
     private static final String[] E = {"fuera de servicio",
@@ -46,6 +49,7 @@ public class ApiLocationManager implements LocationListener {
         Location localizacion = null;
         try {
             localizacion = manejador.getLastKnownLocation(proveedor);
+            CommonHelper.MY_LOCATION = localizacion;
         } catch (SecurityException e) {
             e.printStackTrace();
         }

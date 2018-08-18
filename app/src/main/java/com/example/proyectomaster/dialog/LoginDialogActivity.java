@@ -1,5 +1,6 @@
-package com.example.proyectomaster.detail.dialog;
+package com.example.proyectomaster.dialog;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,7 +26,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DialogActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class LoginDialogActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private static final int RC_GOOGLE_SIGN_IN = 123;
@@ -61,7 +62,7 @@ public class DialogActivity extends FragmentActivity implements GoogleApiClient.
                 if (result.isSuccess()) {
                     googleAuth(result.getSignInAccount());
                 } else {
-                    mensaje("Error de autentificación con Google");
+                    messageOnError("Error de autentificación con Google");
                 }
             }
         }
@@ -75,7 +76,7 @@ public class DialogActivity extends FragmentActivity implements GoogleApiClient.
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            mensaje(task.getException().getLocalizedMessage());
+                            messageOnError(task.getException().getLocalizedMessage());
                         } else {
                             verificaSiUsuarioValidado();
                         }
@@ -84,8 +85,10 @@ public class DialogActivity extends FragmentActivity implements GoogleApiClient.
 
     }
 
-    private void mensaje(String mensaje) {
+    private void messageOnError(String mensaje) {
         Snackbar.make(container, mensaje, Snackbar.LENGTH_LONG).show();
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
     }
 
@@ -94,22 +97,15 @@ public class DialogActivity extends FragmentActivity implements GoogleApiClient.
         startActivityForResult(i, RC_GOOGLE_SIGN_IN);
     }
 
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        mensaje("Error de autentificación con Google");
+        messageOnError("Error de autentificación con Google");
     }
 
     private void verificaSiUsuarioValidado() {
-        /*if (!unificar && auth.getCurrentUser() != null) {
-            guardarUsuario(auth.getCurrentUser());
-            Intent i = new Intent(this, MainActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    | Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(i);
-            finish();
-        }*/
-        mensaje("CORRECT");
+        //messageOnError("CORRECT");
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 }

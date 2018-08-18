@@ -3,12 +3,12 @@
     package="com.example.proyectomaster">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />d
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".MainApplication"
+        android:name=".app.MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".InitActivity"
+            android:name=".start.InitActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +28,7 @@
         <activity
             android:name=".search.activity.ui.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan|stateVisible" />
         <activity
             android:name=".detail.activity.ui.DetailActivity"
             android:theme="@style/AppTheme.NoActionAndStatusBar" />
@@ -37,9 +37,9 @@
             android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".detail.dialog.DialogActivity"
+            android:name=".dialog.LoginDialogActivity"
             android:theme="@style/AppDialogTheme" />
-        <activity android:name=".note.NoteActivity"></activity>
+        <activity android:name=".note.ui.NoteActivity"></activity>
     </application>
 
 </manifest>

@@ -20,9 +20,8 @@ import android.widget.Toast;
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
+import com.example.proyectomaster.app.MainApplication;
 import com.example.proyectomaster.lib.ImageLoader;
-import com.example.proyectomaster.lib.di.DaggerLibsComponent;
-import com.example.proyectomaster.lib.di.LibsModule;
 import com.jsibbold.zoomage.ZoomageView;
 
 import java.io.File;
@@ -35,8 +34,6 @@ import butterknife.ButterKnife;
 public class PhotoActivity extends AppCompatActivity {
 
     private static final String TAG = PhotoActivity.class.getSimpleName();
-    @Inject
-    ImageLoader imageLoader;
     @BindView(R.id.myZoomageView)
     ZoomageView myZoomageView;
     File imgFile;
@@ -44,6 +41,8 @@ public class PhotoActivity extends AppCompatActivity {
     View viewMain;*/
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @Inject
+    ImageLoader imageLoader;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -66,10 +65,11 @@ public class PhotoActivity extends AppCompatActivity {
             }
         } else {
             String reference = getIntent().getStringExtra(CommonHelper.PHOTO_REF);
-            DaggerLibsComponent.builder()
+            /*DaggerLibsComponent.builder()
                     .libsModule(new LibsModule(this))
                     .build()
-                    .inject(this);
+                    .inject(this);*/
+            setupInjection();
 
             imageLoader.load(myZoomageView, Helper.generateUrl(reference));
         }
@@ -116,6 +116,13 @@ public class PhotoActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void setupInjection() {
+
+        MainApplication.getAppComponent()
+                .newPhotoComponent()
+                .inject(this);
     }
 
     @Override

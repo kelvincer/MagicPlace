@@ -1,29 +1,33 @@
-package com.example.proyectomaster;
+package com.example.proyectomaster.start.fragments;
 
 import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.proyectomaster.R;
 import com.example.proyectomaster.search.activity.ui.SearchActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class InitActivity extends AppCompatActivity {
+public class InitFragment extends Fragment {
 
     @BindView(R.id.lnl_init)
     RelativeLayout lnlInit;
@@ -32,21 +36,25 @@ public class InitActivity extends AppCompatActivity {
     @BindView(R.id.txv_title)
     TextView txvTitle;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_init);
-        ButterKnife.bind(this);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_init, container, false);
+        ButterKnife.bind(this, view);
+        return view;
+    }
 
-        
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         searchQuerySection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(InitActivity.this, SearchActivity.class);
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ActivityOptionsCompat options = ActivityOptionsCompat.
-                            makeSceneTransitionAnimation(InitActivity.this,
+                            makeSceneTransitionAnimation(getActivity(),
                                     searchQuerySection,
                                     ViewCompat.getTransitionName(searchQuerySection));
                     startActivity(intent, options.toBundle());
@@ -84,7 +92,7 @@ public class InitActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
                 //txvTitle.animate().y(80).setDuration(200);
-                Animation animacion = AnimationUtils.loadAnimation(InitActivity.this,
+                Animation animacion = AnimationUtils.loadAnimation(getContext(),
                         R.anim.animacion);
                 animacion.setFillAfter(true);
                 animacion.setDuration(150);

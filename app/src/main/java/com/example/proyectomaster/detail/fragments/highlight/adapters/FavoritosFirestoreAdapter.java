@@ -18,16 +18,8 @@ import butterknife.ButterKnife;
 
 public class FavoritosFirestoreAdapter extends FirestoreRecyclerAdapter<StoragePhoto, FavoritosFirestoreAdapter.ViewHolder> {
 
-
     ImageLoader imageLoader;
 
-
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
     public FavoritosFirestoreAdapter(@NonNull FirestoreRecyclerOptions<StoragePhoto> options, ImageLoader imageLoader) {
         super(options);
         this.imageLoader = imageLoader;
@@ -59,7 +51,6 @@ public class FavoritosFirestoreAdapter extends FirestoreRecyclerAdapter<StorageP
         }
 
         public void bindItem(StoragePhoto photo) {
-
             imageLoader.load(favorPhoto, photo.getUrl());
         }
     }

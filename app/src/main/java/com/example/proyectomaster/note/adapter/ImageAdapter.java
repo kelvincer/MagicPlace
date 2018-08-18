@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.proyectomaster.R;
@@ -57,15 +58,16 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView = convertView.findViewById(R.id.image_photo);
         Glide.with(context).load(images.get(position)).into(imageView);
 
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Position: " + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return convertView;
     }
 
-    /**
-     * Getting All Images Path.
-     *
-     * @param activity the activity
-     * @return ArrayList with images Path
-     */
     private ArrayList<String> getAllShownImagesPath(Activity activity) {
         Uri uri;
         Cursor cursor;

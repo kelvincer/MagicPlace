@@ -1,4 +1,4 @@
-package com.example.proyectomaster.detail.fragments.notes;
+package com.example.proyectomaster.start.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,23 +10,12 @@ import android.view.ViewGroup;
 
 import com.example.proyectomaster.R;
 
-import butterknife.ButterKnife;
-
-public class NotesFragment extends Fragment{
-
-    private static final String TAG = NotesFragment.class.getSimpleName();
-    public static Fragment getInstance() {
-
-        Fragment fragment = new NotesFragment();
-        return fragment;
-    }
+public class FavoritesFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_notes, container, false);
-        ButterKnife.bind(this, view);
+        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         return view;
     }
 }

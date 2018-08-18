@@ -1,6 +1,7 @@
 package com.example.proyectomaster.lib;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -34,9 +35,9 @@ public class GlideImageLoader implements ImageLoader {
     private static final String TAG = GlideImageLoader.class.getSimpleName();
     private RequestManager glideRequestManager;
     private RequestListener onFinishedImageLoadingListener;
-    private Activity activity;
+    private Context activity;
 
-    public void setLoaderContext(Activity activity) {
+    public void setLoaderContext(Context activity) {
         this.glideRequestManager = Glide.with(activity);
         this.activity = activity;
     }

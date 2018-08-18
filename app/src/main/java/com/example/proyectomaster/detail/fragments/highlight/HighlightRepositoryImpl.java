@@ -13,7 +13,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -55,7 +54,7 @@ public class HighlightRepositoryImpl implements HighlightRepository {
                 if (queryDocumentSnapshots.getDocuments().size() != 0) {
                     FirestoreRecyclerOptions<StoragePhoto> options = new FirestoreRecyclerOptions
                             .Builder<StoragePhoto>().setQuery(query, StoragePhoto.class).build();
-                    post(HighlightEvent.GET_PHOTOS, options);
+                    post(HighlightEvent.GET_PHOTOS_SUCCESS, options);
                     Log.d("DEBUG", "on success");
                 } else {
                     post(HighlightEvent.NO_PHOTOS, "NO HAY PHOTOS");
@@ -78,6 +77,7 @@ public class HighlightRepositoryImpl implements HighlightRepository {
         final StorageReference imageRef = storageRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(uuid + ".jpg");
 
         UploadTask uploadTask = imageRef.putBytes(data);
+
         /*imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -93,7 +93,7 @@ public class HighlightRepositoryImpl implements HighlightRepository {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "UPLOAD DATA TO FIRESTORE SUCCESS");
-                        post(HighlightEvent.ON_SUCCESS);
+                        post(HighlightEvent.ON_SUCCESS_UPLOAD_PHOTO);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -129,12 +129,13 @@ public class HighlightRepositoryImpl implements HighlightRepository {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.d(TAG, "UPLOAD DATA TO FIRESTORE SUCCESS");
-                                post(HighlightEvent.ON_SUCCESS);
+                                post(HighlightEvent.ON_SUCCESS_UPLOAD_PHOTO);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 e.printStackTrace();
+                                post(HighlightEvent.ERROR, e.getMessage());
                                 Log.d(TAG, "UPLOAD DATA TO FIRESTORE FAILURE");
                             }
                         });

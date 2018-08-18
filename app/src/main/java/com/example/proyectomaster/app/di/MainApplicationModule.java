@@ -1,8 +1,7 @@
-package com.example.proyectomaster.lib.di;
+package com.example.proyectomaster.app.di;
 
-import android.app.Activity;
+import android.content.Context;
 
-import com.example.proyectomaster.ActivityScope;
 import com.example.proyectomaster.ConstantsHelper;
 import com.example.proyectomaster.lib.EventBus;
 import com.example.proyectomaster.lib.GlideImageLoader;
@@ -11,50 +10,49 @@ import com.example.proyectomaster.lib.ImageLoader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * Created by ykro.
- */
 @Module
-public class LibsModule {
+public class MainApplicationModule {
 
-    Activity activity;
+    Context appContext;
 
-    public LibsModule() {
+    public MainApplicationModule() {
     }
 
-    public LibsModule(Activity activity) {
-        this.activity = activity;
+    public MainApplicationModule(Context appContext) {
+        this.appContext = appContext;
     }
 
+    @Singleton
     @Provides
-    @ActivityScope
     EventBus provideEventBus() {
         return new GreenRobotEventBus();
     }
 
+    @Singleton
     @Provides
-    @ActivityScope
-    ImageLoader provideImageLoader(Activity activity) {
+    ImageLoader provideImageLoader(Context appContext) {
         GlideImageLoader imageLoader = new GlideImageLoader();
-        if (activity != null) {
-            imageLoader.setLoaderContext(activity);
+        if (appContext != null) {
+            imageLoader.setLoaderContext(appContext);
         }
         return imageLoader;
     }
 
+    @Singleton
     @Provides
-    @ActivityScope
-    Activity provideActivity() {
-        return this.activity;
+    Context provideAppContext() {
+        return this.appContext;
     }
 
+    @Singleton
     @Provides
-    @ActivityScope
     public Retrofit PlaceApiClient(GsonConverterFactory gsonConverterFactory) {
         return new Retrofit.Builder()
                 .baseUrl(ConstantsHelper.BASE_URL)
@@ -62,14 +60,14 @@ public class LibsModule {
                 .build();
     }
 
+    @Singleton
     @Provides
-    @ActivityScope
     public GsonConverterFactory gsonConverterFactory(Gson gson) {
         return GsonConverterFactory.create(gson);
     }
 
+    @Singleton
     @Provides
-    @ActivityScope
     public Gson gson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         return gsonBuilder.create();

@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.example.proyectomaster.detail.entities.Result;
 import com.example.proyectomaster.detail.fragments.highlight.ui.HighlightsFragment;
-import com.example.proyectomaster.detail.fragments.notes.NotesFragment;
+import com.example.proyectomaster.detail.fragments.notes.ui.NotesFragment;
 import com.example.proyectomaster.detail.fragments.photos.PhotosFragment;
 import com.example.proyectomaster.lib.ImageLoader;
 
@@ -30,11 +30,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                return HighlightsFragment.getInstance(result, imageLoader);
+                return HighlightsFragment.getInstance(result);
             case 1:
                 return PhotosFragment.getInstance(result);
             case 2:
-                return NotesFragment.getInstance();
+                return NotesFragment.getInstance(result);
         }
 
         return null;

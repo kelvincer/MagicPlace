@@ -8,7 +8,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class HighlightPresenterImpl implements HighlightPresenter {
 
-
     private EventBus eventBus;
     private HighlightView highlightView;
     private HighlightInteractor highlightInteractor;
@@ -45,15 +44,16 @@ public class HighlightPresenterImpl implements HighlightPresenter {
     public void onEventMainThread(HighlightEvent event) {
 
         switch (event.getType()) {
-            case HighlightEvent.GET_PHOTOS:
+            case HighlightEvent.GET_PHOTOS_SUCCESS:
                 highlightView.setOptions(event.getOpciones());
                 break;
             case HighlightEvent.ERROR:
                 highlightView.showMessage(event.getMessage());
                 break;
-            case HighlightEvent.ON_SUCCESS:
+
+            /*case HighlightEvent.ON_SUCCESS_UPLOAD_PHOTO:
                 highlightView.loadFavoritePhotos();
-                break;
+                break;*/
             case HighlightEvent.NO_PHOTOS:
                 highlightView.showMessage(event.getMessage());
                 break;

@@ -19,7 +19,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,14 +26,13 @@ import android.widget.Toast;
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
+import com.example.proyectomaster.app.MainApplication;
 import com.example.proyectomaster.detail.activity.ui.DetailActivity;
-import com.example.proyectomaster.lib.di.LibsModule;
 import com.example.proyectomaster.location.ApiLocationManager;
 import com.example.proyectomaster.location.LocationCallback;
 import com.example.proyectomaster.search.activity.SearchActivityPresenter;
 import com.example.proyectomaster.search.activity.adapters.OnItemClickListener;
 import com.example.proyectomaster.search.activity.adapters.RecyclerViewResultAdapter;
-import com.example.proyectomaster.search.activity.di.DaggerSearchActivityComponent;
 import com.example.proyectomaster.search.activity.di.SearchActivityModule;
 import com.example.proyectomaster.search.entities.Result;
 import com.example.proyectomaster.search.fragments.filter.SideFilterFragment;
@@ -55,19 +53,19 @@ public class SearchActivity extends AppCompatActivity implements
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     @BindView(R.id.places_recycler)
-    RecyclerView placesRecyclers;
+    RecyclerView placesRecycler;
     @BindView(R.id.progressbar)
     ProgressBar progressbar;
+    @BindView(R.id.txv_info)
+    TextView txvInfo;
+    private List<String> listaPermisos = new ArrayList<>();
+    private int SOLICITUD_PERMISO = 100;
+    ApiLocationManager locationManager;
+
     @Inject
     SearchActivityPresenter presenter;
     @Inject
     RecyclerViewResultAdapter adapter;
-    @BindView(R.id.txv_info)
-    TextView txvInfo;
-
-    private List<String> listaPermisos = new ArrayList<>();
-    private int SOLICITUD_PERMISO = 100;
-    ApiLocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +73,12 @@ public class SearchActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_search_demo);
         ButterKnife.bind(this);
 
+        initVariables();
         setupInjection();
         addFragments();
-        setupRecyclerView();
+        setupViews();
         presenter.onCreate();
         setupPermission();
-        initVariables();
     }
 
     @Override
@@ -161,19 +159,22 @@ public class SearchActivity extends AppCompatActivity implements
 
     private void setupInjection() {
 
-        DaggerSearchActivityComponent.builder()
+        /*DaggerSearchActivityComponent.builder()
                 .libsModule(new LibsModule(this))
                 .searchActivityModule(new SearchActivityModule(this, this))
                 .build()
+                .inject(this);*/
+        MainApplication.getAppComponent()
+                .newSearchActivityComponent(new SearchActivityModule(this, this))
                 .inject(this);
     }
 
-    private void setupRecyclerView() {
+    private void setupViews() {
 
-        placesRecyclers.setLayoutManager(new LinearLayoutManager(this));
-        placesRecyclers.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        placesRecyclers.setAdapter(adapter);
-        placesRecyclers.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+        placesRecycler.setLayoutManager(new LinearLayoutManager(this));
+        placesRecycler.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        placesRecycler.setAdapter(adapter);
+        placesRecycler.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
             public void onLoadMore() {
 

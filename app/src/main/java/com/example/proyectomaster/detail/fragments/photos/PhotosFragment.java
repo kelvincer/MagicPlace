@@ -21,26 +21,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.proyectomaster.CommonHelper;
+import com.example.proyectomaster.app.MainApplication;
+import com.example.proyectomaster.detail.activity.di.DetailApiModule;
+import com.example.proyectomaster.detail.activity.di.DetailModule;
+import com.example.proyectomaster.detail.activity.ui.DetailActivity;
 import com.example.proyectomaster.detail.fragments.GridSpacingItemDecoration;
 import com.example.proyectomaster.detail.fragments.photos.adapters.PhotosAdapter;
-import com.example.proyectomaster.lib.di.DaggerLibsComponent;
 import com.example.proyectomaster.photo.PhotoActivity;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.detail.entities.Photo;
 import com.example.proyectomaster.detail.entities.Result;
 import com.example.proyectomaster.detail.fragments.listener.PhotoClickListener;
 import com.example.proyectomaster.lib.ImageLoader;
-import com.example.proyectomaster.lib.di.LibsModule;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -107,9 +106,13 @@ public class PhotosFragment extends Fragment implements PhotoClickListener {
 
     private void setupInjection() {
 
-        DaggerLibsComponent.builder()
+        /*DaggerLibsComponent.builder()
                 .libsModule(new LibsModule(getActivity()))
                 .build()
+                .inject(this);*/
+        MainApplication.getAppComponent()
+                .newDetailComponent(new DetailApiModule(), new DetailModule(((DetailActivity) getActivity()).getView()))
+                .newPhotoFragmentComponent()
                 .inject(this);
     }
 

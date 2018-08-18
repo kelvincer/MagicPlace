@@ -16,14 +16,14 @@ import android.widget.Toast;
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
+import com.example.proyectomaster.app.MainApplication;
 import com.example.proyectomaster.detail.activity.DetailActivityPresenter;
 import com.example.proyectomaster.detail.activity.adapters.PagerAdapter;
-import com.example.proyectomaster.detail.activity.di.DaggerDetailComponent;
+import com.example.proyectomaster.detail.activity.di.DetailApiModule;
 import com.example.proyectomaster.detail.activity.di.DetailModule;
 import com.example.proyectomaster.detail.entities.Result;
 import com.example.proyectomaster.lib.ImageLoader;
-import com.example.proyectomaster.lib.di.LibsModule;
-import com.example.proyectomaster.note.NoteActivity;
+import com.example.proyectomaster.note.ui.NoteActivity;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -107,6 +107,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
                         Toast.makeText(DetailActivity.this, "TO", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(DetailActivity.this, NoteActivity.class);
                         intent.putExtra(CommonHelper.PLACE_NAME, result.getName());
+                        intent.putExtra(CommonHelper.PLACE_ID, result.getPlaceId());
                         startActivity(intent);
                         return false;
                     default:
@@ -122,12 +123,19 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         presenter.onDestroy();
     }
 
+    public DetailActivityView getView(){
+        return this;
+    }
+
     private void setupInjection() {
 
-        DaggerDetailComponent.builder()
+        /*DaggerDetailActivityComponent.builder()
                 .detailModule(new DetailModule(this, this, pageTitle.length))
                 .libsModule(new LibsModule(this))
                 .build()
+                .inject(this);*/
+        MainApplication.getAppComponent()
+                .newDetailComponent(new DetailApiModule(), new DetailModule(this))
                 .inject(this);
     }
 

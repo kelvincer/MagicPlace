@@ -8,9 +8,9 @@ public class HighlightEvent {
     private int type;
     private String message;
     FirestoreRecyclerOptions<StoragePhoto> opciones;
-    public static final int GET_PHOTOS = 0;
+    public static final int GET_PHOTOS_SUCCESS = 0;
     public static final int ERROR = 1;
-    public static final int ON_SUCCESS = 2;
+    public static final int ON_SUCCESS_UPLOAD_PHOTO = 2;
     public static final int NO_PHOTOS = 3;
 
     public int getType() {

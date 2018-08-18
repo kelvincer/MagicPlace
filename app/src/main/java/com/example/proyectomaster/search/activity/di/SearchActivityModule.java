@@ -1,6 +1,6 @@
 package com.example.proyectomaster.search.activity.di;
 
-import com.example.proyectomaster.ActivityScope;
+import com.example.proyectomaster.PerActivity;
 import com.example.proyectomaster.lib.EventBus;
 import com.example.proyectomaster.lib.ImageLoader;
 import com.example.proyectomaster.search.activity.adapters.RecyclerViewResultAdapter;
@@ -33,51 +33,51 @@ public class SearchActivityModule {
         this.onItemClickListener = onItemClickListener;
     }
 
-    @ActivityScope
+    @PerActivity
     @Provides
     SearchActivityView provideSearchActivityView() {
         return searchActivityView;
     }
 
-    @ActivityScope
+    @PerActivity
     @Provides
     SearchActivityPresenter provideSearchActivityPresenter(EventBus eventBus, SearchActivityView searchActivityView, SearchActivityInteractor searchActivityInteractor) {
 
         return new SearchActivityPresenterImpl(eventBus, searchActivityView, searchActivityInteractor);
     }
 
-    @ActivityScope
+    @PerActivity
     @Provides
     SearchActivityInteractor provideSearchActivityInteractor(SearchActivityRepository searchActivityRepository) {
         return new SearchActivityInteractorImpl(searchActivityRepository);
 
     }
 
-    @ActivityScope
+    @PerActivity
     @Provides
     SearchActivityRepository provideSearchActivityRepository(EventBus eventBus, PlacesApiService service) {
         return new SearchActivityRepositoryImpl(eventBus, service);
     }
 
-    @ActivityScope
+    @PerActivity
     @Provides
     RecyclerViewResultAdapter providePlacesApiAdapter(List<Result> data, OnItemClickListener onItemClickListener, ImageLoader imageLoader) {
         return new RecyclerViewResultAdapter(data, onItemClickListener, imageLoader);
     }
 
-    @ActivityScope
+    @PerActivity
     @Provides
     List<Result> provideData() {
         return new ArrayList<>();
     }
 
-    @ActivityScope
+    @PerActivity
     @Provides
     OnItemClickListener provideOnItemClickListener() {
         return this.onItemClickListener;
     }
 
-    @ActivityScope
+    @PerActivity
     @Provides
     public PlacesApiService providePlacesApiService(Retrofit retrofit) {
         return retrofit.create(PlacesApiService.class);
