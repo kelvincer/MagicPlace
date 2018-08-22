@@ -90,16 +90,19 @@ public class RecyclerViewResultAdapter extends RecyclerView.Adapter<RecyclerView
             if (CommonHelper.SEARCH_MODE == 1) {
                 txvAddress.setText(result.getFormattedAddress());
                 txvDistance.setText((Helper.getDistanceFromMyLocation(result.getGeometry().getLocation())));
-
-                if (!result.getPhotos().isEmpty()) {
-                    imageLoader.load(igvPhotoItem, Helper.generateUrl(result.getPhotos().get(0).getPhotoReference()));
+                if (result.getPhotos() != null) {
+                    if (!result.getPhotos().isEmpty()) {
+                        imageLoader.load(igvPhotoItem, Helper.generateUrl(result.getPhotos().get(0).getPhotoReference()));
+                    }
                 }
 
             } else if (CommonHelper.SEARCH_MODE == 2) {
                 txvAddress.setText(result.getVicinity());
                 txvDistance.setText((Helper.getDistanceFromQueryLocation(result.getGeometry().getLocation())));
-                if (!result.getPhotos().isEmpty()) {
-                    imageLoader.load(igvPhotoItem, Helper.generateUrl(result.getPhotos().get(0).getPhotoReference()));
+                if (result.getPhotos() != null) {
+                    if (!result.getPhotos().isEmpty()) {
+                        imageLoader.load(igvPhotoItem, Helper.generateUrl(result.getPhotos().get(0).getPhotoReference()));
+                    }
                 }
             } else {
                 throw new RuntimeException("Illegal SEARCH_MODE");

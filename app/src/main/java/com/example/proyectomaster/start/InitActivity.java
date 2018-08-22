@@ -13,6 +13,8 @@ import com.example.proyectomaster.R;
 import com.example.proyectomaster.start.fragments.AccountFragment;
 import com.example.proyectomaster.start.fragments.FavoritesFragment;
 import com.example.proyectomaster.start.fragments.InitFragment;
+import com.example.proyectomaster.start.fragments.LoggedFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,13 +35,13 @@ public class InitActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigation.setOnNavigationItemSelectedListener(this);
     }
 
-    private boolean loadFragment(Fragment fragment) {
+    public boolean loadFragment(Fragment fragment) {
 
         if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, fragment)
-                    .commit();
+                    .commitAllowingStateLoss();
             return true;
         }
         return false;
@@ -53,13 +55,14 @@ public class InitActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.action_search:
                 fragment = new InitFragment();
                 break;
-
             case R.id.action_favorites:
                 fragment = new FavoritesFragment();
                 break;
-
             case R.id.action_account:
-                fragment = new AccountFragment();
+                if (FirebaseAuth.getInstance().getCurrentUser() == null)
+                    fragment = new AccountFragment();
+                else
+                    fragment = new LoggedFragment();
                 break;
         }
 

@@ -35,7 +35,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:background="#d62d20"
-            android:onClick="autentificarGoogle"
+            android:onClick="loginWithGoogle"
             android:src="@drawable/ic_google" />
 
     </LinearLayout>

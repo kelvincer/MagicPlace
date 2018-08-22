@@ -219,7 +219,7 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
     private void openTakePhoto() {
 
         // Falta echarle un vistazp
-        Helper.hideKeyboard(this, getCurrentFocus().getWindowToken());
+        hideKeyboard();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -281,7 +281,7 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
 
     @Override
     public void hideKeyboard() {
-        Helper.hideKeyboard(this, getCurrentFocus().getWindowToken());
+        Helper.hideKeyboard(this, header.getWindowToken());
     }
 
     @Override

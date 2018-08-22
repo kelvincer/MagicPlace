@@ -67,34 +67,20 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/separator_one" />
 
-        <LinearLayout
-            android:id="@+id/lnl_take_photos"
+        <TextView
+            android:id="@+id/txv_take_photos"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/gray"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="16dp"
+            android:textSize="20sp"
+            android:clickable="true"
+            android:focusable="true"
+            android:drawablePadding="8dp"
+            android:drawableTop="@drawable/ic_photos"
             android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/txv_favoritas">
-
-            <ImageView
-                android:id="@+id/igv_take_photo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="center"
-                android:src="@drawable/ic_photos" />
-
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="Puedes agregar tus fotos favoritas" />
-
-        </LinearLayout>
+            android:text="Puedes agregar tus fotos favoritas"
+            app:layout_constraintTop_toBottomOf="@id/txv_favoritas" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/ryv_favoritos"

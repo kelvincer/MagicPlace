@@ -4,5 +4,5 @@
         android:fromXDelta="0"
         android:fromYDelta="0"
         android:toXDelta="0"
-        android:toYDelta="300" />
+        android:toYDelta="25%p" />
 </set>

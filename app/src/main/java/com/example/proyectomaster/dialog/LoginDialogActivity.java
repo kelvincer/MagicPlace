@@ -82,7 +82,6 @@ public class LoginDialogActivity extends FragmentActivity implements GoogleApiCl
                         }
                     }
                 });
-
     }
 
     private void messageOnError(String mensaje) {

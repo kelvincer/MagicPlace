@@ -8,11 +8,13 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
@@ -123,7 +125,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         presenter.onDestroy();
     }
 
-    public DetailActivityView getView(){
+    public DetailActivityView getView() {
         return this;
     }
 

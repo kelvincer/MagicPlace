@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,12 +62,10 @@ public class HighlightsFragment extends Fragment implements View.OnClickListener
     TextView txvLabelCount;
     @BindView(R.id.simpleRatingBar)
     ScaleRatingBar simpleRatingBar;
-    @BindView(R.id.igv_take_photo)
-    ImageView igvTakePhoto;
     @BindView(R.id.ryv_favoritos)
     RecyclerView ryvFavoritos;
-    @BindView(R.id.lnl_take_photos)
-    LinearLayout lnlTakePhotos;
+    @BindView(R.id.txv_take_photos)
+    TextView txvTakePhotos;
 
     @Inject
     HighlightPresenter presenter;
@@ -184,7 +181,7 @@ public class HighlightsFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    @OnClick(R.id.igv_take_photo)
+    @OnClick(R.id.txv_take_photos)
     public void onViewClicked() {
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -241,7 +238,7 @@ public class HighlightsFragment extends Fragment implements View.OnClickListener
         //ryvFavoritos.addItemDecoration(new ItemOffsetDecoration(2));
         adapter.startListening();
         ryvFavoritos.setVisibility(View.VISIBLE);
-        lnlTakePhotos.setVisibility(View.GONE);
+        txvTakePhotos.setVisibility(View.GONE);
     }
 
     @Override

@@ -3,7 +3,8 @@
     package="com.example.proyectomaster">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />d
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    d
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -39,7 +40,9 @@
         <activity
             android:name=".dialog.LoginDialogActivity"
             android:theme="@style/AppDialogTheme" />
-        <activity android:name=".note.ui.NoteActivity"></activity>
+        <activity android:name=".note.ui.NoteActivity" />
+        <activity android:name=".account.RegisterActivity" />
+        <activity android:name=".account.InitSessionActivity"></activity>
     </application>
 
 </manifest>

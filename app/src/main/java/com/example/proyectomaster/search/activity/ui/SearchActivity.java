@@ -249,7 +249,7 @@ public class SearchActivity extends AppCompatActivity implements
 
     @Override
     public void hideKeyboard() {
-        Helper.hideKeyboard(this, getCurrentFocus().getWindowToken());
+        Helper.hideKeyboard(this, drawerLayout.getWindowToken());
     }
 
     @Override

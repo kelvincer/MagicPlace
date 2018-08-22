@@ -1,19 +1,28 @@
 package com.example.proyectomaster.detail.fragments.notes.ui;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectomaster.CommonHelper;
+import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.app.MainApplication;
 import com.example.proyectomaster.detail.activity.di.DetailApiModule;
@@ -40,14 +49,17 @@ public class NotesFragment extends Fragment implements NoteFragmentView {
     NotesFirestoreAdapter adapter;
     @BindView(R.id.ryv_notes)
     RecyclerView ryvNotes;
-    @BindView(R.id.lnl_no_notes)
-    LinearLayout lnlNoNotes;
+    @BindView(R.id.txv_notes)
+    TextView txvNotes;
     Unbinder unbinder;
+    @BindView(R.id.ctl_main)
+    ConstraintLayout ctlMain;
 
     @Inject
     NoteFragmentPresenter presenter;
     @Inject
     ImageLoader imageLoader;
+
 
     public static Fragment getInstance(Result result) {
 
@@ -80,6 +92,25 @@ public class NotesFragment extends Fragment implements NoteFragmentView {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         loadNotes();
+        ViewTreeObserver viewTreeObserver = txvNotes.getViewTreeObserver();
+        if (viewTreeObserver.isAlive()) {
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    txvNotes.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+                    float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
+                    float viewpagerHeig = dpHeight - 280;
+                    int notPx = txvNotes.getHeight();
+                    float noteDP = Helper.convertPixelsToDp(notPx, getContext());
+                    float difDp = viewpagerHeig / 2 - noteDP / 2;
+                    ConstraintLayout.LayoutParams lpt = (ConstraintLayout.LayoutParams) txvNotes.getLayoutParams();
+                    lpt.topMargin = (int) Helper.convertDpToPixel(difDp, getContext());
+                    Log.d(TAG, "dimen " + Helper.convertDpToPixel(difDp, getContext()));
+                    txvNotes.setLayoutParams(lpt);
+                }
+            });
+        }
     }
 
     @Override
@@ -132,7 +163,7 @@ public class NotesFragment extends Fragment implements NoteFragmentView {
         //ryvFavoritos.addItemDecoration(new ItemOffsetDecoration(2));
         adapter.startListening();
         ryvNotes.setVisibility(View.VISIBLE);
-        lnlNoNotes.setVisibility(View.GONE);
+        txvNotes.setVisibility(View.GONE);
     }
 
     @Override
