@@ -10,12 +10,8 @@ public class HighlightInteractorImpl implements HighlightInteractor {
     }
 
     @Override
-    public void execute(String placeId) {
+    public void executeGetPhotos(String placeId) {
         highlightRepository.getPhotos(placeId);
     }
 
-    @Override
-    public void uploadPhoto(byte[] data, String placeId) {
-        highlightRepository.uploadPhoto(data, placeId);
-    }
 }

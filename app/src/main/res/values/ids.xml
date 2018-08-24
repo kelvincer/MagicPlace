@@ -2,4 +2,5 @@
 <resources>
     <item name="fab_photo_label" type="id">1</item>
     <item name="fab_note_label" type="id">2</item>
+    <item name="fab_favorite_label" type="id">3</item>
 </resources>

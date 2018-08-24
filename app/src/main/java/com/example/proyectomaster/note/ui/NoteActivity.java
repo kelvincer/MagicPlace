@@ -3,6 +3,7 @@ package com.example.proyectomaster.note.ui;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -10,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +40,8 @@ import com.example.proyectomaster.note.listener.OnGalleryItemClickListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -53,8 +57,6 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
     @BindView(R.id.bottom_sheet)
     CoordinatorLayout bottomSheet;
     BottomSheetBehavior mBottomSheetBehavior;
-    /* @BindView(R.id.gridview)
-     GridView gridview;*/;
     @BindView(R.id.header)
     LinearLayout header;
     @BindView(R.id.ryv_photo_galery)
@@ -75,6 +77,7 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
     ProgressBar progressbar;
     @Inject
     NoteActivityPresenter presenter;
+    private File photoFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +99,22 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CAPTURE_IMAGE &&
-                resultCode == RESULT_OK) {
-            if (data != null && data.getExtras() != null) {
-                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                showPhoto(imageBitmap);
-            }
+        switch (requestCode) {
+            case REQUEST_CAPTURE_IMAGE:
+                if (resultCode == RESULT_OK) {
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(photoFile));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (bitmap != null) {
+                        showPhoto(bitmap);
+                    }
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid request code");
         }
     }
 
@@ -158,7 +171,7 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
         fmlPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCamera();
+                dispatchTakePictureIntent();
             }
         });
 
@@ -290,12 +303,21 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
-    private void showCamera() {
-
-        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (pictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(pictureIntent,
-                    REQUEST_CAPTURE_IMAGE);
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            try {
+                photoFile = Helper.createImageFile(this);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.proyectomaster.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_CAPTURE_IMAGE);
+            }
         }
     }
 

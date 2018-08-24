@@ -16,6 +16,8 @@ public interface ImageLoader {
 
     void load(ImageView imageView, String Url);
 
+    void loadWithoutOverride(ImageView imageView, String URL);
+
     void load(ImageView imageView, String url, PhotoClickListener listener);
 
     void setOnFinishedImageLoadingListener(Object object);

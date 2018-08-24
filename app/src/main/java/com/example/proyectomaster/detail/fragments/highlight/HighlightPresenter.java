@@ -10,7 +10,5 @@ public interface HighlightPresenter {
 
     void getFavoritePhotos(String placeId);
 
-    void uploadPhoto(byte[] data, String id);
-
     void onEventMainThread(HighlightEvent event);
 }

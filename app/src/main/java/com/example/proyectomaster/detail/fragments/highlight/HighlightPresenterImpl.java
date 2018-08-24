@@ -31,12 +31,7 @@ public class HighlightPresenterImpl implements HighlightPresenter {
 
     @Override
     public void getFavoritePhotos(String placeId) {
-        highlightInteractor.execute(placeId);
-    }
-
-    @Override
-    public void uploadPhoto(byte[] data, String placeId) {
-        highlightInteractor.uploadPhoto(data, placeId);
+        highlightInteractor.executeGetPhotos(placeId);
     }
 
     @Subscribe
@@ -50,10 +45,9 @@ public class HighlightPresenterImpl implements HighlightPresenter {
             case HighlightEvent.ERROR:
                 highlightView.showMessage(event.getMessage());
                 break;
-
-            /*case HighlightEvent.ON_SUCCESS_UPLOAD_PHOTO:
+            case HighlightEvent.ON_SUCCESS_UPLOAD_PHOTO:
                 highlightView.loadFavoritePhotos();
-                break;*/
+                break;
             case HighlightEvent.NO_PHOTOS:
                 highlightView.showMessage(event.getMessage());
                 break;

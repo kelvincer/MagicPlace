@@ -16,11 +16,11 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FavoritosFirestoreAdapter extends FirestoreRecyclerAdapter<StoragePhoto, FavoritosFirestoreAdapter.ViewHolder> {
+public class FavoritesFirestoreAdapter extends FirestoreRecyclerAdapter<StoragePhoto, FavoritesFirestoreAdapter.ViewHolder> {
 
     ImageLoader imageLoader;
 
-    public FavoritosFirestoreAdapter(@NonNull FirestoreRecyclerOptions<StoragePhoto> options, ImageLoader imageLoader) {
+    public FavoritesFirestoreAdapter(@NonNull FirestoreRecyclerOptions<StoragePhoto> options, ImageLoader imageLoader) {
         super(options);
         this.imageLoader = imageLoader;
     }
@@ -39,7 +39,6 @@ public class FavoritosFirestoreAdapter extends FirestoreRecyclerAdapter<StorageP
         return new ViewHolder(view);
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.favor_photo)
@@ -51,7 +50,7 @@ public class FavoritosFirestoreAdapter extends FirestoreRecyclerAdapter<StorageP
         }
 
         public void bindItem(StoragePhoto photo) {
-            imageLoader.load(favorPhoto, photo.getUrl());
+            imageLoader.loadWithoutOverride(favorPhoto, photo.getUrl());
         }
     }
 }

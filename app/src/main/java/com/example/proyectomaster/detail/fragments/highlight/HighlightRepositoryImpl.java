@@ -55,7 +55,7 @@ public class HighlightRepositoryImpl implements HighlightRepository {
                     FirestoreRecyclerOptions<StoragePhoto> options = new FirestoreRecyclerOptions
                             .Builder<StoragePhoto>().setQuery(query, StoragePhoto.class).build();
                     post(HighlightEvent.GET_PHOTOS_SUCCESS, options);
-                    Log.d("DEBUG", "on success");
+                    Log.d(TAG, "on success");
                 } else {
                     post(HighlightEvent.NO_PHOTOS, "NO HAY PHOTOS");
                 }
@@ -64,83 +64,6 @@ public class HighlightRepositoryImpl implements HighlightRepository {
             @Override
             public void onFailure(@NonNull Exception e) {
                 post(HighlightEvent.ERROR, e.getMessage());
-            }
-        });
-    }
-
-    @Override
-    public void uploadPhoto(final byte[] data, final String placeId) {
-
-        final String uuid = UUID.randomUUID().toString();
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReferenceFromUrl(ConstantsHelper.FIREBASE_STORAGE);
-        final StorageReference imageRef = storageRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(uuid + ".jpg");
-
-        UploadTask uploadTask = imageRef.putBytes(data);
-
-        /*imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Log.d(TAG, uri.toString());
-                Map<String, Object> datos = new HashMap<>();
-                datos.put("url", uri.toString());
-                FirebaseFirestore.getInstance()
-                        .collection("images")
-                        .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .collection(placeId)
-                        .document("fotos")
-                        .set(datos).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "UPLOAD DATA TO FIRESTORE SUCCESS");
-                        post(HighlightEvent.ON_SUCCESS_UPLOAD_PHOTO);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                        Log.d(TAG, "UPLOAD DATA TO FIRESTORE FAILURE");
-                    }
-                });
-            }
-        });*/
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d(TAG, "UPLOAD PHOTO FAILURE");
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.d(TAG, "UPLOAD PHOTO SUCCESS");
-                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Log.d(TAG, uri.toString());
-                        Map<String, Object> datos = new HashMap<>();
-                        datos.put("url", uri.toString());
-                        datos.put("name", uuid);
-                        FirebaseFirestore.getInstance()
-                                .collection("images")
-                                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .collection(placeId)
-                                .document("foto_" + uuid)
-                                .set(datos).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "UPLOAD DATA TO FIRESTORE SUCCESS");
-                                post(HighlightEvent.ON_SUCCESS_UPLOAD_PHOTO);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                e.printStackTrace();
-                                post(HighlightEvent.ERROR, e.getMessage());
-                                Log.d(TAG, "UPLOAD DATA TO FIRESTORE FAILURE");
-                            }
-                        });
-                    }
-                });
             }
         });
     }

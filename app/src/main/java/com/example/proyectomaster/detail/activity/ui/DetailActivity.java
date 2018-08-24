@@ -1,20 +1,25 @@
 package com.example.proyectomaster.detail.activity.ui;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
@@ -24,20 +29,35 @@ import com.example.proyectomaster.detail.activity.adapters.PagerAdapter;
 import com.example.proyectomaster.detail.activity.di.DetailApiModule;
 import com.example.proyectomaster.detail.activity.di.DetailModule;
 import com.example.proyectomaster.detail.entities.Result;
+import com.example.proyectomaster.detail.entities.StoragePhoto;
+import com.example.proyectomaster.detail.fragments.highlight.ui.HighlightsFragment;
+import com.example.proyectomaster.dialog.LoginDialogActivity;
+import com.example.proyectomaster.gallery.GalleryActivity;
 import com.example.proyectomaster.lib.ImageLoader;
 import com.example.proyectomaster.note.ui.NoteActivity;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
+
+import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailActivity extends AppCompatActivity implements DetailActivityView, TabLayout.OnTabSelectedListener {
+public class DetailActivity extends AppCompatActivity implements DetailActivityView, TabLayout.OnTabSelectedListener
+        , View.OnClickListener {
 
+    private static final int REQUEST_CAPTURE_IMAGE = 100;
+    private static final int LOGIN_REQUEST_CODE = 101;
     private final String[] pageTitle = {"DESTACADOS", "FOTOS", "NOTAS"};
+    Dialog dialog;
     Result result;
+    File photoFile;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tab_layout)
@@ -54,6 +74,8 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     DetailActivityPresenter presenter;
     @Inject
     ImageLoader imageLoader;
+    @BindView(R.id.speedDial)
+    SpeedDialView speedDial;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,7 +91,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
         setupTabLayout();
         setupInjection();
-        //pager.setAdapter(adapter);
         pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(this);
         presenter.onCreate();
@@ -80,40 +101,80 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         for (int i = 0; i < pageTitle.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(pageTitle[i]));
         }
-
         setupSpeedDial();
     }
 
-    private void setupSpeedDial() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_CAPTURE_IMAGE:
+                if (resultCode == RESULT_OK) {
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(photoFile));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (bitmap != null) {
+                        uploadToFirebaseStorage(bitmap);
+                    }
+                }
+                break;
+            case LOGIN_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    loadFavoritesPhotos();
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid request code");
+        }
+    }
 
-        SpeedDialView speedDialView = findViewById(R.id.speedDial);
-        speedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_photo_label, R.drawable
+    private void loadFavoritesPhotos() {
+        if (pager.getCurrentItem() == 0) {
+            HighlightsFragment frag1 = (HighlightsFragment) pager.getAdapter()
+                    .instantiateItem(pager, pager.getCurrentItem());
+            frag1.loadFavoritePhotos();
+        }
+    }
+
+    private void uploadToFirebaseStorage(Bitmap bitmap) {
+        presenter.uploadPhoto(Helper.bitmapToByteArray(bitmap), result.getPlaceId());
+    }
+
+    private void setupSpeedDial() {
+        speedDial.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_photo_label, R.drawable
                 .ic_add_a_photo_white_24dp)
                 .setLabel("Agregar una foto")
                 .setLabelColor(Color.BLACK)
                 .create());
-        speedDialView.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_note_label, R.drawable
+        speedDial.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_note_label, R.drawable
                 .ic_note_add_white_24dp)
                 .setLabel("Dejar una nota")
                 .setLabelColor(Color.BLACK)
                 .create());
 
-        speedDialView.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
+        speedDial.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_favorite_label, R.drawable
+                .ic_favorite_border_white_24dp)
+                .setLabel("Agregar a favorito")
+                .setLabelColor(Color.BLACK)
+                .create());
+
+        speedDial.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
             public boolean onActionSelected(SpeedDialActionItem speedDialActionItem) {
                 switch (speedDialActionItem.getId()) {
                     case R.id.fab_photo_label:
-                        Toast.makeText(DetailActivity.this, "QO", Toast.LENGTH_SHORT).show();
+                        launchDialog();
                         return false; // true to keep the Speed Dial open
                     case R.id.fab_note_label:
-                        Toast.makeText(DetailActivity.this, "TO", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(DetailActivity.this, NoteActivity.class);
-                        intent.putExtra(CommonHelper.PLACE_NAME, result.getName());
-                        intent.putExtra(CommonHelper.PLACE_ID, result.getPlaceId());
-                        startActivity(intent);
+                        goToDetailActivity();
+                        return false;
+                    case R.id.fab_favorite_label:
                         return false;
                     default:
-                        return false;
+                        throw new IllegalArgumentException("Illegal speed dial id");
                 }
             }
         });
@@ -125,8 +186,34 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         presenter.onDestroy();
     }
 
+    public void launchDialog() {
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null)
+            startActivityForResult(new Intent(this, LoginDialogActivity.class), LOGIN_REQUEST_CODE);
+        else {
+            launchChooserDialog();
+        }
+    }
+
+    private void launchChooserDialog() {
+
+        dialog = new Dialog(this, R.style.AppDialogTheme);
+        dialog.setContentView(R.layout.dialog_chooser);
+        dialog.findViewById(R.id.txv_camera).setOnClickListener(this);
+        dialog.findViewById(R.id.txv_gallery).setOnClickListener(this);
+        dialog.show();
+    }
+
     public DetailActivityView getView() {
         return this;
+    }
+
+    private void goToDetailActivity() {
+        Intent intent = new Intent(DetailActivity.this, NoteActivity.class);
+        intent.putExtra(CommonHelper.PLACE_NAME, result.getName());
+        intent.putExtra(CommonHelper.PLACE_ID, result.getPlaceId());
+        startActivity(intent);
     }
 
     private void setupInjection() {
@@ -166,6 +253,11 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         pager.setAdapter(new PagerAdapter(getSupportFragmentManager(), pageTitle.length, result, imageLoader));
     }
 
+    @Override
+    public void setOptions(FirestoreRecyclerOptions<StoragePhoto> options) {
+
+    }
+
     private void setupActionBar(Result result) {
         getSupportActionBar().setTitle(result.getName());
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -184,5 +276,44 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.txv_camera:
+                dialog.dismiss();
+                dispatchTakePictureIntent();
+                break;
+            case R.id.txv_gallery:
+                dialog.dismiss();
+                gotoGalleryActivity();
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal view id");
+        }
+    }
+
+    private void gotoGalleryActivity() {
+
+        startActivity(new Intent(this, GalleryActivity.class));
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            try {
+                photoFile = Helper.createImageFile(this);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.proyectomaster.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_CAPTURE_IMAGE);
+            }
+        }
     }
 }

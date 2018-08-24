@@ -86,12 +86,11 @@ public class LoginDialogActivity extends FragmentActivity implements GoogleApiCl
 
     private void messageOnError(String mensaje) {
         Snackbar.make(container, mensaje, Snackbar.LENGTH_LONG).show();
-        Intent returnIntent = new Intent();
-        setResult(Activity.RESULT_CANCELED, returnIntent);
+        setResult(Activity.RESULT_CANCELED);
         finish();
     }
 
-    public void autentificarGoogle(View v) {
+    public void loginWithGoogle(View v) {
         Intent i = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(i, RC_GOOGLE_SIGN_IN);
     }
@@ -103,8 +102,7 @@ public class LoginDialogActivity extends FragmentActivity implements GoogleApiCl
 
     private void verificaSiUsuarioValidado() {
         //messageOnError("CORRECT");
-        Intent returnIntent = new Intent();
-        setResult(Activity.RESULT_OK, returnIntent);
+        setResult(Activity.RESULT_OK);
         finish();
     }
 }

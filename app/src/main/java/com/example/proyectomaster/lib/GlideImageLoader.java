@@ -1,17 +1,14 @@
 package com.example.proyectomaster.lib;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.graphics.Palette;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -20,7 +17,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestFutureTarget;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -35,11 +31,9 @@ public class GlideImageLoader implements ImageLoader {
     private static final String TAG = GlideImageLoader.class.getSimpleName();
     private RequestManager glideRequestManager;
     private RequestListener onFinishedImageLoadingListener;
-    private Context activity;
 
     public void setLoaderContext(Context activity) {
         this.glideRequestManager = Glide.with(activity);
-        this.activity = activity;
     }
 
     @Override
@@ -50,6 +44,29 @@ public class GlideImageLoader implements ImageLoader {
                 .timeout(10000)
                 .skipMemoryCache(true)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .placeholder(R.drawable.background_blur);
+
+        if (onFinishedImageLoadingListener != null) {
+            glideRequestManager
+                    .load(URL)
+                    .apply(requestOptions)
+                    .listener(onFinishedImageLoadingListener)
+                    .into(imageView);
+        } else {
+            glideRequestManager
+                    .load(URL)
+                    .apply(requestOptions)
+                    .into(imageView);
+        }
+    }
+
+    @Override
+    public void loadWithoutOverride(ImageView imageView, String URL) {
+
+        RequestOptions requestOptions = new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .timeout(10000)
+                .skipMemoryCache(true)
                 .placeholder(R.drawable.background_blur);
 
         if (onFinishedImageLoadingListener != null) {

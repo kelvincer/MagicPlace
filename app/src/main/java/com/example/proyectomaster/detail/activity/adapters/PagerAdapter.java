@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.ViewGroup;
 
 import com.example.proyectomaster.detail.entities.Result;
 import com.example.proyectomaster.detail.fragments.highlight.ui.HighlightsFragment;
@@ -48,10 +49,5 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getItemPosition(@NonNull Object object) {
         return POSITION_NONE;
-    }
-
-    public void updateViewPager(Result result) {
-        this.result = result;
-        notifyDataSetChanged();
     }
 }

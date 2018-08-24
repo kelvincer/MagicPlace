@@ -7,6 +7,10 @@ import com.example.proyectomaster.detail.activity.DetailActivityPresenter;
 import com.example.proyectomaster.detail.activity.DetailActivityPresenterImpl;
 import com.example.proyectomaster.detail.activity.DetailActivityRepository;
 import com.example.proyectomaster.detail.activity.DetailActivityRepositoryImpl;
+import com.example.proyectomaster.detail.activity.FirebasePhotoInteractor;
+import com.example.proyectomaster.detail.activity.FirebasePhotoInteractorImpl;
+import com.example.proyectomaster.detail.activity.FirebasePhotoRepository;
+import com.example.proyectomaster.detail.activity.FirebasePhotoRepositoryImpl;
 import com.example.proyectomaster.detail.activity.api.DetailPlaceApiService;
 import com.example.proyectomaster.detail.activity.ui.DetailActivityView;
 import com.example.proyectomaster.lib.EventBus;
@@ -31,9 +35,11 @@ public class DetailModule {
 
     @PerActivity
     @Provides
-    public DetailActivityPresenter provideDetailActivityPresenterImpl(EventBus eventBus, DetailActivityView detailActivityView, DetailActivityInteractor detailActivityInteractor) {
+    public DetailActivityPresenter provideDetailActivityPresenterImpl(EventBus eventBus, DetailActivityView detailActivityView,
+                                                                      DetailActivityInteractor detailActivityInteractor,
+                                                                      FirebasePhotoInteractor firebasePhotoInteractor) {
 
-        return new DetailActivityPresenterImpl(eventBus, detailActivityView, detailActivityInteractor);
+        return new DetailActivityPresenterImpl(eventBus, detailActivityView, detailActivityInteractor, firebasePhotoInteractor);
     }
 
     @PerActivity
@@ -44,7 +50,19 @@ public class DetailModule {
 
     @PerActivity
     @Provides
+    public FirebasePhotoInteractor provideFirebasePhotoInteractorImpl(FirebasePhotoRepository firebasePhotoRepository) {
+        return new FirebasePhotoInteractorImpl(firebasePhotoRepository);
+    }
+
+    @PerActivity
+    @Provides
     public DetailActivityRepository provideDetailActivityRepositoryImpl(EventBus eventBus, DetailPlaceApiService detailPlaceApiService) {
         return new DetailActivityRepositoryImpl(eventBus, detailPlaceApiService);
+    }
+
+    @PerActivity
+    @Provides
+    public FirebasePhotoRepository provideFirebasePhotoRepositoryImpl(EventBus eventBus) {
+        return new FirebasePhotoRepositoryImpl(eventBus);
     }
 }
