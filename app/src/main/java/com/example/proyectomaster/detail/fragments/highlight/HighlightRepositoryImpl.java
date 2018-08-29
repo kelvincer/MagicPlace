@@ -56,6 +56,7 @@ public class HighlightRepositoryImpl implements HighlightRepository {
                             .Builder<StoragePhoto>().setQuery(query, StoragePhoto.class).build();
                     post(HighlightEvent.GET_PHOTOS_SUCCESS, options);
                     Log.d(TAG, "on success");
+                    //queryDocumentSnapshots.toObjects(StoragePhoto.class);
                 } else {
                     post(HighlightEvent.NO_PHOTOS, "NO HAY PHOTOS");
                 }

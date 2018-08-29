@@ -1,10 +1,6 @@
 package com.example.proyectomaster.note.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,19 +12,18 @@ import com.bumptech.glide.Glide;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.note.listener.OnGalleryItemClickListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class GaleryPhotoAdapter extends RecyclerView.Adapter<GaleryPhotoAdapter.ViewHolder> {
+public class GalleryPhotoAdapter extends RecyclerView.Adapter<GalleryPhotoAdapter.ViewHolder> {
 
     private List<String> images;
     Context context;
     OnGalleryItemClickListener listener;
 
-    public GaleryPhotoAdapter(List<String> images, Context context, OnGalleryItemClickListener listener) {
+    public GalleryPhotoAdapter(List<String> images, Context context, OnGalleryItemClickListener listener) {
         this.images = images;
         this.context = context;
         this.listener = listener;

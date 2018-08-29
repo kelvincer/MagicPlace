@@ -10,6 +10,7 @@ public class CommonHelper {
     public static final String BITMAP_PATH = "bitmap_path";
     public static final String PLACE_NAME = "Title";
     public static final String MESSAGE = "Message";
+    public static final String PATH = "Path";
     public static Location MY_LOCATION;
     public static Location SEARCH_QUERY_LOCATION;
     public static int SOURCE_MODE = 1;

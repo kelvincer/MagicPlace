@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.CardView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -96,9 +95,8 @@ public class InitFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                //txvTitle.animate().y(80).setDuration(200);
                 if (getActivity() != null) {
-                    Animation animacion = AnimationUtils.loadAnimation(getActivity(), R.anim.animacion);
+                    Animation animacion = AnimationUtils.loadAnimation(getActivity(), R.anim.move_down);
                     animacion.setFillAfter(true);
                     animacion.setDuration(150);
                     txvTitle.startAnimation(animacion);

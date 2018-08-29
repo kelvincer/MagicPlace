@@ -34,7 +34,7 @@ import com.example.proyectomaster.R;
 import com.example.proyectomaster.app.MainApplication;
 import com.example.proyectomaster.dialog.LoginDialogActivity;
 import com.example.proyectomaster.note.NoteActivityPresenter;
-import com.example.proyectomaster.note.adapter.GaleryPhotoAdapter;
+import com.example.proyectomaster.note.adapter.GalleryPhotoAdapter;
 import com.example.proyectomaster.note.di.NoteActivityModule;
 import com.example.proyectomaster.note.listener.OnGalleryItemClickListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -146,7 +146,7 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
         List<String> images = Helper.getAllShownImagesPath(this);
 
         ryvPhotoGalery.setLayoutManager(new GridLayoutManager(this, 3));
-        ryvPhotoGalery.setAdapter(new GaleryPhotoAdapter(images, this, this));
+        ryvPhotoGalery.setAdapter(new GalleryPhotoAdapter(images, this, this));
 
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override

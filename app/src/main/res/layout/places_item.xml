@@ -74,10 +74,10 @@
         android:layout_height="30dp"
         android:background="#129067"
         android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/lnl_info"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="4.5" />
 
 </android.support.constraint.ConstraintLayout>

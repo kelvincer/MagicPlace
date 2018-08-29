@@ -3,6 +3,7 @@ package com.example.proyectomaster.detail.activity.ui;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -52,8 +52,9 @@ import butterknife.ButterKnife;
 public class DetailActivity extends AppCompatActivity implements DetailActivityView, TabLayout.OnTabSelectedListener
         , View.OnClickListener {
 
-    private static final int REQUEST_CAPTURE_IMAGE = 100;
+    private static final int CAPTURE_REQUEST_CODE = 100;
     private static final int LOGIN_REQUEST_CODE = 101;
+    private static final int GALLERY_REQUEST_CODE = 102;
     private final String[] pageTitle = {"DESTACADOS", "FOTOS", "NOTAS"};
     Dialog dialog;
     Result result;
@@ -70,12 +71,12 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     ViewPager pager;
     @BindView(R.id.header)
     ImageView header;
+    @BindView(R.id.speedDial)
+    SpeedDialView speedDial;
     @Inject
     DetailActivityPresenter presenter;
     @Inject
     ImageLoader imageLoader;
-    @BindView(R.id.speedDial)
-    SpeedDialView speedDial;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,8 +99,8 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     }
 
     private void setupTabLayout() {
-        for (int i = 0; i < pageTitle.length; i++) {
-            tabLayout.addTab(tabLayout.newTab().setText(pageTitle[i]));
+        for (String aPageTitle : pageTitle) {
+            tabLayout.addTab(tabLayout.newTab().setText(aPageTitle));
         }
         setupSpeedDial();
     }
@@ -108,7 +109,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case REQUEST_CAPTURE_IMAGE:
+            case CAPTURE_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     Bitmap bitmap = null;
                     try {
@@ -126,6 +127,13 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
                     loadFavoritesPhotos();
                 }
                 break;
+            case GALLERY_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    String path = data.getStringExtra(CommonHelper.PATH);
+                    Bitmap bitmap = BitmapFactory.decodeFile(path);
+                    uploadToFirebaseStorage(bitmap);
+                }
+                break;
             default:
                 throw new IllegalArgumentException("Invalid request code");
         }
@@ -133,9 +141,9 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
     private void loadFavoritesPhotos() {
         if (pager.getCurrentItem() == 0) {
-            HighlightsFragment frag1 = (HighlightsFragment) pager.getAdapter()
+            HighlightsFragment frag = (HighlightsFragment) pager.getAdapter()
                     .instantiateItem(pager, pager.getCurrentItem());
-            frag1.loadFavoritePhotos();
+            frag.loadFavoritePhotos();
         }
     }
 
@@ -169,7 +177,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
                         launchDialog();
                         return false; // true to keep the Speed Dial open
                     case R.id.fab_note_label:
-                        goToDetailActivity();
+                        goToNoteActivity();
                         return false;
                     case R.id.fab_favorite_label:
                         return false;
@@ -209,7 +217,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         return this;
     }
 
-    private void goToDetailActivity() {
+    private void goToNoteActivity() {
         Intent intent = new Intent(DetailActivity.this, NoteActivity.class);
         intent.putExtra(CommonHelper.PLACE_NAME, result.getName());
         intent.putExtra(CommonHelper.PLACE_ID, result.getPlaceId());
@@ -248,8 +256,10 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
         this.result = result;
         setupActionBar(result);
-        String photoReference = result.getPhotos().get(0).getPhotoReference();
-        imageLoader.load(header, collapsingToolbarLayout, Helper.generateUrl(photoReference));
+        if (result.getPhotos() != null) {
+            String photoReference = result.getPhotos().get(0).getPhotoReference();
+            imageLoader.load(header, collapsingToolbarLayout, Helper.generateUrl(photoReference));
+        }
         pager.setAdapter(new PagerAdapter(getSupportFragmentManager(), pageTitle.length, result, imageLoader));
     }
 
@@ -295,8 +305,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     }
 
     private void gotoGalleryActivity() {
-
-        startActivity(new Intent(this, GalleryActivity.class));
+        startActivityForResult(new Intent(this, GalleryActivity.class), GALLERY_REQUEST_CODE);
     }
 
     private void dispatchTakePictureIntent() {
@@ -312,7 +321,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
                         "com.example.proyectomaster.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_CAPTURE_IMAGE);
+                startActivityForResult(takePictureIntent, CAPTURE_REQUEST_CODE);
             }
         }
     }
