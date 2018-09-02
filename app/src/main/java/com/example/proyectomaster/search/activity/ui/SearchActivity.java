@@ -16,14 +16,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.proyectomaster.CommonHelper;
+import com.example.proyectomaster.ConstantsHelper;
 import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.app.MainApplication;
@@ -36,15 +45,16 @@ import com.example.proyectomaster.search.activity.adapters.RecyclerViewResultAda
 import com.example.proyectomaster.search.activity.di.SearchActivityModule;
 import com.example.proyectomaster.search.entities.Result;
 import com.example.proyectomaster.search.fragments.filter.SideFilterFragment;
-import com.example.proyectomaster.search.fragments.search_by_text.TextSearchFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class SearchActivity extends AppCompatActivity implements
         SearchActivityView, LocationCallback, OnItemClickListener {
@@ -58,6 +68,16 @@ public class SearchActivity extends AppCompatActivity implements
     ProgressBar progressbar;
     @BindView(R.id.txv_info)
     TextView txvInfo;
+    @BindView(R.id.search_etx)
+    EditText searchTextView;
+    @BindView(R.id.action_empty_btn)
+    ImageButton actionEmptyBtn;
+    @BindView(R.id.action_search_btn)
+    ImageButton actionSearchBtn;
+    @BindView(R.id.action_up_btn)
+    ImageButton actionUpBtn;
+    @BindView(R.id.filter_btn)
+    Button filterBtn;
     private List<String> listaPermisos = new ArrayList<>();
     private int SOLICITUD_PERMISO = 100;
     ApiLocationManager locationManager;
@@ -185,6 +205,80 @@ public class SearchActivity extends AppCompatActivity implements
                 }
             }
         });
+
+        searchTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s.toString().isEmpty()) {
+                    actionEmptyBtn.setVisibility(View.INVISIBLE);
+                    actionSearchBtn.setVisibility(View.VISIBLE);
+                    CommonHelper.QUERY = null;
+                } else {
+                    actionEmptyBtn.setVisibility(View.VISIBLE);
+                    actionSearchBtn.setVisibility(View.INVISIBLE);
+                    CommonHelper.QUERY = s.toString();
+                }
+            }
+        });
+        searchTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                    if (CommonHelper.SEARCH_MODE == 1) {
+                        if (searchTextView.getText().toString().isEmpty()) {
+                            Toast.makeText(getApplicationContext(), "Debes ingresar los parámetros requeridos", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                        newSearch();
+                        return true;
+                    } else if (CommonHelper.SEARCH_MODE == 2) {
+                        if (searchTextView.getText().toString().isEmpty()) {
+                            Toast.makeText(getApplicationContext(), "Debes ingresar los parámetros requeridos", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+
+                        if (!ConstantsHelper.LAT_LNG_PATTERN.matcher(searchTextView.getText().toString()).matches()) {
+                            Toast.makeText(getApplicationContext(), "Los datos no son válidos", Toast.LENGTH_LONG).show();
+                            return false;
+                        }
+
+                        CommonHelper.SEARCH_QUERY_LOCATION = new Location("LOCATION");
+                        List<String> coordinates = Arrays.asList(CommonHelper.QUERY.replaceAll("\\s+", "").split(","));
+                        CommonHelper.SEARCH_QUERY_LOCATION.setLatitude(Double.valueOf(coordinates.get(0)));
+                        CommonHelper.SEARCH_QUERY_LOCATION.setLongitude(Double.valueOf(coordinates.get(1)));
+                        //CommonHelper.SEARCH_QUERY_LOCATION = CommonHelper.MY_LOCATION;
+                        Log.d("QUERY", "location: " + CommonHelper.SEARCH_QUERY_LOCATION.toString());
+                        newSearch();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        searchTextView.setText("restaurants in new York");
+        actionEmptyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchTextView.getText().clear();
+            }
+        });
+        actionUpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        searchTextView.setSelection(searchTextView.getText().length());
     }
 
     private void getNextTokenResult() {
@@ -193,8 +287,8 @@ public class SearchActivity extends AppCompatActivity implements
 
     private void addFragments() {
 
-        Fragment fragment = TextSearchFragment.newInstance();
-        getFragmentManager().beginTransaction().replace(R.id.search_head_container, fragment).commit();
+       /* Fragment fragment = TextSearchFragment.newInstance();
+        getFragmentManager().beginTransaction().replace(R.id.search_head_container, fragment).commit();*/
 
         Fragment f = SideFilterFragment.newInstance();
         getFragmentManager().beginTransaction().replace(R.id.side_filter_container, f).commit();
@@ -268,6 +362,22 @@ public class SearchActivity extends AppCompatActivity implements
         CommonHelper.NEXT_PAGE_TOKEN = null;
         CommonHelper.QUERY = null;
         CommonHelper.SEARCH_MODE = 1;
+        CommonHelper.location = null;
+        CommonHelper.radius = "1000";
+        CommonHelper.KEYWORD = null;
+        CommonHelper.opennow = null;
+        CommonHelper.RANKYBY = "prominence";
+        CommonHelper.SEARCH_QUERY_LOCATION = null;
+    }
+
+    private void newSearch() {
+
+        Log.d(TAG, "query " + CommonHelper.QUERY);
+        if (CommonHelper.QUERY != null) {
+            newSearch(CommonHelper.QUERY);
+        } else {
+            Toast.makeText(getApplicationContext(), "QUERY IS NULL", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -281,5 +391,30 @@ public class SearchActivity extends AppCompatActivity implements
     public void newSearch(String currentQuery) {
         CommonHelper.NEXT_PAGE_TOKEN = null;
         presenter.newSearch(currentQuery);
+    }
+
+    public void changeSearchBarHint() {
+        if (CommonHelper.SEARCH_MODE == 1) {
+            searchTextView.setText("restaurants in new york");
+            searchTextView.setSelection(searchTextView.getText().length());
+            /*searchTextView.setInputType(InputType.TYPE_CLASS_TEXT);
+            searchTextView.setSingleLine();
+            searchTextView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);*/
+            //searchTextView.setEnabled(true);
+        } else if (CommonHelper.SEARCH_MODE == 2) {
+            searchTextView.setText("40.730610,-73.935242");
+            searchTextView.setSelection(searchTextView.getText().length());
+            //searchTextView.setSelection(searchTextView.getText().length());
+            //searchTextView.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+            //searchTextView.setKeyListener(DigitsKeyListener.getInstance("0123456789.,-"));
+        } else {
+            throw new IllegalArgumentException("Invalid search mode");
+        }
+    }
+
+    @OnClick(R.id.filter_btn)
+    public void onViewClicked() {
+        hideKeyboard();
+        openDrawer();
     }
 }

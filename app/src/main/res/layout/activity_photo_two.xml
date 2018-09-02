@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#000"
     android:fitsSystemWindows="true"
-    tools:context=".photo.PhotoActivity">
+    tools:context=".photo.ui.PhotoActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

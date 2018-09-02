@@ -81,10 +81,18 @@ public class LocOptionalParamFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s.toString().isEmpty()) {
                     CommonHelper.radius = null;
+                    if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
+                        etxRadius.setError("Se requiere el radio");
+                    }
+
                 } else {
-                    CommonHelper.radius = s.toString();
-                    rdgSortby.clearCheck();
-                    CommonHelper.RANKYBY = null;
+                    etxRadius.setError(null);
+                    if (getActivity().getCurrentFocus() == etxRadius) {
+                        CommonHelper.radius = s.toString();
+                        //rdgSortby.clearCheck();
+                        //  rdgSortby.setEnabled(false);
+                        //CommonHelper.RANKYBY = null;
+                    }
                 }
             }
         });
@@ -104,8 +112,12 @@ public class LocOptionalParamFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s.toString().isEmpty()) {
                     CommonHelper.KEYWORD = null;
+                    if (CommonHelper.RANKYBY.equalsIgnoreCase("distance")) {
+                        //etxKeyword.setError("Se requiere palabra clave");
+                    }
                 } else {
                     CommonHelper.KEYWORD = s.toString();
+                    etxKeyword.setError(null);
                 }
             }
         });
@@ -147,16 +159,19 @@ public class LocOptionalParamFragment extends Fragment {
                 boolean isChecked = checkedRadioButton.isChecked();
                 if (isChecked) {
                     switch (checkedId) {
-                        case R.id.rdb_text:
+                        case R.id.rdb_prominence:
                             CommonHelper.RANKYBY = "prominence";
+                            CommonHelper.radius = "1000";
+                            etxRadius.clearFocus();
+                            etxRadius.setText("1000");
+                            etxRadius.setEnabled(true);
                             break;
-                        case R.id.rdb_location:
+                        case R.id.rdb_distance:
                             CommonHelper.RANKYBY = "distance";
-                            etxRadius.getText().clear();
                             CommonHelper.radius = null;
-                            if (etxKeyword.getText().toString().isEmpty()) {
-                                Toast.makeText(getActivity(), "Se requiere keyword", Toast.LENGTH_SHORT).show();
-                            }
+                            etxRadius.setEnabled(false);
+                            etxRadius.getText().clear();
+                            etxRadius.setError(null);
                             break;
                     }
                 }

@@ -29,7 +29,7 @@ public class TextSearchFragment extends Fragment {
 
     @BindView(R.id.filter_btn)
     Button filterButton;
-    @BindView(R.id.searchTextView)
+    @BindView(R.id.search_etx)
     EditText searchTextView;
     @BindView(R.id.action_up_btn)
     ImageButton actionUpBtn;

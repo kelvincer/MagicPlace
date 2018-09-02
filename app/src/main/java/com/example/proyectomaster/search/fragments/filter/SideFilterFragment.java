@@ -14,8 +14,6 @@ import com.example.proyectomaster.R;
 import com.example.proyectomaster.search.activity.ui.SearchActivity;
 import com.example.proyectomaster.search.fragments.LocOptionalParamFragment;
 import com.example.proyectomaster.search.fragments.TextOptionalParamFragment;
-import com.example.proyectomaster.search.fragments.search_by_loc.NearbySearchFragment;
-import com.example.proyectomaster.search.fragments.search_by_text.TextSearchFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +49,7 @@ public class SideFilterFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setupViews();
         addOptionaParametersFragment(TextOptionalParamFragment.newInstance());
-        resetTextSearchParam();
+        //resetTextSearchParam();
     }
 
     @Override
@@ -73,19 +71,21 @@ public class SideFilterFragment extends Fragment {
                 boolean isChecked = checkedRadioButton.isChecked();
                 if (isChecked) {
                     switch (checkedId) {
-                        case R.id.rdb_text:
-                            addSearchBarFragment(TextSearchFragment.newInstance());
+                        case R.id.rdb_prominence:
+                            //addSearchBarFragment(TextSearchFragment.newInstance());
                             resetTextSearchParam();
                             clearRecycleview();
                             CommonHelper.SEARCH_MODE = 1;
                             addOptionaParametersFragment(TextOptionalParamFragment.newInstance());
+                            changeSearchBarHint();
                             break;
-                        case R.id.rdb_location:
-                            addSearchBarFragment(NearbySearchFragment.newInstance());
+                        case R.id.rdb_distance:
+                            //addSearchBarFragment(NearbySearchFragment.newInstance());
                             clearRecycleview();
                             resetLocSearchParam();
                             CommonHelper.SEARCH_MODE = 2;
                             addOptionaParametersFragment(LocOptionalParamFragment.newInstance());
+                            changeSearchBarHint();
                             break;
                         default:
                             throw new RuntimeException("Incorrect radio button id");
@@ -93,8 +93,11 @@ public class SideFilterFragment extends Fragment {
                 }
             }
         });
+    }
 
-        rdgSortby.check(R.id.rdb_text);
+    private void changeSearchBarHint() {
+
+        ((SearchActivity) getActivity()).changeSearchBarHint();
     }
 
     private void addOptionaParametersFragment(Fragment fragment) {
@@ -105,9 +108,10 @@ public class SideFilterFragment extends Fragment {
     }
 
     private void addSearchBarFragment(Fragment f) {
-        getFragmentManager().beginTransaction()
+        /*getFragmentManager().beginTransaction()
                 .replace(R.id.search_head_container, f)
-                .commit();
+                .commit();*/
+
     }
 
     private void resetTextSearchParam() {

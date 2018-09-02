@@ -33,7 +33,7 @@
             android:name=".detail.activity.ui.DetailActivity"
             android:theme="@style/AppTheme.NoActionAndStatusBar" />
         <activity
-            android:name=".photo.PhotoActivity"
+            android:name=".photo.ui.PhotoActivity"
             android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

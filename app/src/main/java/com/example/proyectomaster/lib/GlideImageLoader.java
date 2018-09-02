@@ -94,8 +94,6 @@ public class GlideImageLoader implements ImageLoader {
 
         String url = Helper.generateUrl(photoRef);
 
-        Log.d("IMAGE", url);
-
         glideRequestManager
                 .load(url)
                 .apply(requestOptions)

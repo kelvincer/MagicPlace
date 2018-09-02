@@ -2,7 +2,6 @@ package com.example.proyectomaster.detail.fragments.photos;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -12,10 +11,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +24,7 @@ import com.example.proyectomaster.detail.activity.di.DetailModule;
 import com.example.proyectomaster.detail.activity.ui.DetailActivity;
 import com.example.proyectomaster.detail.fragments.GridSpacingItemDecoration;
 import com.example.proyectomaster.detail.fragments.photos.adapters.PhotosAdapter;
-import com.example.proyectomaster.photo.PhotoActivity;
+import com.example.proyectomaster.photo.ui.PhotoActivity;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.detail.entities.Photo;
 import com.example.proyectomaster.detail.entities.Result;
@@ -46,7 +43,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import okhttp3.Cache;
 
 public class PhotosFragment extends Fragment implements PhotoClickListener {
 
@@ -135,6 +131,7 @@ public class PhotosFragment extends Fragment implements PhotoClickListener {
                 fos.close();
                 Intent intent = new Intent(getActivity(), PhotoActivity.class);
                 intent.putExtra(CommonHelper.BITMAP_PATH, f.getAbsolutePath());
+                intent.putExtra(CommonHelper.FROM_FRAGMENT, CommonHelper.FROM_PHOTOS);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     ActivityOptionsCompat options = ActivityOptionsCompat.
                             makeSceneTransitionAnimation(getActivity(),
@@ -150,6 +147,7 @@ public class PhotosFragment extends Fragment implements PhotoClickListener {
         } else {
             Intent intent = new Intent(getActivity(), PhotoActivity.class);
             intent.putExtra(CommonHelper.PHOTO_REF, photo.getPhotoReference());
+            intent.putExtra(CommonHelper.FROM_FRAGMENT, CommonHelper.FROM_PHOTOS);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation(getActivity(),

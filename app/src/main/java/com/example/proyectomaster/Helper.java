@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 import com.example.proyectomaster.search.entities.Location;
 
@@ -115,6 +116,14 @@ public class Helper {
         float dp = px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return dp;
 
+    }
+
+    public static void openKeyboard(Context context, EditText editText){
+        /*InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);*/
+
+        InputMethodManager in = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
     }
 
     public static File createImageFile(Context context) throws IOException {

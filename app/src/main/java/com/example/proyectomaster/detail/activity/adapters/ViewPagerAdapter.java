@@ -13,13 +13,13 @@ import com.example.proyectomaster.detail.fragments.photos.PhotosFragment;
 import com.example.proyectomaster.lib.ImageLoader;
 
 
-public class PagerAdapter extends FragmentStatePagerAdapter {
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private int numOfTabs;
     private Result result;
     private ImageLoader imageLoader;
 
-    public PagerAdapter(FragmentManager fm, int numOfTabs, Result result, ImageLoader imageLoader) {
+    public ViewPagerAdapter(FragmentManager fm, int numOfTabs, Result result, ImageLoader imageLoader) {
         super(fm);
         this.numOfTabs = numOfTabs;
         this.result = result;

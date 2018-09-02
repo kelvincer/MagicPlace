@@ -29,6 +29,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
+            android:inputType="number"
             android:text="1000"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txv_radius" />
@@ -112,19 +113,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:contentDescription="sfdsfs"
+            android:layout_marginStart="8dp"
+            android:checkedButton="@id/rdb_prominence"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/txv_sort">
 
             <RadioButton
-                android:id="@+id/rdb_text"
+                android:id="@+id/rdb_prominence"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 android:text="Relevancia" />
 
             <RadioButton
-                android:id="@+id/rdb_location"
+                android:id="@+id/rdb_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Distancia" />
@@ -132,6 +133,5 @@
         </RadioGroup>
 
     </android.support.constraint.ConstraintLayout>
-
 
 </LinearLayout>

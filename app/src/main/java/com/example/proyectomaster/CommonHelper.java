@@ -11,6 +11,11 @@ public class CommonHelper {
     public static final String PLACE_NAME = "Title";
     public static final String MESSAGE = "Message";
     public static final String PATH = "Path";
+    public static final String FROM_FRAGMENT = "From_Fragment";
+    public static final int FROM_HIGHLIGHTS = 101;
+    public static final int FROM_PHOTOS = 102;
+    public static final String PHOTO_URL = "photo_url";
+    public static final String FIRE_PHOTO_MODEL = "firebase_photo_model" ;
     public static Location MY_LOCATION;
     public static Location SEARCH_QUERY_LOCATION;
     public static int SOURCE_MODE = 1;

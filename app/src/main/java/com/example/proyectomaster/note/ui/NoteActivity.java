@@ -279,6 +279,7 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
     @Override
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
         finish();
     }
 

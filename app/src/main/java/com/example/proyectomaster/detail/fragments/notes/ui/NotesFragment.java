@@ -144,7 +144,7 @@ public class NotesFragment extends Fragment implements NoteFragmentView {
                 .inject(this);
     }
 
-    private void loadNotes() {
+    public void loadNotes() {
         presenter.getNotes(result.getPlaceId());
     }
 

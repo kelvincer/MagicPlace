@@ -1,13 +1,12 @@
-package com.example.proyectomaster.detail.activity.events;
+package com.example.proyectomaster.photo.events;
 
-public class FirebasePhotoEvent {
+public class PhotoEvent {
+
+    public static final int ON_SUCCESS = 1;
+    public static final int ON_ERROR= 2;
 
     private int type;
     private String message;
-    public static final int GET_PHOTOS_SUCCESS = 0;
-    public static final int ERROR = 1;
-    public static final int ON_SUCCESS_UPLOAD_PHOTO = 2;
-    public static final int NO_PHOTOS = 3;
 
     public int getType() {
         return type;

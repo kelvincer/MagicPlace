@@ -1,4 +1,4 @@
-package com.example.proyectomaster.photo;
+package com.example.proyectomaster.photo.ui;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
@@ -21,7 +23,10 @@ import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.app.MainApplication;
+import com.example.proyectomaster.detail.entities.FavoritePhotoModel;
 import com.example.proyectomaster.lib.ImageLoader;
+import com.example.proyectomaster.photo.PhotoPresenter;
+import com.example.proyectomaster.photo.di.PhotoActivityModule;
 import com.jsibbold.zoomage.ZoomageView;
 
 import java.io.File;
@@ -31,18 +36,21 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PhotoActivity extends AppCompatActivity {
+public class PhotoActivity extends AppCompatActivity implements PhotoView {
 
     private static final String TAG = PhotoActivity.class.getSimpleName();
+    int fragment;
+    String placeId;
+    FavoritePhotoModel model;
+    File imgFile;
     @BindView(R.id.myZoomageView)
     ZoomageView myZoomageView;
-    File imgFile;
-    /*@BindView(R.id.view_main)
-    View viewMain;*/
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @Inject
     ImageLoader imageLoader;
+    @Inject
+    PhotoPresenter photoPresenter;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -52,9 +60,12 @@ public class PhotoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().show();
-
+        setupInjection();
+        photoPresenter.onCreate();
+        fragment = getIntent().getIntExtra(CommonHelper.FROM_FRAGMENT, 0);
+        placeId = getIntent().getStringExtra(CommonHelper.PLACE_ID);
         String imagePath = getIntent().getStringExtra(CommonHelper.BITMAP_PATH);
+        model = (FavoritePhotoModel) getIntent().getExtras().getSerializable(CommonHelper.FIRE_PHOTO_MODEL);
         if (imagePath != null) {
             imgFile = new File(imagePath);
             if (imgFile.exists()) {
@@ -64,15 +75,24 @@ public class PhotoActivity extends AppCompatActivity {
                 Toast.makeText(this, "NO EXISTE IMAGEN", Toast.LENGTH_SHORT).show();
             }
         } else {
-            String reference = getIntent().getStringExtra(CommonHelper.PHOTO_REF);
-            /*DaggerLibsComponent.builder()
-                    .libsModule(new LibsModule(this))
-                    .build()
-                    .inject(this);*/
-            setupInjection();
-
-            imageLoader.load(myZoomageView, Helper.generateUrl(reference));
+            switch (fragment) {
+                case CommonHelper.FROM_HIGHLIGHTS:
+                    imageLoader.load(myZoomageView, model.getUrl());
+                    break;
+                case CommonHelper.FROM_PHOTOS:
+                    String reference = getIntent().getStringExtra(CommonHelper.PHOTO_REF);
+                    imageLoader.load(myZoomageView, Helper.generateUrl(reference));
+                    break;
+                default:
+                    throw new IllegalArgumentException("Illegal fragment id");
+            }
         }
+
+        setupViews();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setupViews() {
 
         myZoomageView.setOnTouchListener(new View.OnTouchListener() {
             float x1, x2, y1, y2;
@@ -121,7 +141,7 @@ public class PhotoActivity extends AppCompatActivity {
     private void setupInjection() {
 
         MainApplication.getAppComponent()
-                .newPhotoComponent()
+                .newPhotoComponent(new PhotoActivityModule(this))
                 .inject(this);
     }
 
@@ -136,13 +156,12 @@ public class PhotoActivity extends AppCompatActivity {
             Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
         }
         Log.d(TAG, "configuration changed");
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "on destroy");
+        photoPresenter.onDestroy();
         if (imgFile != null) {
             boolean b = imgFile.delete();
             if (b) {
@@ -151,6 +170,45 @@ public class PhotoActivity extends AppCompatActivity {
                 Toast.makeText(this, "FILE NOT DELETED", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        switch (fragment) {
+            case CommonHelper.FROM_HIGHLIGHTS:
+                getMenuInflater().inflate(R.menu.menu_photo_delete, menu);
+                break;
+            case CommonHelper.FROM_PHOTOS:
+                getMenuInflater().inflate(R.menu.menu_photo, menu);
+                break;
+            default:
+                throw new IllegalStateException("Illegal fragment id");
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.fire_share_photo:
+                Toast.makeText(getApplicationContext(), "SHARE FIRE", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.fire_delete_photo:
+                deletePhoto();
+                break;
+            case R.id.share:
+                Toast.makeText(this, "SHARE", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void deletePhoto() {
+        if (fragment == CommonHelper.FROM_HIGHLIGHTS)
+            photoPresenter.deletePhoto(model, placeId);
     }
 
     public static RectF getImageBounds(ImageView imageView) {
@@ -180,5 +238,11 @@ public class PhotoActivity extends AppCompatActivity {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

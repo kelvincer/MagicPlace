@@ -1,11 +1,9 @@
 package com.example.proyectomaster.detail.fragments.highlight;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.example.proyectomaster.ConstantsHelper;
-import com.example.proyectomaster.detail.entities.StoragePhoto;
+import com.example.proyectomaster.detail.entities.FavoritePhotoModel;
 import com.example.proyectomaster.detail.fragments.highlight.events.HighlightEvent;
 import com.example.proyectomaster.lib.EventBus;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -15,13 +13,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 
 public class HighlightRepositoryImpl implements HighlightRepository {
@@ -52,11 +43,11 @@ public class HighlightRepositoryImpl implements HighlightRepository {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (queryDocumentSnapshots.getDocuments().size() != 0) {
-                    FirestoreRecyclerOptions<StoragePhoto> options = new FirestoreRecyclerOptions
-                            .Builder<StoragePhoto>().setQuery(query, StoragePhoto.class).build();
+                    FirestoreRecyclerOptions<FavoritePhotoModel> options = new FirestoreRecyclerOptions
+                            .Builder<FavoritePhotoModel>().setQuery(query, FavoritePhotoModel.class).build();
                     post(HighlightEvent.GET_PHOTOS_SUCCESS, options);
                     Log.d(TAG, "on success");
-                    //queryDocumentSnapshots.toObjects(StoragePhoto.class);
+                    //queryDocumentSnapshots.toObjects(FavoritePhotoModel.class);
                 } else {
                     post(HighlightEvent.NO_PHOTOS, "NO HAY PHOTOS");
                 }
@@ -80,7 +71,7 @@ public class HighlightRepositoryImpl implements HighlightRepository {
         eventBus.post(event);
     }
 
-    private void post(int type, FirestoreRecyclerOptions<StoragePhoto> options) {
+    private void post(int type, FirestoreRecyclerOptions<FavoritePhotoModel> options) {
         HighlightEvent event = new HighlightEvent();
         event.setOpciones(options);
         event.setType(type);

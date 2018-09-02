@@ -25,12 +25,13 @@ import com.example.proyectomaster.Helper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.app.MainApplication;
 import com.example.proyectomaster.detail.activity.DetailActivityPresenter;
-import com.example.proyectomaster.detail.activity.adapters.PagerAdapter;
+import com.example.proyectomaster.detail.activity.adapters.ViewPagerAdapter;
 import com.example.proyectomaster.detail.activity.di.DetailApiModule;
 import com.example.proyectomaster.detail.activity.di.DetailModule;
+import com.example.proyectomaster.detail.entities.FavoritePhotoModel;
 import com.example.proyectomaster.detail.entities.Result;
-import com.example.proyectomaster.detail.entities.StoragePhoto;
 import com.example.proyectomaster.detail.fragments.highlight.ui.HighlightsFragment;
+import com.example.proyectomaster.detail.fragments.notes.ui.NotesFragment;
 import com.example.proyectomaster.dialog.LoginDialogActivity;
 import com.example.proyectomaster.gallery.GalleryActivity;
 import com.example.proyectomaster.lib.ImageLoader;
@@ -55,6 +56,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     private static final int CAPTURE_REQUEST_CODE = 100;
     private static final int LOGIN_REQUEST_CODE = 101;
     private static final int GALLERY_REQUEST_CODE = 102;
+    private static final int NOTE_ACT_REQUEST_CODE = 103;
     private final String[] pageTitle = {"DESTACADOS", "FOTOS", "NOTAS"};
     Dialog dialog;
     Result result;
@@ -87,22 +89,22 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Intent intent = getIntent();
-        String id = intent.getStringExtra(CommonHelper.PLACE_ID);
-        Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
+        String place_id = intent.getStringExtra(CommonHelper.PLACE_ID);
+        Toast.makeText(this, place_id, Toast.LENGTH_SHORT).show();
 
         setupTabLayout();
+        setupSpeedDial();
         setupInjection();
         pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(this);
         presenter.onCreate();
-        presenter.getPlaceDetail(id);
+        presenter.getPlaceDetail(place_id);
     }
 
     private void setupTabLayout() {
         for (String aPageTitle : pageTitle) {
             tabLayout.addTab(tabLayout.newTab().setText(aPageTitle));
         }
-        setupSpeedDial();
     }
 
     @Override
@@ -134,9 +136,21 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
                     uploadToFirebaseStorage(bitmap);
                 }
                 break;
+            case NOTE_ACT_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    loadNotes();
+                }
+                break;
             default:
                 throw new IllegalArgumentException("Invalid request code");
         }
+    }
+
+    private void loadNotes() {
+
+        NotesFragment fragment = (NotesFragment) pager.getAdapter()
+                .instantiateItem(pager, 2);
+        fragment.loadNotes();
     }
 
     private void loadFavoritesPhotos() {
@@ -186,6 +200,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
                 }
             }
         });
+
     }
 
     @Override
@@ -221,7 +236,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         Intent intent = new Intent(DetailActivity.this, NoteActivity.class);
         intent.putExtra(CommonHelper.PLACE_NAME, result.getName());
         intent.putExtra(CommonHelper.PLACE_ID, result.getPlaceId());
-        startActivity(intent);
+        startActivityForResult(intent, NOTE_ACT_REQUEST_CODE);
     }
 
     private void setupInjection() {
@@ -260,11 +275,11 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
             String photoReference = result.getPhotos().get(0).getPhotoReference();
             imageLoader.load(header, collapsingToolbarLayout, Helper.generateUrl(photoReference));
         }
-        pager.setAdapter(new PagerAdapter(getSupportFragmentManager(), pageTitle.length, result, imageLoader));
+        pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageTitle.length, result, imageLoader));
     }
 
     @Override
-    public void setOptions(FirestoreRecyclerOptions<StoragePhoto> options) {
+    public void setOptions(FirestoreRecyclerOptions<FavoritePhotoModel> options) {
 
     }
 

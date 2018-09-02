@@ -7,6 +7,8 @@ import com.example.proyectomaster.detail.activity.di.DetailModule;
 import com.example.proyectomaster.note.di.NoteActivityComponent;
 import com.example.proyectomaster.note.di.NoteActivityModule;
 import com.example.proyectomaster.photo.di.PhotoActivityComponent;
+import com.example.proyectomaster.photo.di.PhotoActivityModule;
+import com.example.proyectomaster.photo.ui.PhotoActivity;
 import com.example.proyectomaster.search.activity.di.SearchActivityComponent;
 import com.example.proyectomaster.search.activity.di.SearchActivityModule;
 
@@ -22,7 +24,7 @@ public interface MainApplicationComponent {
 
     SearchActivityComponent newSearchActivityComponent(SearchActivityModule module);
 
-    PhotoActivityComponent newPhotoComponent();
+    PhotoActivityComponent newPhotoComponent(PhotoActivityModule module);
 
     DetailActivityComponent newDetailComponent(DetailApiModule module, DetailModule detailModule);
 

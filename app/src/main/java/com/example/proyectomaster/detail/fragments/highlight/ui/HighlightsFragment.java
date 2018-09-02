@@ -1,9 +1,14 @@
 package com.example.proyectomaster.detail.fragments.highlight.ui;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -19,15 +24,22 @@ import com.example.proyectomaster.app.MainApplication;
 import com.example.proyectomaster.detail.activity.di.DetailApiModule;
 import com.example.proyectomaster.detail.activity.di.DetailModule;
 import com.example.proyectomaster.detail.activity.ui.DetailActivity;
+import com.example.proyectomaster.detail.entities.FavoritePhotoModel;
 import com.example.proyectomaster.detail.fragments.highlight.adapters.FavoritesFirestoreAdapter;
 import com.example.proyectomaster.detail.entities.Result;
-import com.example.proyectomaster.detail.entities.StoragePhoto;
 import com.example.proyectomaster.detail.fragments.highlight.HighlightPresenter;
 import com.example.proyectomaster.detail.fragments.highlight.di.HighlightFragmentModule;
+import com.example.proyectomaster.detail.fragments.listener.FavoritePhotoClickListener;
 import com.example.proyectomaster.lib.ImageLoader;
+import com.example.proyectomaster.photo.ui.PhotoActivity;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.willy.ratingbar.ScaleRatingBar;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -36,7 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class HighlightsFragment extends Fragment implements HighlightView {
+public class HighlightsFragment extends Fragment implements HighlightView, FavoritePhotoClickListener {
 
     private static final String TAG = HighlightsFragment.class.getSimpleName();
     Unbinder unbinder;
@@ -118,8 +130,6 @@ public class HighlightsFragment extends Fragment implements HighlightView {
     @Override
     public void onStop() {
         super.onStop();
-        if (adapter != null)
-            adapter.stopListening();
     }
 
     @Override
@@ -127,9 +137,9 @@ public class HighlightsFragment extends Fragment implements HighlightView {
         super.onDestroyView();
         unbinder.unbind();
         presenter.onDestroy();
-        Toast.makeText(getContext(), "DESTROY", Toast.LENGTH_SHORT).show();
-       // result = null;
         Log.d(TAG, "destroy destroy");
+        if (adapter != null)
+            adapter.stopListening();
     }
 
     private void setupViews() {
@@ -148,16 +158,18 @@ public class HighlightsFragment extends Fragment implements HighlightView {
     @Override
     public void showMessage(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        if (adapter.getItemCount() == 0) {
+            ryvFavoritos.setVisibility(View.GONE);
+            txvTakePhotos.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
-    public void setOptions(FirestoreRecyclerOptions<StoragePhoto> options) {
+    public void setOptions(FirestoreRecyclerOptions<FavoritePhotoModel> options) {
 
-        adapter = new FavoritesFirestoreAdapter(options, imageLoader);
-        // ryvFavoritos.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        adapter = new FavoritesFirestoreAdapter(options, imageLoader, this);
         ryvFavoritos.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
         ryvFavoritos.setAdapter(adapter);
-        //ryvFavoritos.addItemDecoration(new ItemOffsetDecoration(2));
         adapter.startListening();
         ryvFavoritos.setVisibility(View.VISIBLE);
         txvTakePhotos.setVisibility(View.GONE);
@@ -167,6 +179,54 @@ public class HighlightsFragment extends Fragment implements HighlightView {
     public void loadFavoritePhotos() {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             presenter.getFavoritePhotos(result.getPlaceId());
+        }
+    }
+
+    @Override
+    public void onItemClickListener(FavoritePhotoModel model, Bitmap bitmap, View view) {
+
+        if (bitmap != null) {
+            File f = new File(getContext().getFilesDir(), "myphoto");
+            try {
+                f.createNewFile();
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+                byte[] bitmapdata = bos.toByteArray();
+                FileOutputStream fos = new FileOutputStream(f);
+                fos.write(bitmapdata);
+                fos.flush();
+                fos.close();
+                Intent intent = new Intent(getActivity(), PhotoActivity.class);
+                intent.putExtra(CommonHelper.FROM_FRAGMENT, CommonHelper.FROM_HIGHLIGHTS);
+                intent.putExtra(CommonHelper.FIRE_PHOTO_MODEL, model);
+                intent.putExtra(CommonHelper.BITMAP_PATH, f.getAbsolutePath());
+                intent.putExtra(CommonHelper.PLACE_ID, result.getPlaceId());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptionsCompat options = ActivityOptionsCompat.
+                            makeSceneTransitionAnimation(getActivity(),
+                                    view,
+                                    ViewCompat.getTransitionName(view));
+                    startActivity(intent, options.toBundle());
+                } else {
+                    startActivity(intent);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Intent intent = new Intent(getActivity(), PhotoActivity.class);
+            intent.putExtra(CommonHelper.FIRE_PHOTO_MODEL, model);
+            intent.putExtra(CommonHelper.FROM_FRAGMENT, CommonHelper.FROM_HIGHLIGHTS);
+            intent.putExtra(CommonHelper.PLACE_ID, result.getPlaceId());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(getActivity(),
+                                view,
+                                ViewCompat.getTransitionName(view));
+                startActivity(intent, options.toBundle());
+            } else {
+                startActivity(intent);
+            }
         }
     }
 }
