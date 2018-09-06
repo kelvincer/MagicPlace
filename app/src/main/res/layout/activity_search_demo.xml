@@ -21,17 +21,13 @@
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|enterAlways">
 
-                <!--<FrameLayout
-                    android:id="@+id/search_head_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:tag="head_fragment" />-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
-                    android:orientation="vertical">
+                    android:paddingTop="4dp">
 
                     <include
                         android:id="@+id/search_layout"
@@ -41,13 +37,11 @@
                         android:id="@+id/filter_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="4dp"
                         android:layout_marginTop="4dp"
                         android:background="#FF7845"
                         android:foreground="?android:attr/selectableItemBackground"
-                        android:text="FILTROS"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/search_layout" />
+                        android:text="FILTROS" />
                 </LinearLayout>
             </android.support.design.widget.CollapsingToolbarLayout>
         </android.support.design.widget.AppBarLayout>

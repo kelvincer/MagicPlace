@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".start.InitActivity"
+            android:name=".start.activities.InitActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,6 +42,8 @@
         <activity android:name=".note.ui.NoteActivity" />
         <activity android:name=".account.RegisterActivity" />
         <activity android:name=".account.InitSessionActivity" />
+        <activity android:name=".gallery.GalleryActivity" />
+        <activity android:name=".start.activities.list.ui.ListFavouritesActivity"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -53,7 +55,10 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".gallery.GalleryActivity"></activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
     </application>
 
 </manifest>

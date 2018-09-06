@@ -128,11 +128,6 @@ public class HighlightsFragment extends Fragment implements HighlightView, Favor
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
@@ -158,7 +153,7 @@ public class HighlightsFragment extends Fragment implements HighlightView, Favor
     @Override
     public void showMessage(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-        if (adapter.getItemCount() == 0) {
+        if (adapter != null && adapter.getItemCount() == 0) {
             ryvFavoritos.setVisibility(View.GONE);
             txvTakePhotos.setVisibility(View.VISIBLE);
         }

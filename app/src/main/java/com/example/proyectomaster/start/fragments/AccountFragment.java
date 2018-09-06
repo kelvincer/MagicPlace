@@ -17,7 +17,7 @@ import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.account.InitSessionActivity;
 import com.example.proyectomaster.account.RegisterActivity;
-import com.example.proyectomaster.start.InitActivity;
+import com.example.proyectomaster.start.activities.InitActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

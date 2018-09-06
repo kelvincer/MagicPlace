@@ -12,7 +12,11 @@ public interface DetailActivityView {
 
     void showMessage(String message);
 
+    void removeFavouriteOption();
+
     void setResult(Result result);
 
-    void setOptions(FirestoreRecyclerOptions<FavoritePhotoModel> options);
+    void seFavourite(boolean isFavourite);
+
+    void loadFavoritesPhotos();
 }

@@ -34,7 +34,8 @@
             android:id="@+id/tie_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Contraseña" />
+            android:hint="Contraseña"
+            android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
     <Button

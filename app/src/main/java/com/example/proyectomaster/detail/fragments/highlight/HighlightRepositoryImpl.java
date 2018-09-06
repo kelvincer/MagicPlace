@@ -47,7 +47,6 @@ public class HighlightRepositoryImpl implements HighlightRepository {
                             .Builder<FavoritePhotoModel>().setQuery(query, FavoritePhotoModel.class).build();
                     post(HighlightEvent.GET_PHOTOS_SUCCESS, options);
                     Log.d(TAG, "on success");
-                    //queryDocumentSnapshots.toObjects(FavoritePhotoModel.class);
                 } else {
                     post(HighlightEvent.NO_PHOTOS, "NO HAY PHOTOS");
                 }

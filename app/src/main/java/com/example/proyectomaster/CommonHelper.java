@@ -15,7 +15,9 @@ public class CommonHelper {
     public static final int FROM_HIGHLIGHTS = 101;
     public static final int FROM_PHOTOS = 102;
     public static final String PHOTO_URL = "photo_url";
-    public static final String FIRE_PHOTO_MODEL = "firebase_photo_model" ;
+    public static final String FIRE_PHOTO_MODEL = "firebase_photo_model";
+    public static final String CATEGORY = "place_category";
+    public static final String FROM_ACTIVITY = "from_activity";
     public static Location MY_LOCATION;
     public static Location SEARCH_QUERY_LOCATION;
     public static int SOURCE_MODE = 1;

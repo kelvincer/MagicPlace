@@ -11,6 +11,10 @@ import com.example.proyectomaster.photo.di.PhotoActivityModule;
 import com.example.proyectomaster.photo.ui.PhotoActivity;
 import com.example.proyectomaster.search.activity.di.SearchActivityComponent;
 import com.example.proyectomaster.search.activity.di.SearchActivityModule;
+import com.example.proyectomaster.start.activities.list.di.ListFavouriteComponent;
+import com.example.proyectomaster.start.activities.list.di.ListFavouriteModule;
+import com.example.proyectomaster.start.fragments.favourites.di.FavouritesFragComponent;
+import com.example.proyectomaster.start.fragments.favourites.di.FavouritesFragModule;
 
 import javax.inject.Singleton;
 
@@ -29,4 +33,8 @@ public interface MainApplicationComponent {
     DetailActivityComponent newDetailComponent(DetailApiModule module, DetailModule detailModule);
 
     NoteActivityComponent newNoteActivityComponent(NoteActivityModule module);
+
+    FavouritesFragComponent newFavouritesFragComponent(FavouritesFragModule module);
+
+    ListFavouriteComponent newListFavouriteComponent(ListFavouriteModule module);
 }

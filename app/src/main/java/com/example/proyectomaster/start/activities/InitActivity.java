@@ -1,4 +1,4 @@
-package com.example.proyectomaster.start;
+package com.example.proyectomaster.start.activities;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.start.fragments.AccountFragment;
-import com.example.proyectomaster.start.fragments.FavoritesFragment;
+import com.example.proyectomaster.start.fragments.favourites.ui.FavouritesFragment;
 import com.example.proyectomaster.start.fragments.InitFragment;
 import com.example.proyectomaster.start.fragments.LoggedFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,7 +56,7 @@ public class InitActivity extends AppCompatActivity implements BottomNavigationV
                 fragment = new InitFragment();
                 break;
             case R.id.action_favorites:
-                fragment = new FavoritesFragment();
+                fragment = new FavouritesFragment();
                 break;
             case R.id.action_account:
                 if (FirebaseAuth.getInstance().getCurrentUser() == null)

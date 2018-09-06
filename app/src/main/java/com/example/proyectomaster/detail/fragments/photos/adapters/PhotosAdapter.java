@@ -53,11 +53,9 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
         @BindView(R.id.igv_photo)
         ImageView igvPhoto;
-        View view;
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.view = itemView;
             ButterKnife.bind(this, itemView);
         }
 
@@ -66,7 +64,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         }
 
         void setOnItemClick(final Photo photo) {
-            view.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     photoClickListener.onPhotoItemClickListner(photo, igvPhoto);

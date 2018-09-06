@@ -10,7 +10,7 @@
         android:id="@+id/rtl_image"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:background="#890"
+        android:background="#9b7351"
         app:layout_constraintBottom_toTopOf="@+id/txv_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

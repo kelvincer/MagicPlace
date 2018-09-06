@@ -1,12 +1,17 @@
 package com.example.proyectomaster.photo.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,7 +34,10 @@ import com.example.proyectomaster.photo.PhotoPresenter;
 import com.example.proyectomaster.photo.di.PhotoActivityModule;
 import com.jsibbold.zoomage.ZoomageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -194,16 +202,61 @@ public class PhotoActivity extends AppCompatActivity implements PhotoView {
         switch (item.getItemId()) {
 
             case R.id.fire_share_photo:
+                shareImage();
                 Toast.makeText(getApplicationContext(), "SHARE FIRE", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fire_delete_photo:
                 deletePhoto();
                 break;
             case R.id.share:
+                shareImage();
                 Toast.makeText(this, "SHARE", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void shareImage() {
+        BitmapDrawable drawable = (BitmapDrawable) myZoomageView.getDrawable();
+        if (drawable == null)
+            return;
+        Bitmap bimap = drawable.getBitmap();
+
+        if (bimap == null)
+            return;
+
+        Uri uri = saveImage(bimap);
+        if (uri != null) {
+            shareImageUri(uri);
+        } else {
+            Toast.makeText(this, "Uri Error", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private Uri saveImage(Bitmap image) {
+        //TODO - Should be processed in another thread
+        Uri uri = null;
+        try {
+
+            File file = Helper.createImageFile(this);
+            FileOutputStream stream = new FileOutputStream(file);
+            image.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+            stream.flush();
+            stream.close();
+            uri = FileProvider.getUriForFile(this, "com.example.proyectomaster.fileprovider", file);
+
+        } catch (IOException e) {
+            Log.d(TAG, "IOException while trying to write file for sharing: " + e.getMessage());
+        }
+        return uri;
+    }
+
+    private void shareImageUri(Uri uri) {
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("image/png");
+        startActivity(intent);
     }
 
     private void deletePhoto() {

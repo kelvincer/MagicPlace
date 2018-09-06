@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.proyectomaster.R;
-import com.example.proyectomaster.start.InitActivity;
+import com.example.proyectomaster.start.activities.InitActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

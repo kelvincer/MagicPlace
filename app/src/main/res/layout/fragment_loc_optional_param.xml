@@ -77,13 +77,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="16dp"
+            app:isb_indicator_color="@color/colorAccent"
             app:isb_indicator_type="circular_bubble"
             app:isb_max="4"
             app:isb_seek_bar_type="discrete_ticks_texts"
+            app:isb_text_color="@color/black"
+            app:isb_thumb_color="@color/colorAccent"
+            app:isb_tick_color="@color/colorAccent"
             app:isb_tick_type="oval"
+            app:isb_track_background_bar_color="@color/colorAccent"
+            app:isb_track_progress_bar_color="@color/colorAccent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lnl_minprice" />
-
 
         <TextView
             android:id="@+id/txv_opennow"

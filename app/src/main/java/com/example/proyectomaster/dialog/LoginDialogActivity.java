@@ -9,7 +9,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
+import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.R;
+import com.example.proyectomaster.account.RegisterActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -103,6 +105,13 @@ public class LoginDialogActivity extends FragmentActivity implements GoogleApiCl
     private void verificaSiUsuarioValidado() {
         //messageOnError("CORRECT");
         setResult(Activity.RESULT_OK);
+        finish();
+    }
+
+    public void registerWithEmail(View view) {
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra(CommonHelper.FROM_ACTIVITY, "LoginDialogActivity");
+        startActivity(intent);
         finish();
     }
 }

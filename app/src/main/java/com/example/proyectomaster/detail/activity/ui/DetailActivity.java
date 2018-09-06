@@ -28,7 +28,6 @@ import com.example.proyectomaster.detail.activity.DetailActivityPresenter;
 import com.example.proyectomaster.detail.activity.adapters.ViewPagerAdapter;
 import com.example.proyectomaster.detail.activity.di.DetailApiModule;
 import com.example.proyectomaster.detail.activity.di.DetailModule;
-import com.example.proyectomaster.detail.entities.FavoritePhotoModel;
 import com.example.proyectomaster.detail.entities.Result;
 import com.example.proyectomaster.detail.fragments.highlight.ui.HighlightsFragment;
 import com.example.proyectomaster.detail.fragments.notes.ui.NotesFragment;
@@ -36,7 +35,6 @@ import com.example.proyectomaster.dialog.LoginDialogActivity;
 import com.example.proyectomaster.gallery.GalleryActivity;
 import com.example.proyectomaster.lib.ImageLoader;
 import com.example.proyectomaster.note.ui.NoteActivity;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
@@ -57,7 +55,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     private static final int LOGIN_REQUEST_CODE = 101;
     private static final int GALLERY_REQUEST_CODE = 102;
     private static final int NOTE_ACT_REQUEST_CODE = 103;
-    private final String[] pageTitle = {"DESTACADOS", "FOTOS", "NOTAS"};
+    private final String[] pageTitle = {"DESTACADOS", "FOTOS", "NOTAS", "RUTA"};
     Dialog dialog;
     Result result;
     File photoFile;
@@ -93,7 +91,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         Toast.makeText(this, place_id, Toast.LENGTH_SHORT).show();
 
         setupTabLayout();
-        setupSpeedDial();
         setupInjection();
         pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(this);
@@ -146,6 +143,12 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
+
     private void loadNotes() {
 
         NotesFragment fragment = (NotesFragment) pager.getAdapter()
@@ -153,7 +156,8 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         fragment.loadNotes();
     }
 
-    private void loadFavoritesPhotos() {
+    @Override
+    public void loadFavoritesPhotos() {
         if (pager.getCurrentItem() == 0) {
             HighlightsFragment frag = (HighlightsFragment) pager.getAdapter()
                     .instantiateItem(pager, pager.getCurrentItem());
@@ -165,7 +169,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         presenter.uploadPhoto(Helper.bitmapToByteArray(bitmap), result.getPlaceId());
     }
 
-    private void setupSpeedDial() {
+    private void setupSpeedDial(boolean isFavourite) {
         speedDial.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_photo_label, R.drawable
                 .ic_add_a_photo_white_24dp)
                 .setLabel("Agregar una foto")
@@ -177,11 +181,13 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
                 .setLabelColor(Color.BLACK)
                 .create());
 
-        speedDial.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_favorite_label, R.drawable
-                .ic_favorite_border_white_24dp)
-                .setLabel("Agregar a favorito")
-                .setLabelColor(Color.BLACK)
-                .create());
+        if (!isFavourite) {
+            speedDial.addActionItem(new SpeedDialActionItem.Builder(R.id.fab_favorite_label, R.drawable
+                    .ic_favorite_border_white_24dp)
+                    .setLabel("Agregar a favorito")
+                    .setLabelColor(Color.BLACK)
+                    .create());
+        }
 
         speedDial.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
             @Override
@@ -194,19 +200,24 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
                         goToNoteActivity();
                         return false;
                     case R.id.fab_favorite_label:
+                        saveFavorite();
                         return false;
                     default:
                         throw new IllegalArgumentException("Illegal speed dial id");
                 }
             }
         });
-
+        speedDial.show();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.onDestroy();
+    private void saveFavorite() {
+
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null)
+            startActivityForResult(new Intent(this, LoginDialogActivity.class), LOGIN_REQUEST_CODE);
+        else {
+            presenter.saveFavourite(result);
+        }
     }
 
     public void launchDialog() {
@@ -267,6 +278,11 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     }
 
     @Override
+    public void removeFavouriteOption() {
+        speedDial.removeActionItemById(R.id.fab_favorite_label);
+    }
+
+    @Override
     public void setResult(Result result) {
 
         this.result = result;
@@ -276,11 +292,16 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
             imageLoader.load(header, collapsingToolbarLayout, Helper.generateUrl(photoReference));
         }
         pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageTitle.length, result, imageLoader));
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            presenter.checkIfFavourite(result);
+        } else {
+            setupSpeedDial(false);
+        }
     }
 
     @Override
-    public void setOptions(FirestoreRecyclerOptions<FavoritePhotoModel> options) {
-
+    public void seFavourite(boolean isFavourite) {
+        setupSpeedDial(isFavourite);
     }
 
     private void setupActionBar(Result result) {
@@ -291,6 +312,12 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         pager.setCurrentItem(tab.getPosition());
+        if (tab.getPosition() == 3) {
+            appBar.setExpanded(false);
+            speedDial.hide();
+        } else {
+            speedDial.show();
+        }
     }
 
     @Override

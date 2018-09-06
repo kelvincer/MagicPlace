@@ -8,5 +8,5 @@ public class ConstantsHelper {
     public final static String BASE_URL = "https://maps.googleapis.com/maps/api/place/";
     public static final String FIREBASE_STORAGE = "gs://master-aeea3.appspot.com/";
     public static final Pattern LAT_LNG_PATTERN = Pattern.compile("^[-+]?([1-8]?\\d(\\.\\d+)?|90(\\.0+)?),\\s*[-+]?(180(\\.0+)?|((1[0-7]\\d)|([1-9]?\\d))(\\.\\d+)?)$");
-
+    public static String DIRECTIONS_KEY = "AIzaSyAMni--tCJGoCbW-RsdcfhWBDEEC0uOhDQ";
 }

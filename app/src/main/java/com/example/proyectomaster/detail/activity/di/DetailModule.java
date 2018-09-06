@@ -11,6 +11,10 @@ import com.example.proyectomaster.detail.activity.FirebasePhotoInteractor;
 import com.example.proyectomaster.detail.activity.FirebasePhotoInteractorImpl;
 import com.example.proyectomaster.detail.activity.FirebasePhotoRepository;
 import com.example.proyectomaster.detail.activity.FirebasePhotoRepositoryImpl;
+import com.example.proyectomaster.detail.activity.SaveFavouriteInteractor;
+import com.example.proyectomaster.detail.activity.SaveFavouriteInteractorImpl;
+import com.example.proyectomaster.detail.activity.SaveFavouriteRepository;
+import com.example.proyectomaster.detail.activity.SaveFavouriteRepositoryImpl;
 import com.example.proyectomaster.detail.activity.api.DetailPlaceApiService;
 import com.example.proyectomaster.detail.activity.ui.DetailActivityView;
 import com.example.proyectomaster.lib.EventBus;
@@ -37,9 +41,14 @@ public class DetailModule {
     @Provides
     public DetailActivityPresenter provideDetailActivityPresenterImpl(EventBus eventBus, DetailActivityView detailActivityView,
                                                                       DetailActivityInteractor detailActivityInteractor,
-                                                                      FirebasePhotoInteractor firebasePhotoInteractor) {
+                                                                      FirebasePhotoInteractor firebasePhotoInteractor,
+                                                                      SaveFavouriteInteractor saveFavouriteInteractor) {
 
-        return new DetailActivityPresenterImpl(eventBus, detailActivityView, detailActivityInteractor, firebasePhotoInteractor);
+        return new DetailActivityPresenterImpl(eventBus,
+                detailActivityView,
+                detailActivityInteractor,
+                firebasePhotoInteractor,
+                saveFavouriteInteractor);
     }
 
     @PerActivity
@@ -65,4 +74,17 @@ public class DetailModule {
     public FirebasePhotoRepository provideFirebasePhotoRepositoryImpl(EventBus eventBus) {
         return new FirebasePhotoRepositoryImpl(eventBus);
     }
+
+    @PerActivity
+    @Provides
+    public SaveFavouriteInteractor provideSaveFavouriteInteractorImpl(SaveFavouriteRepository saveFavouriteRepository) {
+        return new SaveFavouriteInteractorImpl(saveFavouriteRepository);
+    }
+
+    @PerActivity
+    @Provides
+    public SaveFavouriteRepository SaveFavouriteRepositoryImpl(EventBus eventBus) {
+        return new SaveFavouriteRepositoryImpl(eventBus);
+    }
+
 }

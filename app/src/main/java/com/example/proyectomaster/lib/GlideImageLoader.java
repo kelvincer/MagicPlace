@@ -138,9 +138,9 @@ public class GlideImageLoader implements ImageLoader {
                     public void onResourceReady(@NonNull final Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         Palette.from(resource).generate(new Palette.PaletteAsyncListener() {
                             public void onGenerated(Palette palette) {
-                                int vibrantColor = palette.getVibrantColor(Color.parseColor("#FF0000"));
+                                int vibrantColor = palette.getVibrantColor(Color.parseColor("#9E9E9E"));
                                 Log.d(TAG, "vibrantColor " + vibrantColor);
-                                int darkVibrantColor = palette.getDarkVibrantColor(Color.parseColor("#000000"));
+                                int darkVibrantColor = palette.getDarkVibrantColor(Color.parseColor("#616161"));
                                 Log.d(TAG, "darkVibrantColor " + darkVibrantColor);
                                 collapsingToolbarLayout.setContentScrimColor(vibrantColor);
                                 collapsingToolbarLayout.setStatusBarScrimColor(darkVibrantColor);

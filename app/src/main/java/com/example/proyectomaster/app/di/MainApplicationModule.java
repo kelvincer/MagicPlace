@@ -22,9 +22,6 @@ public class MainApplicationModule {
 
     Context appContext;
 
-    public MainApplicationModule() {
-    }
-
     public MainApplicationModule(Context appContext) {
         this.appContext = appContext;
     }

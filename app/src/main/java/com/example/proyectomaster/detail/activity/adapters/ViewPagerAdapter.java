@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.example.proyectomaster.detail.entities.Result;
 import com.example.proyectomaster.detail.fragments.highlight.ui.HighlightsFragment;
 import com.example.proyectomaster.detail.fragments.notes.ui.NotesFragment;
+import com.example.proyectomaster.detail.fragments.path.PathFragment;
 import com.example.proyectomaster.detail.fragments.photos.PhotosFragment;
 import com.example.proyectomaster.lib.ImageLoader;
 
@@ -36,6 +37,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                 return PhotosFragment.getInstance(result);
             case 2:
                 return NotesFragment.getInstance(result);
+            case 3:
+                return PathFragment.getInstance(result);
         }
 
         return null;

@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -33,6 +34,7 @@ import butterknife.ButterKnife;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
+    private static final String TAG = RegisterActivity.class.getSimpleName();
     @BindView(R.id.tie_email)
     TextInputEditText tieEmail;
     @BindView(R.id.tie_password)
@@ -47,6 +49,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     Button btnGoogleInitSession;
     @BindView(R.id.pgn_register)
     ProgressBar pgnRegister;
+    @BindView(R.id.btn_init_session)
+    Button btnInitSession;
 
     private String email = "";
     private String password = "";
@@ -61,6 +65,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
         setupViews();
+
+        String from = getIntent().getStringExtra(CommonHelper.FROM_ACTIVITY);
+        if (from != null && from.equalsIgnoreCase("LoginDialogActivity")) {
+            btnInitSession.setVisibility(View.VISIBLE);
+            btnInitSession.setOnClickListener(this);
+        }
     }
 
     @Override
@@ -105,9 +115,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             case R.id.btn_google_init_session:
                 authenticateGoogle();
                 break;
+            case R.id.btn_init_session:
+                startLoginActivity();
+                break;
             default:
                 throw new IllegalArgumentException("Illegal view id");
         }
+    }
+
+    private void startLoginActivity() {
+        startActivity(new Intent(this, InitSessionActivity.class));
+        finish();
     }
 
     private void registerUser() {

@@ -16,6 +16,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.app.MainApplication;
@@ -85,6 +86,11 @@ public class PhotosFragment extends Fragment implements PhotoClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (result.getPhotos() == null || result.getPhotos().size() == 0) {
+            Toast.makeText(getContext(), "No tiene fotos este lugar", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         rcvPhotos.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         rcvPhotos.setAdapter(new PhotosAdapter(result, imageLoader, this));
