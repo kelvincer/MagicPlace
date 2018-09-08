@@ -40,16 +40,16 @@ public class SaveFavouriteRepositoryImpl implements SaveFavouriteRepository {
         datosType.put("type_name", type);
 
         FirebaseFirestore.getInstance()
-                .collection("favourites")
+                .collection("users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .collection("types")
+                .collection("favourites")
                 .document(type).set(datosType).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 FirebaseFirestore.getInstance()
-                        .collection("favourites")
+                        .collection("users")
                         .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .collection("types")
+                        .collection("favourites")
                         .document(type)
                         .collection("places")
                         .document("place_" + result.getPlaceId())
@@ -79,9 +79,9 @@ public class SaveFavouriteRepositoryImpl implements SaveFavouriteRepository {
     public void checkIfFavourite(Result result) {
         final String type = result.getTypes().get(0) != null ? result.getTypes().get(0) : "unknown";
         FirebaseFirestore.getInstance()
-                .collection("favourites")
+                .collection("users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .collection("types")
+                .collection("favourites")
                 .document(type)
                 .collection("places")
                 .document("place_" + result.getPlaceId())

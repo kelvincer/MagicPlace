@@ -45,11 +45,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:background="#77FFFFFF"
-                app:tabMode="scrollable"
                 app:tabGravity="fill"
-                app:tabMinWidth="90dp"
                 app:tabIndicatorColor="@color/colorAccent"
-                app:tabSelectedTextColor="@android:color/white"
+                app:tabMinWidth="90dp"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@android:color/black"
                 app:tabTextColor="@color/colorAccent" />
 
         </android.support.design.widget.CollapsingToolbarLayout>

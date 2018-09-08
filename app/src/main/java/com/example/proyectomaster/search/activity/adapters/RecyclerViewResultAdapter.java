@@ -60,7 +60,8 @@ public class RecyclerViewResultAdapter extends RecyclerView.Adapter<RecyclerView
     public void clearData() {
         final int size = results.size();
         results.clear();
-        notifyItemRangeRemoved(0, size);
+        notifyDataSetChanged();
+        //notifyItemRangeRemoved(0, size);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

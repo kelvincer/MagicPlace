@@ -81,8 +81,10 @@ public class FirebasePhotoRepositoryImpl implements FirebasePhotoRepository {
                         datos.put("url", uri.toString());
                         datos.put("name", uuid);
                         FirebaseFirestore.getInstance()
-                                .collection("images")
+                                .collection("users")
                                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .collection("photos")
+                                .document("places")
                                 .collection(placeId)
                                 .document("foto_" + uuid)
                                 .set(datos).addOnSuccessListener(new OnSuccessListener<Void>() {

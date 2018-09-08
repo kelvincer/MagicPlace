@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -66,7 +67,7 @@ public class Helper {
     }
 
     public static String getCurrentDate() {
-        DateFormat df = new SimpleDateFormat("EEE, MMM d, ''yy");
+        DateFormat df = new SimpleDateFormat("EEE, MMM d, ''yy", Locale.getDefault());
         String date = df.format(Calendar.getInstance().getTime());
         return date;
     }
@@ -118,11 +119,11 @@ public class Helper {
 
     }
 
-    public static void openKeyboard(Context context, EditText editText){
+    public static void openKeyboard(Context context, EditText editText) {
         /*InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);*/
 
-        InputMethodManager in = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager in = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         in.showSoftInput(editText, InputMethodManager.SHOW_FORCED);
     }
 

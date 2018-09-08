@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.R;
+import com.example.proyectomaster.search.activity.ui.SearchActivity;
 import com.warkiz.widget.IndicatorSeekBar;
 
 import butterknife.BindView;
@@ -36,7 +37,7 @@ public class LocOptionalParamFragment extends Fragment {
     CheckBox cebOpennow;
     @BindView(R.id.isb_minprice)
     IndicatorSeekBar isbMinprice;
-    @BindView(R.id.rdg_sortby)
+    @BindView(R.id.rdg_sort)
     RadioGroup rdgSortby;
 
     public static Fragment newInstance() {
@@ -56,6 +57,7 @@ public class LocOptionalParamFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupViews();
+        newSearchWithRadius();
     }
 
     @Override
@@ -83,15 +85,14 @@ public class LocOptionalParamFragment extends Fragment {
                     CommonHelper.radius = null;
                     if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
                         etxRadius.setError("Se requiere el radio");
+                    } else if (CommonHelper.RANKYBY.equalsIgnoreCase("distance")) {
+                        newSearchWithoutRadius();
                     }
-
                 } else {
                     etxRadius.setError(null);
                     if (getActivity().getCurrentFocus() == etxRadius) {
                         CommonHelper.radius = s.toString();
-                        //rdgSortby.clearCheck();
-                        //  rdgSortby.setEnabled(false);
-                        //CommonHelper.RANKYBY = null;
+                        newSearchWithRadius();
                     }
                 }
             }
@@ -112,12 +113,20 @@ public class LocOptionalParamFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s.toString().isEmpty()) {
                     CommonHelper.KEYWORD = null;
-                    if (CommonHelper.RANKYBY.equalsIgnoreCase("distance")) {
+                    if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
+                        newSearchWithRadius();
+                    } else if (CommonHelper.RANKYBY.equalsIgnoreCase("distance")) {
                         //etxKeyword.setError("Se requiere palabra clave");
+                        newSearchWithoutRadius();
                     }
                 } else {
                     CommonHelper.KEYWORD = s.toString();
                     etxKeyword.setError(null);
+                    if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
+                        newSearchWithRadius();
+                    } else if (CommonHelper.RANKYBY.equalsIgnoreCase("distance")) {
+                        newSearchWithoutRadius();
+                    }
                 }
             }
         });
@@ -125,10 +134,21 @@ public class LocOptionalParamFragment extends Fragment {
         cebOpennow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
+                if (isChecked) {
                     CommonHelper.opennow = "";
-                else
+                    if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
+                        newSearchWithRadius();
+                    } else if (CommonHelper.RANKYBY.equalsIgnoreCase("distance")) {
+                        newSearchWithoutRadius();
+                    }
+                } else {
                     CommonHelper.opennow = null;
+                    if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
+                        newSearchWithRadius();
+                    } else if (CommonHelper.RANKYBY.equalsIgnoreCase("distance")) {
+                        newSearchWithoutRadius();
+                    }
+                }
             }
         });
 
@@ -140,10 +160,20 @@ public class LocOptionalParamFragment extends Fragment {
                 if (isChecked) {
                     isbMinprice.setEnabled(true);
                     CommonHelper.minprice = "0";
+                    if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
+                        newSearchWithRadius();
+                    } else if (CommonHelper.RANKYBY.equalsIgnoreCase("distance")) {
+                        newSearchWithoutRadius();
+                    }
                 } else {
                     isbMinprice.setEnabled(false);
                     isbMinprice.setProgress(0);
                     CommonHelper.minprice = null;
+                    if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
+                        newSearchWithRadius();
+                    } else if (CommonHelper.RANKYBY.equalsIgnoreCase("distance")) {
+                        newSearchWithoutRadius();
+                    }
                 }
             }
         });
@@ -165,6 +195,7 @@ public class LocOptionalParamFragment extends Fragment {
                             etxRadius.clearFocus();
                             etxRadius.setText("1000");
                             etxRadius.setEnabled(true);
+                            newSearchWithRadius();
                             break;
                         case R.id.rdb_distance:
                             CommonHelper.RANKYBY = "distance";
@@ -172,6 +203,7 @@ public class LocOptionalParamFragment extends Fragment {
                             etxRadius.setEnabled(false);
                             etxRadius.getText().clear();
                             etxRadius.setError(null);
+                            newSearchWithoutRadius();
                             break;
                     }
                 }
@@ -192,6 +224,11 @@ public class LocOptionalParamFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
                 }
+                if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
+                    newSearchWithRadius();
+                } else if (CommonHelper.RANKYBY.equalsIgnoreCase("distance")) {
+                    newSearchWithoutRadius();
+                }
             }
 
             @Override
@@ -204,6 +241,28 @@ public class LocOptionalParamFragment extends Fragment {
 
             }
         });
+    }
 
+    private void newSearchWithRadius() {
+
+        if (CommonHelper.radius.isEmpty()) {
+            Toast.makeText(getActivity(), "El radio es nulo", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (CommonHelper.QUERY != null) {
+            ((SearchActivity) getActivity()).newSearch(CommonHelper.QUERY);
+        } else {
+            Toast.makeText(getActivity(), "QUERY IS NULL", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void newSearchWithoutRadius() {
+
+        if (CommonHelper.QUERY != null) {
+            ((SearchActivity) getActivity()).newSearch(CommonHelper.QUERY);
+        } else {
+            Toast.makeText(getActivity(), "QUERY IS NULL", Toast.LENGTH_SHORT).show();
+        }
     }
 }

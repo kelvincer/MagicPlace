@@ -37,8 +37,10 @@ public class PhotoRepositoryImpl implements PhotoRepository {
             @Override
             public void onSuccess(Void aVoid) {
                 FirebaseFirestore.getInstance()
-                        .collection("images")
+                        .collection("users")
                         .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                        .collection("photos")
+                        .document("places")
                         .collection(placeId)
                         .document("foto_" + model.getName())
                         .delete().addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -48,14 +48,17 @@ public class SearchActivityPresenterImpl implements SearchActivityPresenter {
     public void onEventMainThread(SearchEvent event) {
         switch (event.getType()) {
 
-            case SearchEvent.GET_EVENT:
+            case SearchEvent.SUCCESS_EVENT:
                 searchActivityView.hideProgressBar();
+                searchActivityView.hideInfoText(); // this is for asynchronous
                 searchActivityView.updatePlaces(event.getData());
                 break;
             case SearchEvent.ERROR:
                 searchActivityView.hideProgressBar();
                 searchActivityView.showMessage(event.getMessage());
                 break;
+            default:
+                throw new IllegalArgumentException("Invalid event type");
         }
     }
 }

@@ -226,6 +226,11 @@ public class SearchActivity extends AppCompatActivity implements
                     actionEmptyBtn.setVisibility(View.VISIBLE);
                     actionSearchBtn.setVisibility(View.INVISIBLE);
                     CommonHelper.QUERY = s.toString();
+                    if (CommonHelper.SEARCH_MODE == 2) {
+                        if (isValidLocationInput(CommonHelper.QUERY)) {
+                            saveQueryLocation();
+                        }
+                    }
                 }
             }
         });
@@ -239,26 +244,14 @@ public class SearchActivity extends AppCompatActivity implements
                             Toast.makeText(getApplicationContext(), "Debes ingresar los parámetros requeridos", Toast.LENGTH_SHORT).show();
                             return false;
                         }
-                        newSearch();
+                        newSearch(searchTextView.getText().toString());
                         return true;
                     } else if (CommonHelper.SEARCH_MODE == 2) {
-                        if (searchTextView.getText().toString().isEmpty()) {
-                            Toast.makeText(getApplicationContext(), "Debes ingresar los parámetros requeridos", Toast.LENGTH_SHORT).show();
-                            return false;
-                        }
 
-                        if (!ConstantsHelper.LAT_LNG_PATTERN.matcher(searchTextView.getText().toString()).matches()) {
-                            Toast.makeText(getApplicationContext(), "Los datos no son válidos", Toast.LENGTH_LONG).show();
+                        if (!isValidLocationInput(searchTextView.getText().toString()))
                             return false;
-                        }
-
-                        CommonHelper.SEARCH_QUERY_LOCATION = new Location("LOCATION");
-                        List<String> coordinates = Arrays.asList(CommonHelper.QUERY.replaceAll("\\s+", "").split(","));
-                        CommonHelper.SEARCH_QUERY_LOCATION.setLatitude(Double.valueOf(coordinates.get(0)));
-                        CommonHelper.SEARCH_QUERY_LOCATION.setLongitude(Double.valueOf(coordinates.get(1)));
-                        //CommonHelper.SEARCH_QUERY_LOCATION = CommonHelper.MY_LOCATION;
-                        Log.d("QUERY", "location: " + CommonHelper.SEARCH_QUERY_LOCATION.toString());
-                        newSearch();
+                        saveQueryLocation();
+                        newSearch(searchTextView.getText().toString());
                         return true;
                     }
                 }
@@ -279,6 +272,14 @@ public class SearchActivity extends AppCompatActivity implements
             }
         });
         searchTextView.setSelection(searchTextView.getText().length());
+    }
+
+    private void saveQueryLocation() {
+        CommonHelper.SEARCH_QUERY_LOCATION = new Location("LOCATION");
+        List<String> coordinates = Arrays.asList(CommonHelper.QUERY.replaceAll("\\s+", "").split(","));
+        CommonHelper.SEARCH_QUERY_LOCATION.setLatitude(Double.valueOf(coordinates.get(0)));
+        CommonHelper.SEARCH_QUERY_LOCATION.setLongitude(Double.valueOf(coordinates.get(1)));
+        Log.d("QUERY", "location: " + CommonHelper.SEARCH_QUERY_LOCATION.toString());
     }
 
     private void getNextTokenResult() {
@@ -349,6 +350,7 @@ public class SearchActivity extends AppCompatActivity implements
     @Override
     public void hideInfoText() {
         txvInfo.setVisibility(View.GONE);
+        Log.d(TAG, "searchactivity hide info text");
     }
 
     public void showInfoText(String message) {
@@ -370,7 +372,7 @@ public class SearchActivity extends AppCompatActivity implements
         CommonHelper.SEARCH_QUERY_LOCATION = null;
     }
 
-    private void newSearch() {
+    /*private void newSearch() {
 
         Log.d(TAG, "query " + CommonHelper.QUERY);
         if (CommonHelper.QUERY != null) {
@@ -378,7 +380,7 @@ public class SearchActivity extends AppCompatActivity implements
         } else {
             Toast.makeText(getApplicationContext(), "QUERY IS NULL", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
     @Override
     public void onItemClick(String placeId) {
@@ -389,8 +391,17 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     public void newSearch(String currentQuery) {
-        CommonHelper.NEXT_PAGE_TOKEN = null;
-        presenter.newSearch(currentQuery);
+
+        CommonHelper.QUERY = currentQuery;
+        if (CommonHelper.SEARCH_MODE == 1) {
+            CommonHelper.NEXT_PAGE_TOKEN = null;
+            presenter.newSearch(currentQuery);
+        } else if (CommonHelper.SEARCH_MODE == 2) {
+            if (isValidLocationInput(currentQuery)) {
+                CommonHelper.NEXT_PAGE_TOKEN = null;
+                presenter.newSearch(currentQuery);
+            }
+        }
     }
 
     public void changeSearchBarHint() {
@@ -404,12 +415,28 @@ public class SearchActivity extends AppCompatActivity implements
         } else if (CommonHelper.SEARCH_MODE == 2) {
             searchTextView.setText("40.730610,-73.935242");
             searchTextView.setSelection(searchTextView.getText().length());
+            placesRecycler.requestFocus();
             //searchTextView.setSelection(searchTextView.getText().length());
             //searchTextView.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
             //searchTextView.setKeyListener(DigitsKeyListener.getInstance("0123456789.,-"));
         } else {
             throw new IllegalArgumentException("Invalid search mode");
         }
+    }
+
+    private boolean isValidLocationInput(String location) {
+
+        if (location.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Debes ingresar los parámetros requeridos", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!ConstantsHelper.LAT_LNG_PATTERN.matcher(location).matches()) {
+            Toast.makeText(getApplicationContext(), "Los datos no son válidos", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
     }
 
     @OnClick(R.id.filter_btn)

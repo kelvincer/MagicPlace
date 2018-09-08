@@ -10,7 +10,7 @@ public class SearchEvent {
     private List<Result> data;
     private String message;
 
-    public static final int GET_EVENT = 0;
+    public static final int SUCCESS_EVENT = 0;
     public static final int ERROR = 1;
 
     public int getType() {

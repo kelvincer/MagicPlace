@@ -31,9 +31,9 @@ public class ListFavouriteRepositoryImpl implements ListFavouriteRepository {
     public void getFavouritesByCategory(String category) {
 
         final Query query = FirebaseFirestore.getInstance()
-                .collection("favourites")
+                .collection("users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .collection("types")
+                .collection("favourites")
                 .document(category)
                 .collection("places");
 
@@ -60,9 +60,9 @@ public class ListFavouriteRepositoryImpl implements ListFavouriteRepository {
     public void deleteFavouritePlace(final FavouritePlaceModel model) {
 
         FirebaseFirestore.getInstance()
-                .collection("favourites")
+                .collection("users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .collection("types")
+                .collection("favourites")
                 .document(model.getCategory())
                 .collection("places")
                 .document("place_" + model.getPlaceId())
@@ -71,9 +71,9 @@ public class ListFavouriteRepositoryImpl implements ListFavouriteRepository {
             public void onSuccess(Void aVoid) {
                 postEvent(ListFavouriteEvent.ON_DELETE_SUCCESS, "Eliminado satisfactoriamente");
                 FirebaseFirestore.getInstance()
-                        .collection("favourites")
+                        .collection("users")
                         .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .collection("types")
+                        .collection("favourites")
                         .document(model.getCategory())
                         .collection("places")
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -83,9 +83,9 @@ public class ListFavouriteRepositoryImpl implements ListFavouriteRepository {
                                 if (queryDocumentSnapshots != null) {
                                     if (queryDocumentSnapshots.size() == 0) {
                                         FirebaseFirestore.getInstance()
-                                                .collection("favourites")
+                                                .collection("users")
                                                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                                .collection("types")
+                                                .collection("favourites")
                                                 .document(model.getCategory())
                                                 .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override

@@ -46,7 +46,7 @@ public class SearchActivityRepositoryImpl implements SearchActivityRepository {
                         PlaceApiResponse placeApiResponse = response.body();
                         CommonHelper.NEXT_PAGE_TOKEN = placeApiResponse.getNextPageToken();
                         if (placeApiResponse.getStatus().equals("OK")) {
-                            post(SearchEvent.GET_EVENT, placeApiResponse.getResults());
+                            post(SearchEvent.SUCCESS_EVENT, placeApiResponse.getResults());
                             Log.d(TAG, "PLACE 0 " + placeApiResponse.getResults().get(0).getPlaceId());
                         } else {
                             post(SearchEvent.ERROR, placeApiResponse.getStatus());
@@ -84,7 +84,7 @@ public class SearchActivityRepositoryImpl implements SearchActivityRepository {
                         PlaceApiResponse placeApiResponse = response.body();
                         CommonHelper.NEXT_PAGE_TOKEN = placeApiResponse.getNextPageToken();
                         if (placeApiResponse.getStatus().equals("OK"))
-                            post(SearchEvent.GET_EVENT, placeApiResponse.getResults());
+                            post(SearchEvent.SUCCESS_EVENT, placeApiResponse.getResults());
                         else
                             post(SearchEvent.ERROR, placeApiResponse.getStatus());
                     } else {

@@ -24,7 +24,7 @@ public class NoteFragmentRepositoryImpl implements NoteFragmentRepository {
     public void getNotes(String placeId) {
 
         final Query query = FirebaseFirestore.getInstance()
-                .collection("comentarios")
+                .collection("comments")
                 .document(placeId)
                 .collection("messages")
                 .orderBy("timestamp", Query.Direction.DESCENDING)

@@ -25,9 +25,9 @@ import com.example.proyectomaster.detail.activity.di.DetailApiModule;
 import com.example.proyectomaster.detail.activity.di.DetailModule;
 import com.example.proyectomaster.detail.activity.ui.DetailActivity;
 import com.example.proyectomaster.detail.entities.FavoritePhotoModel;
-import com.example.proyectomaster.detail.fragments.highlight.adapters.FavoritesFirestoreAdapter;
 import com.example.proyectomaster.detail.entities.Result;
 import com.example.proyectomaster.detail.fragments.highlight.HighlightPresenter;
+import com.example.proyectomaster.detail.fragments.highlight.adapters.FavoritesFirestoreAdapter;
 import com.example.proyectomaster.detail.fragments.highlight.di.HighlightFragmentModule;
 import com.example.proyectomaster.detail.fragments.listener.FavoritePhotoClickListener;
 import com.example.proyectomaster.lib.ImageLoader;
@@ -63,11 +63,17 @@ public class HighlightsFragment extends Fragment implements HighlightView, Favor
     RecyclerView ryvFavoritos;
     @BindView(R.id.txv_take_photos)
     TextView txvTakePhotos;
-
+    @BindView(R.id.txv_address_info)
+    TextView txvAddressInfo;
+    @BindView(R.id.separator_one)
+    View separatorOne;
+    @BindView(R.id.txv_label_important)
+    TextView txvLabelImportant;
     @Inject
     HighlightPresenter presenter;
     @Inject
     ImageLoader imageLoader;
+
 
     public static Fragment getInstance(Result result) {
         HighlightsFragment fragment = new HighlightsFragment();
@@ -141,7 +147,15 @@ public class HighlightsFragment extends Fragment implements HighlightView, Favor
         if (result.getRating() != null) {
             simpleRatingBar.setRating(result.getRating().floatValue());
             txvLabelCount.setText(String.format("Calificado %s de 5", result.getRating()));
+        } else {
+            simpleRatingBar.setVisibility(View.GONE);
+            txvLabelCount.setVisibility(View.GONE);
+            separatorOne.setVisibility(View.GONE);
+            txvLabelImportant.setVisibility(View.GONE);
         }
+
+        if (result.getFormattedAddress() != null)
+            txvAddressInfo.setText(result.getFormattedAddress());
     }
 
     @OnClick(R.id.txv_take_photos)

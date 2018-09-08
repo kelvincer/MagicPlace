@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -59,6 +60,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     Dialog dialog;
     Result result;
     File photoFile;
+    ViewPagerAdapter adapter;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.tab_layout)
@@ -151,17 +153,25 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
     private void loadNotes() {
 
-        NotesFragment fragment = (NotesFragment) pager.getAdapter()
+       /* NotesFragment fragment = (NotesFragment) pager.getAdapter()
                 .instantiateItem(pager, 2);
-        fragment.loadNotes();
+        fragment.loadNotes();*/
+        Fragment notesFragment = adapter.getmPageReferenceMap().get(2);
+        if (notesFragment != null) {
+            ((NotesFragment) notesFragment).loadNotes();
+        }
     }
 
     @Override
     public void loadFavoritesPhotos() {
-        if (pager.getCurrentItem() == 0) {
+        /*if (pager.getCurrentItem() == 0) {
             HighlightsFragment frag = (HighlightsFragment) pager.getAdapter()
                     .instantiateItem(pager, pager.getCurrentItem());
             frag.loadFavoritePhotos();
+        }*/
+        Fragment highlightFragment = adapter.getmPageReferenceMap().get(0);
+        if (highlightFragment != null) {
+            ((HighlightsFragment) highlightFragment).loadFavoritePhotos();
         }
     }
 
@@ -291,7 +301,9 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
             String photoReference = result.getPhotos().get(0).getPhotoReference();
             imageLoader.load(header, collapsingToolbarLayout, Helper.generateUrl(photoReference));
         }
-        pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageTitle.length, result, imageLoader));
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), pageTitle.length, result, imageLoader);
+        pager.setAdapter(adapter);
+
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             presenter.checkIfFavourite(result);
         } else {

@@ -114,7 +114,7 @@
             app:layout_constraintTop_toBottomOf="@id/ceb_opennow" />
 
         <RadioGroup
-            android:id="@+id/rdg_sortby"
+            android:id="@+id/rdg_sort"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"

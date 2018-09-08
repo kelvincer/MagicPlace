@@ -13,12 +13,16 @@ import com.example.proyectomaster.detail.fragments.path.PathFragment;
 import com.example.proyectomaster.detail.fragments.photos.PhotosFragment;
 import com.example.proyectomaster.lib.ImageLoader;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private int numOfTabs;
     private Result result;
     private ImageLoader imageLoader;
+    Map<Integer, Fragment> mPageReferenceMap = new HashMap<>();
 
     public ViewPagerAdapter(FragmentManager fm, int numOfTabs, Result result, ImageLoader imageLoader) {
         super(fm);
@@ -30,18 +34,25 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
+        Fragment fragment = null;
         switch (position) {
             case 0:
-                return HighlightsFragment.getInstance(result);
+                fragment = HighlightsFragment.getInstance(result);
+                break;
             case 1:
-                return PhotosFragment.getInstance(result);
+                fragment = PhotosFragment.getInstance(result);
+                break;
             case 2:
-                return NotesFragment.getInstance(result);
+                fragment = NotesFragment.getInstance(result);
+                break;
             case 3:
-                return PathFragment.getInstance(result);
+                fragment = PathFragment.getInstance(result);
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal position");
         }
-
-        return null;
+        mPageReferenceMap.put(position, fragment);
+        return fragment;
     }
 
     @Override
@@ -52,5 +63,15 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getItemPosition(@NonNull Object object) {
         return POSITION_NONE;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        super.destroyItem(container, position, object);
+        mPageReferenceMap.remove(position);
+    }
+
+    public Map<Integer, Fragment> getmPageReferenceMap() {
+        return mPageReferenceMap;
     }
 }

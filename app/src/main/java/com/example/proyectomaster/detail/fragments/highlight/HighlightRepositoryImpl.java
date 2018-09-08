@@ -27,15 +27,11 @@ public class HighlightRepositoryImpl implements HighlightRepository {
     @Override
     public void getPhotos(String placeId) {
 
-        /*FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setTimestampsInSnapshotsEnabled(true)
-                .build();
-        firestore.setFirestoreSettings(settings);*/
-
         final Query query = FirebaseFirestore.getInstance()
-                .collection("images")
+                .collection("users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .collection("photos")
+                .document("places")
                 .collection(placeId)
                 .limit(20);
 

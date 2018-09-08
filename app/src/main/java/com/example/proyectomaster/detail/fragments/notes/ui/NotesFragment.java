@@ -145,7 +145,8 @@ public class NotesFragment extends Fragment implements NoteFragmentView {
     }
 
     public void loadNotes() {
-        presenter.getNotes(result.getPlaceId());
+        if(result != null)
+            presenter.getNotes(result.getPlaceId());
     }
 
     @Override

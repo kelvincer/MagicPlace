@@ -23,12 +23,8 @@ import butterknife.Unbinder;
 public class SideFilterFragment extends Fragment {
 
     Unbinder unbinder;
-    @BindView(R.id.rdg_sortby)
-    RadioGroup rdgSortby;
-
-    public SideFilterFragment() {
-        // Required empty public constructor
-    }
+    @BindView(R.id.rdg_search_type)
+    RadioGroup rdgSearchType;
 
     public static SideFilterFragment newInstance() {
         SideFilterFragment fragment = new SideFilterFragment();
@@ -60,7 +56,7 @@ public class SideFilterFragment extends Fragment {
 
     private void setupViews() {
 
-        rdgSortby.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        rdgSearchType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
@@ -71,15 +67,16 @@ public class SideFilterFragment extends Fragment {
                 boolean isChecked = checkedRadioButton.isChecked();
                 if (isChecked) {
                     switch (checkedId) {
-                        case R.id.rdb_prominence:
+                        case R.id.rdb_text_search:
                             //addSearchBarFragment(TextSearchFragment.newInstance());
                             resetTextSearchParam();
                             clearRecycleview();
                             CommonHelper.SEARCH_MODE = 1;
                             addOptionaParametersFragment(TextOptionalParamFragment.newInstance());
                             changeSearchBarHint();
+
                             break;
-                        case R.id.rdb_distance:
+                        case R.id.rdb_loc_search:
                             //addSearchBarFragment(NearbySearchFragment.newInstance());
                             clearRecycleview();
                             resetLocSearchParam();
@@ -105,13 +102,6 @@ public class SideFilterFragment extends Fragment {
         getFragmentManager().beginTransaction()
                 .replace(R.id.optional_parameters_container, fragment)
                 .commit();
-    }
-
-    private void addSearchBarFragment(Fragment f) {
-        /*getFragmentManager().beginTransaction()
-                .replace(R.id.search_head_container, f)
-                .commit();*/
-
     }
 
     private void resetTextSearchParam() {

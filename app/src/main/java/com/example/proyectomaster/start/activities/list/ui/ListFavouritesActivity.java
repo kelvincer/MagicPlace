@@ -1,5 +1,6 @@
 package com.example.proyectomaster.start.activities.list.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,6 +13,7 @@ import com.example.proyectomaster.CommonHelper;
 import com.example.proyectomaster.R;
 import com.example.proyectomaster.app.MainApplication;
 import com.example.proyectomaster.app.di.MainApplicationComponent;
+import com.example.proyectomaster.detail.activity.ui.DetailActivity;
 import com.example.proyectomaster.start.activities.list.ListFavouritePresenter;
 import com.example.proyectomaster.start.activities.list.adapter.ListFavouriteAdapter;
 import com.example.proyectomaster.start.activities.list.di.ListFavouriteModule;
@@ -85,6 +87,8 @@ public class ListFavouritesActivity extends AppCompatActivity implements ListFav
 
     @Override
     public void onItemClickListenr(FavouritePlaceModel model) {
-
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(CommonHelper.PLACE_ID, model.getPlaceId());
+        startActivity(intent);
     }
 }

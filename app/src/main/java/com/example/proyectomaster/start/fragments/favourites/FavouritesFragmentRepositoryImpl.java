@@ -25,9 +25,9 @@ public class FavouritesFragmentRepositoryImpl implements FavouritesFragmentRepos
     @Override
     public void getCategories() {
         final Query query = FirebaseFirestore.getInstance()
-                .collection("favourites")
+                .collection("users")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .collection("types");
+                .collection("favourites");
 
         query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override

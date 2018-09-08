@@ -59,7 +59,7 @@ public class NoteActivityRepositoryImpl implements NoteActivityRepository {
 
                         final String uuid = UUID.randomUUID().toString();
                         FirebaseFirestore.getInstance()
-                                .collection("comentarios")
+                                .collection("comments")
                                 .document(placeId)
                                 .collection("messages")
                                 .document("message_" + uuid)
@@ -93,7 +93,7 @@ public class NoteActivityRepositoryImpl implements NoteActivityRepository {
 
         final String uuid = UUID.randomUUID().toString();
         FirebaseFirestore.getInstance()
-                .collection("comentarios")
+                .collection("comments")
                 .document(placeId)
                 .collection("messages")
                 .document("message_" + uuid)
