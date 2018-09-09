@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.proyectomaster">
+    package="com.upv.magicplace">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -48,7 +48,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.example.proyectomaster.fileprovider"
+            android:authorities="com.upv.magicplace.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

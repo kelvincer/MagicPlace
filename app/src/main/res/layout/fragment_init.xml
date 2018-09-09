@@ -11,9 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="-50dp"
+        android:layout_marginTop="-150dp"
+        android:drawablePadding="10dp"
+        android:drawableTop="@drawable/ic_navigation"
         android:gravity="center_horizontal"
-        android:text="GeoLugares"
+        android:text="MagicPlace"
         android:textSize="35sp"
         android:textStyle="bold" />
 
