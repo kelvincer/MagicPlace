@@ -50,7 +50,8 @@ public class SearchActivityPresenterImpl implements SearchActivityPresenter {
 
             case SearchEvent.SUCCESS_EVENT:
                 searchActivityView.hideProgressBar();
-                searchActivityView.hideInfoText(); // this is for asynchronous
+                searchActivityView.clearData(); // because asynchronous process
+                searchActivityView.hideInfoText(); // because asynchronous processs
                 searchActivityView.updatePlaces(event.getData());
                 break;
             case SearchEvent.ERROR:

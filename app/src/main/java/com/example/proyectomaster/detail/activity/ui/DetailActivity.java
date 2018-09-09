@@ -97,6 +97,11 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(this);
         presenter.onCreate();
+
+        if(!Helper.isNetworkAvailable(this)){
+            Toast.makeText(this, "No tienes conexión a la red", Toast.LENGTH_SHORT).show();
+            return;
+        }
         presenter.getPlaceDetail(place_id);
     }
 

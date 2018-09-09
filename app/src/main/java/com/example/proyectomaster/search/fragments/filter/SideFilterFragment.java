@@ -123,6 +123,7 @@ public class SideFilterFragment extends Fragment {
         CommonHelper.KEYWORD = null;
         CommonHelper.opennow = null;
         CommonHelper.RANKYBY = "prominence";
+        CommonHelper.minprice = null;
 
     }
 

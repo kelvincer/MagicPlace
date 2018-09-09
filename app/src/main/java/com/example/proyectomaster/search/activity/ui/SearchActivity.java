@@ -301,6 +301,8 @@ public class SearchActivity extends AppCompatActivity implements
 
     @Override
     public void updatePlaces(List<Result> data) {
+        if (CommonHelper.SEARCH_MODE == 2)
+            placesRecycler.requestFocus();
         adapter.updateData(data);
     }
 
@@ -370,6 +372,7 @@ public class SearchActivity extends AppCompatActivity implements
         CommonHelper.opennow = null;
         CommonHelper.RANKYBY = "prominence";
         CommonHelper.SEARCH_QUERY_LOCATION = null;
+        CommonHelper.minprice = null;
     }
 
     /*private void newSearch() {
@@ -391,6 +394,11 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     public void newSearch(String currentQuery) {
+
+        if(!Helper.isNetworkAvailable(this)){
+            Toast.makeText(this, "No tienes conexión a la red", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         CommonHelper.QUERY = currentQuery;
         if (CommonHelper.SEARCH_MODE == 1) {
