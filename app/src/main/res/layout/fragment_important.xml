@@ -3,131 +3,134 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/txv_label_important"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Valoración"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/txv_label_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/txv_label_important"
-            tools:text="Calificado 5.8 de 10" />
-
-        <com.willy.ratingbar.ScaleRatingBar xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/simpleRatingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/txv_label_count"
-            app:srb_clearRatingEnabled="true"
-            app:srb_isIndicator="true"
-            app:srb_minimumStars="0"
-            app:srb_numStars="5"
-            app:srb_starHeight="30dp"
-            app:srb_starPadding="15dp"
-            app:srb_starWidth="30dp"
-            app:srb_stepSize="0.1" />
-
-        <View
-            android:id="@+id/separator_one"
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:background="@color/gray"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/simpleRatingBar" />
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/txv_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:text="Dirección"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/separator_one" />
+            <TextView
+                android:id="@+id/txv_label_important"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Valoración"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txv_address_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txv_address"
-            tools:text="Calle Condores" />
+            <TextView
+                android:id="@+id/txv_label_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/txv_label_important"
+                tools:text="Calificado 5.8 de 10" />
 
-        <View
-            android:id="@+id/separator_two"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:background="@color/gray"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txv_address_info" />
+            <com.willy.ratingbar.ScaleRatingBar xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/simpleRatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/txv_label_count"
+                app:srb_clearRatingEnabled="true"
+                app:srb_isIndicator="true"
+                app:srb_minimumStars="0"
+                app:srb_numStars="5"
+                app:srb_starHeight="30dp"
+                app:srb_starPadding="15dp"
+                app:srb_starWidth="30dp"
+                app:srb_stepSize="0.1" />
 
-        <TextView
-            android:id="@+id/txv_favorites"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="4dp"
-            android:text="Mis Fotos Favoritas"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/separator_two" />
+            <View
+                android:id="@+id/separator_one"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:background="@color/gray"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/simpleRatingBar" />
 
-        <TextView
-            android:id="@+id/txv_take_photos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginTop="16dp"
-            android:clickable="true"
-            android:drawablePadding="8dp"
-            android:drawableTop="@drawable/ic_photos"
-            android:focusable="true"
-            android:gravity="center"
-            android:text="Puedes agregar tus fotos favoritas"
-            android:textSize="20sp"
-            app:layout_constraintTop_toBottomOf="@id/txv_favorites" />
+            <TextView
+                android:id="@+id/txv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Dirección"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator_one" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/ryv_favoritos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txv_favorites"
-            tools:visibility="visible" />
+            <TextView
+                android:id="@+id/txv_address_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/separator_two"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txv_address"
+                tools:text="Calle Condores" />
 
-    </android.support.constraint.ConstraintLayout>
+            <View
+                android:id="@+id/separator_two"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/gray"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txv_address_info" />
+
+            <TextView
+                android:id="@+id/txv_favorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Mis Fotos Favoritas"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separator_two" />
+
+            <TextView
+                android:id="@+id/txv_take_photos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:drawablePadding="8dp"
+                android:drawableTop="@drawable/ic_photos"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="Puedes agregar tus fotos favoritas"
+                android:textSize="20sp"
+                app:layout_constraintTop_toBottomOf="@id/txv_favorites" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/ryv_favoritos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txv_favorites"
+                tools:visibility="visible" />
+
+        </android.support.constraint.ConstraintLayout>
 
 </android.support.v4.widget.NestedScrollView>

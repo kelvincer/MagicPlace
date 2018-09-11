@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
-            card_view:cardCornerRadius="@dimen/search_view_corner_radius">
+            card_view:cardCornerRadius="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,9 +28,9 @@
 
                 <ImageView
                     android:id="@+id/left_action"
-                    android:layout_width="@dimen/square_button_size"
-                    android:layout_height="@dimen/square_button_size"
-                    android:padding="@dimen/square_button_padding"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="12dp"
                     android:src="@drawable/ic_search_black_24dp" />
 
                 <LinearLayout
@@ -51,8 +51,8 @@
                         android:inputType="numberDecimal|numberSigned"
                         android:longClickable="false"
                         android:maxLines="1"
-                        android:minHeight="@dimen/square_button_size"
-                        android:textSize="@dimen/search_bar_text_size" />
+                        android:minHeight="48dp"
+                        android:textSize="16sp" />
 
                     <EditText
                         android:id="@+id/search_long"
@@ -67,8 +67,8 @@
                         android:inputType="numberDecimal|numberSigned"
                         android:longClickable="false"
                         android:maxLines="1"
-                        android:minHeight="@dimen/square_button_size"
-                        android:textSize="@dimen/search_bar_text_size" />
+                        android:minHeight="48dp"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
             </LinearLayout>

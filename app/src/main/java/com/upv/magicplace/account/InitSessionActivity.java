@@ -191,6 +191,7 @@ public class InitSessionActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void success() {
+        Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
         finish();

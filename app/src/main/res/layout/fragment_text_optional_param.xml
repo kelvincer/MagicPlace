@@ -119,7 +119,7 @@
             app:isb_indicator_type="circular_bubble"
             app:isb_max="4"
             app:isb_seek_bar_type="discrete_ticks_texts"
-            app:isb_text_color="@color/black"
+            app:isb_text_color="#000000"
             app:isb_thumb_color="@color/colorAccent"
             app:isb_tick_color="@color/colorAccent"
             app:isb_tick_type="oval"

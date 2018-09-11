@@ -16,6 +16,7 @@
         android:drawableTop="@drawable/ic_navigation"
         android:gravity="center_horizontal"
         android:text="MagicPlace"
+        android:textColor="@color/colorPrimary"
         android:textSize="35sp"
         android:textStyle="bold" />
 
@@ -31,7 +32,7 @@
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:transitionName="simple_activity_transition"
-        card_view:cardCornerRadius="@dimen/search_view_corner_radius"
+        card_view:cardCornerRadius="3dp"
         card_view:cardUseCompatPadding="true"
         tools:targetApi="lollipop">
 
@@ -42,9 +43,9 @@
 
             <ImageView
                 android:id="@+id/left_action"
-                android:layout_width="@dimen/square_button_size"
-                android:layout_height="@dimen/square_button_size"
-                android:padding="@dimen/square_button_padding"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
                 android:src="@drawable/ic_search_black_24dp" />
 
             <TextView
@@ -58,8 +59,8 @@
                 android:hint="¿Qué estas buscando?"
                 android:longClickable="false"
                 android:maxLines="1"
-                android:minHeight="@dimen/square_button_size"
-                android:textSize="@dimen/search_bar_text_size" />
+                android:minHeight="48dp"
+                android:textSize="16sp" />
 
         </LinearLayout>
 

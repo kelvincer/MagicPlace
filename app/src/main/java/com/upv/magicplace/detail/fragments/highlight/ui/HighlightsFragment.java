@@ -15,9 +15,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.upv.magicplace.CommonHelper;
 import com.upv.magicplace.R;
 import com.upv.magicplace.app.MainApplication;
@@ -32,8 +35,6 @@ import com.upv.magicplace.detail.fragments.highlight.di.HighlightFragmentModule;
 import com.upv.magicplace.detail.fragments.listener.FavoritePhotoClickListener;
 import com.upv.magicplace.lib.ImageLoader;
 import com.upv.magicplace.photo.ui.PhotoActivity;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.willy.ratingbar.ScaleRatingBar;
 
 import java.io.ByteArrayOutputStream;
@@ -74,7 +75,6 @@ public class HighlightsFragment extends Fragment implements HighlightView, Favor
     @Inject
     ImageLoader imageLoader;
 
-
     public static Fragment getInstance(Result result) {
         HighlightsFragment fragment = new HighlightsFragment();
         Bundle bundle = new Bundle();
@@ -92,15 +92,10 @@ public class HighlightsFragment extends Fragment implements HighlightView, Favor
 
         setupInjection();
         presenter.onCreate();
-        Toast.makeText(getContext(), "RESULT FRAGMENT", Toast.LENGTH_SHORT).show();
     }
 
     private void setupInjection() {
 
-        /*DaggerHighlightFragmentComponent.builder()
-                .highlightModule(new HighlightFragmentModule(this))
-                .build()
-                .inject(this);*/
         MainApplication.getAppComponent()
                 .newDetailComponent(new DetailApiModule(), new DetailModule(((DetailActivity) getActivity()).getView()))
                 .newHighlightComponent(new HighlightFragmentModule(this))

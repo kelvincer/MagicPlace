@@ -138,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             pgnRegister.setVisibility(View.INVISIBLE);
                             if (task.isSuccessful()) {
-                                successMessage("SUCCESSFUL");
+                                successMessage("Registro exitoso");
                             } else {
                                 errorMessage(task.getException().getLocalizedMessage());
                             }
@@ -174,6 +174,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void successMessage(String mensaje) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
         Intent returnIntent = new Intent();
         returnIntent.putExtra(CommonHelper.MESSAGE, mensaje);
         setResult(Activity.RESULT_OK, returnIntent);
@@ -200,7 +201,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         if (!task.isSuccessful()) {
                             errorMessage(task.getException().getLocalizedMessage());
                         } else {
-                            successMessage("Autenticación correcta");
+                            successMessage("Inicio de sesión exitoso");
                         }
                     }
                 });

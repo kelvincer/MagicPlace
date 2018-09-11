@@ -52,7 +52,7 @@ public class NoteActivityPresenterImpl implements NoteActivityPresenter {
         switch (event.getType()) {
 
             case NoteEvent.ON_SUCCESS:
-                noteActivityView.showMessage("SUCCESS");
+                noteActivityView.showMessage("Publicado con éxito");
                 break;
             case NoteEvent.ON_ERROR:
                 noteActivityView.showMessage(event.getMessage());

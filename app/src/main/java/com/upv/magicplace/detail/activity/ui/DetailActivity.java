@@ -19,8 +19,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.leinardi.android.speeddial.SpeedDialActionItem;
+import com.leinardi.android.speeddial.SpeedDialView;
 import com.upv.magicplace.CommonHelper;
 import com.upv.magicplace.Helper;
 import com.upv.magicplace.R;
@@ -36,10 +41,6 @@ import com.upv.magicplace.dialog.LoginDialogActivity;
 import com.upv.magicplace.gallery.GalleryActivity;
 import com.upv.magicplace.lib.ImageLoader;
 import com.upv.magicplace.note.ui.NoteActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.leinardi.android.speeddial.SpeedDialActionItem;
-import com.leinardi.android.speeddial.SpeedDialView;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +76,8 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     ImageView header;
     @BindView(R.id.speedDial)
     SpeedDialView speedDial;
+    @BindView(R.id.pgb_detail)
+    ProgressBar pgbDetail;
     @Inject
     DetailActivityPresenter presenter;
     @Inject
@@ -98,7 +101,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         tabLayout.addOnTabSelectedListener(this);
         presenter.onCreate();
 
-        if(!Helper.isNetworkAvailable(this)){
+        if (!Helper.isNetworkAvailable(this)) {
             Toast.makeText(this, "No tienes conexión a la red", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -157,10 +160,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     }
 
     private void loadNotes() {
-
-       /* NotesFragment fragment = (NotesFragment) pager.getAdapter()
-                .instantiateItem(pager, 2);
-        fragment.loadNotes();*/
         Fragment notesFragment = adapter.getmPageReferenceMap().get(2);
         if (notesFragment != null) {
             ((NotesFragment) notesFragment).loadNotes();
@@ -169,11 +168,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
     @Override
     public void loadFavoritesPhotos() {
-        /*if (pager.getCurrentItem() == 0) {
-            HighlightsFragment frag = (HighlightsFragment) pager.getAdapter()
-                    .instantiateItem(pager, pager.getCurrentItem());
-            frag.loadFavoritePhotos();
-        }*/
         Fragment highlightFragment = adapter.getmPageReferenceMap().get(0);
         if (highlightFragment != null) {
             ((HighlightsFragment) highlightFragment).loadFavoritePhotos();
@@ -266,12 +260,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     }
 
     private void setupInjection() {
-
-        /*DaggerDetailActivityComponent.builder()
-                .detailModule(new DetailModule(this, this, pageTitle.length))
-                .libsModule(new LibsModule(this))
-                .build()
-                .inject(this);*/
         MainApplication.getAppComponent()
                 .newDetailComponent(new DetailApiModule(), new DetailModule(this))
                 .inject(this);
@@ -319,6 +307,8 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     @Override
     public void seFavourite(boolean isFavourite) {
         setupSpeedDial(isFavourite);
+        pgbDetail.setVisibility(View.GONE);
+        pager.setVisibility(View.VISIBLE);
     }
 
     private void setupActionBar(Result result) {

@@ -55,6 +55,7 @@ public class NoteActivityRepositoryImpl implements NoteActivityRepository {
                         datos.put("date", Helper.getCurrentDate());
                         datos.put("comment", message);
                         datos.put("url", uri.toString());
+                        datos.put("email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
                         datos.put("timestamp", System.currentTimeMillis());
 
                         final String uuid = UUID.randomUUID().toString();
@@ -87,9 +88,8 @@ public class NoteActivityRepositoryImpl implements NoteActivityRepository {
         datos.put("date", Helper.getCurrentDate());
         datos.put("comment", message);
         datos.put("url", null);
+        datos.put("email", FirebaseAuth.getInstance().getCurrentUser().getEmail());
         datos.put("timestamp", System.currentTimeMillis());
-
-        Log.d(TAG, "datos only note: " + datos.toString());
 
         final String uuid = UUID.randomUUID().toString();
         FirebaseFirestore.getInstance()

@@ -8,7 +8,9 @@ import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.upv.magicplace.CommonHelper;
 import com.upv.magicplace.R;
 import com.upv.magicplace.account.RegisterActivity;
@@ -57,16 +59,22 @@ public class LoginDialogActivity extends FragmentActivity implements GoogleApiCl
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_GOOGLE_SIGN_IN) {
-            if (resultCode == RESULT_OK) {
-                GoogleSignInResult result = Auth.GoogleSignInApi
-                        .getSignInResultFromIntent(data);
-                if (result.isSuccess()) {
-                    googleAuth(result.getSignInAccount());
-                } else {
-                    messageOnError("Error de autentificación con Google");
+
+        switch (requestCode) {
+            case RC_GOOGLE_SIGN_IN:
+                if (resultCode == RESULT_OK) {
+                    GoogleSignInResult result = Auth.GoogleSignInApi
+                            .getSignInResultFromIntent(data);
+                    if (result.isSuccess()) {
+                        googleAuth(result.getSignInAccount());
+                    } else {
+                        messageOnError("Error de autentificación con Google");
+                    }
                 }
-            }
+                break;
+            default:
+                throw new IllegalArgumentException("Illegal request code");
+
         }
     }
 
@@ -83,7 +91,13 @@ public class LoginDialogActivity extends FragmentActivity implements GoogleApiCl
                             verificaSiUsuarioValidado();
                         }
                     }
-                });
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                e.printStackTrace();
+                messageOnError(e.getLocalizedMessage());
+            }
+        });
     }
 
     private void messageOnError(String mensaje) {
@@ -103,7 +117,7 @@ public class LoginDialogActivity extends FragmentActivity implements GoogleApiCl
     }
 
     private void verificaSiUsuarioValidado() {
-        //messageOnError("CORRECT");
+        Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
         setResult(Activity.RESULT_OK);
         finish();
     }

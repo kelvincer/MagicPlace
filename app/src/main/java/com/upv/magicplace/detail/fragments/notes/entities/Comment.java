@@ -6,6 +6,7 @@ public class Comment {
     String date;
     String comment;
     String url;
+    String email;
 
     public String getName() {
         return name;
@@ -37,5 +38,13 @@ public class Comment {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

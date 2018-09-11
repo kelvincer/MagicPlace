@@ -69,6 +69,7 @@ public class PhotoActivity extends AppCompatActivity implements PhotoView {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Foto");
         setupInjection();
         photoPresenter.onCreate();
         fragment = getIntent().getIntExtra(CommonHelper.FROM_FRAGMENT, 0);

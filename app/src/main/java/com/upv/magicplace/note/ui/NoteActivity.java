@@ -1,5 +1,6 @@
 package com.upv.magicplace.note.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -53,10 +54,11 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
 
     private static final String TAG = NoteActivity.class.getSimpleName();
     private static final int REQUEST_CAPTURE_IMAGE = 101;
+    private static final int LOGUIN_REQUEST_CODE = 102;
     String placeId;
+    BottomSheetBehavior mBottomSheetBehavior;
     @BindView(R.id.bottom_sheet)
     CoordinatorLayout bottomSheet;
-    BottomSheetBehavior mBottomSheetBehavior;
     @BindView(R.id.header)
     LinearLayout header;
     @BindView(R.id.ryv_photo_galery)
@@ -111,6 +113,11 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
                     if (bitmap != null) {
                         showPhoto(bitmap);
                     }
+                }
+                break;
+            case LOGUIN_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    publishNote();
                 }
                 break;
             default:
@@ -216,7 +223,7 @@ public class NoteActivity extends AppCompatActivity implements NoteActivityView,
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser == null) {
-            startActivity(new Intent(this, LoginDialogActivity.class));
+            startActivityForResult(new Intent(this, LoginDialogActivity.class), LOGUIN_REQUEST_CODE);
         } else {
 
             BitmapDrawable bitmapDrawable = (BitmapDrawable) igvPhoto.getDrawable();

@@ -10,8 +10,12 @@
         android:id="@+id/txv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/txv_date"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/guideline"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Eric A." />
 
@@ -19,19 +23,25 @@
         android:id="@+id/txv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/txv_comment"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toStartOf="@id/txv_name"
         app:layout_constraintTop_toBottomOf="@+id/txv_name"
         tools:text="13 jul. 2017" />
 
     <TextView
         android:id="@+id/txv_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/guideline"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txv_date"
-        tools:text="No pidan Hawaiana, la mejor es pizza negra..." />
+        tools:text="No pidan Hawaiana, la mejor es pizza negra...si..." />
 
     <ImageView
         android:id="@+id/imageView"
@@ -45,4 +55,12 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txv_comment"
         tools:srcCompat="@drawable/background_blur" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
 </android.support.constraint.ConstraintLayout>
