@@ -243,8 +243,8 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
         dialog = new Dialog(this, R.style.AppDialogTheme);
         dialog.setContentView(R.layout.dialog_chooser);
-        dialog.findViewById(R.id.txv_camera).setOnClickListener(this);
-        dialog.findViewById(R.id.txv_gallery).setOnClickListener(this);
+        dialog.findViewById(R.id.btn_camera).setOnClickListener(this);
+        dialog.findViewById(R.id.btn_gallery).setOnClickListener(this);
         dialog.show();
     }
 
@@ -340,11 +340,11 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.txv_camera:
+            case R.id.btn_camera:
                 dialog.dismiss();
                 dispatchTakePictureIntent();
                 break;
-            case R.id.txv_gallery:
+            case R.id.btn_gallery:
                 dialog.dismiss();
                 gotoGalleryActivity();
                 break;

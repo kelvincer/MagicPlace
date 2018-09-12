@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="330dp"
-    android:layout_height="160dp"
+    android:layout_height="180dp"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -12,21 +12,27 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txv_camera"
+    <Button
+        android:id="@+id/btn_camera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:background="@null"
+        android:foreground="?selectableItemBackground"
         android:text="Usar la cámara"
         android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/txv_gallery"
+    <Button
+        android:id="@+id/btn_gallery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:background="@null"
+        android:foreground="?selectableItemBackground"
         android:text="Escoger de la Galería"
         android:textSize="18sp" />
 
