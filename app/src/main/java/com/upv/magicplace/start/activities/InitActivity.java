@@ -51,7 +51,7 @@ public class InitActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
 
-               switch (item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.action_search:
                 fragment = new InitFragment();
                 break;

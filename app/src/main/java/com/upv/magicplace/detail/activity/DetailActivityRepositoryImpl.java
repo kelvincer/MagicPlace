@@ -34,7 +34,7 @@ public class DetailActivityRepositoryImpl implements DetailActivityRepository {
                 if (response.isSuccessful()) {
                     DetailResponse detailResponse = response.body();
                     if (detailResponse.getStatus().equals("OK")) {
-                        post(DetailActivityEvent.GET_DETAIL, detailResponse.getResult());
+                        post(DetailActivityEvent.GET_DETAIL_SUCCESS, detailResponse.getResult());
                     } else {
                         post(DetailActivityEvent.GET_DETAIL_ERROR, detailResponse.getStatus());
                     }

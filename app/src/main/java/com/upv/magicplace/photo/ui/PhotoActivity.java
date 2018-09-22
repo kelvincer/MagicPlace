@@ -174,11 +174,6 @@ public class PhotoActivity extends AppCompatActivity implements PhotoView {
         photoPresenter.onDestroy();
         if (imgFile != null) {
             boolean b = imgFile.delete();
-            if (b) {
-                Toast.makeText(this, "FILE DELETED", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "FILE NOT DELETED", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
@@ -205,14 +200,12 @@ public class PhotoActivity extends AppCompatActivity implements PhotoView {
 
             case R.id.fire_share_photo:
                 shareImage();
-                Toast.makeText(getApplicationContext(), "SHARE FIRE", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fire_delete_photo:
                 deletePhoto();
                 break;
             case R.id.share:
                 shareImage();
-                Toast.makeText(this, "SHARE", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -231,7 +224,7 @@ public class PhotoActivity extends AppCompatActivity implements PhotoView {
         if (uri != null) {
             shareImageUri(uri);
         } else {
-            Toast.makeText(this, "Uri Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error en compartir", Toast.LENGTH_SHORT).show();
         }
     }
 

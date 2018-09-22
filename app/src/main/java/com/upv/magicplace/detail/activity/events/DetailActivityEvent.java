@@ -10,7 +10,7 @@ public class DetailActivityEvent {
 
     private String message;
 
-    public static final int GET_DETAIL = 0;
+    public static final int GET_DETAIL_SUCCESS = 0;
     public static final int GET_DETAIL_ERROR = 1;
 
     public int getType() {

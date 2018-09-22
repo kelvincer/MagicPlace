@@ -29,7 +29,6 @@ public class ListFavouritesActivity extends AppCompatActivity implements ListFav
     ListFavouriteAdapter adapter;
     @BindView(R.id.ryv_list_favourites)
     RecyclerView ryvListFavourites;
-
     @Inject
     ListFavouritePresenter presenter;
 
@@ -77,7 +76,6 @@ public class ListFavouritesActivity extends AppCompatActivity implements ListFav
 
     @Override
     public void onDeleteItemClickListener(FavouritePlaceModel model) {
-        Toast.makeText(this, "DELETE", Toast.LENGTH_SHORT).show();
         presenter.deleteFavouritePlace(model);
     }
 

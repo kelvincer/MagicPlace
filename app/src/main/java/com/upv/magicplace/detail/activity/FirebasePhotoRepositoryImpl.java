@@ -38,32 +38,6 @@ public class FirebasePhotoRepositoryImpl implements FirebasePhotoRepository {
 
         UploadTask uploadTask = imageRef.putBytes(data);
 
-        /*imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Log.d(TAG, uri.toString());
-                Map<String, Object> datos = new HashMap<>();
-                datos.put("url", uri.toString());
-                FirebaseFirestore.getInstance()
-                        .collection("images")
-                        .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .collection(placeId)
-                        .document("fotos")
-                        .set(datos).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "UPLOAD DATA TO FIRESTORE SUCCESS");
-                        post(HighlightEvent.ON_SUCCESS_UPLOAD_PHOTO);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                        Log.d(TAG, "UPLOAD DATA TO FIRESTORE FAILURE");
-                    }
-                });
-            }
-        });*/
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
@@ -91,14 +65,14 @@ public class FirebasePhotoRepositoryImpl implements FirebasePhotoRepository {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.d(TAG, "UPLOAD DATA TO FIRESTORE SUCCESS");
-                                post(FirebasePhotoEvent.ON_SUCCESS_UPLOAD_PHOTO, "Success upload");
+                                post(FirebasePhotoEvent.ON_SUCCESS_UPLOAD_PHOTO, "Foto subido exitosamente");
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 e.printStackTrace();
                                 post(FirebasePhotoEvent.ERROR, e.getMessage());
-                                Log.d(TAG, "UPLOAD DATA TO FIRESTORE FAILURE");
+                                Log.d(TAG, "Error en subir foto");
                             }
                         });
                     }

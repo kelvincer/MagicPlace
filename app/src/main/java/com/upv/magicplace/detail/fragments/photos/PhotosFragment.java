@@ -16,21 +16,22 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.upv.magicplace.CommonHelper;
+import com.upv.magicplace.R;
 import com.upv.magicplace.app.MainApplication;
 import com.upv.magicplace.detail.activity.di.DetailApiModule;
 import com.upv.magicplace.detail.activity.di.DetailModule;
 import com.upv.magicplace.detail.activity.ui.DetailActivity;
-import com.upv.magicplace.detail.fragments.GridSpacingItemDecoration;
-import com.upv.magicplace.detail.fragments.photos.adapters.PhotosAdapter;
-import com.upv.magicplace.photo.ui.PhotoActivity;
-import com.upv.magicplace.R;
 import com.upv.magicplace.detail.entities.Photo;
 import com.upv.magicplace.detail.entities.Result;
+import com.upv.magicplace.detail.fragments.GridSpacingItemDecoration;
 import com.upv.magicplace.detail.fragments.listener.PhotoClickListener;
+import com.upv.magicplace.detail.fragments.photos.adapters.PhotosAdapter;
 import com.upv.magicplace.lib.ImageLoader;
+import com.upv.magicplace.photo.ui.PhotoActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -52,6 +53,8 @@ public class PhotosFragment extends Fragment implements PhotoClickListener {
     Map<String, Drawable> drawableMap;
     @BindView(R.id.rcv_photos)
     RecyclerView rcvPhotos;
+    @BindView(R.id.txv_info)
+    TextView txvInfo;
     Result result;
     @Inject
     ImageLoader imageLoader;
@@ -88,8 +91,10 @@ public class PhotosFragment extends Fragment implements PhotoClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         if (result.getPhotos() == null || result.getPhotos().size() == 0) {
-            Toast.makeText(getContext(), "No tiene fotos este lugar", Toast.LENGTH_SHORT).show();
+            txvInfo.setVisibility(View.VISIBLE);
             return;
+        } else {
+            txvInfo.setVisibility(View.GONE);
         }
 
         rcvPhotos.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));

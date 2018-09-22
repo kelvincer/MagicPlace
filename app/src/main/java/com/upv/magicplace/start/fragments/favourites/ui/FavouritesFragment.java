@@ -109,8 +109,6 @@ public class FavouritesFragment extends Fragment implements FavouritesFragmentVi
 
     @Override
     public void onItemClickListener(CategoryModel model) {
-        Toast.makeText(getContext(), model.getType_name(), Toast.LENGTH_SHORT).show();
-
         startActivity(new Intent(getContext(), ListFavouritesActivity.class)
                 .putExtra(CommonHelper.CATEGORY, model));
     }

@@ -64,10 +64,12 @@ public class DetailActivityPresenterImpl implements DetailActivityPresenter {
     public void onEventApiThread(DetailActivityEvent event) {
         switch (event.getType()) {
 
-            case DetailActivityEvent.GET_DETAIL:
+            case DetailActivityEvent.GET_DETAIL_SUCCESS:
+                detailActivityView.hideProgressBar();
                 detailActivityView.setResult(event.getData());
                 break;
             case DetailActivityEvent.GET_DETAIL_ERROR:
+                detailActivityView.hideProgressBar();
                 detailActivityView.showMessage(event.getMessage());
                 break;
         }

@@ -45,7 +45,6 @@ public class NoteFragmentPresenterImpl implements NoteFragmentPresenter {
                 noteFragmentView.showMessage(event.getMessage());
                 break;
             case NoteFragEvent.NO_COMMENTS:
-                noteFragmentView.showMessage(event.getMessage());
                 break;
         }
     }

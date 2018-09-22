@@ -49,7 +49,7 @@ public class HighlightPresenterImpl implements HighlightPresenter {
                 highlightView.loadFavoritePhotos();
                 break;
             case HighlightEvent.NO_PHOTOS:
-                highlightView.showMessage(event.getMessage());
+
                 break;
         }
     }

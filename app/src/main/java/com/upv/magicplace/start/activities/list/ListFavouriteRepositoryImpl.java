@@ -102,7 +102,7 @@ public class ListFavouriteRepositoryImpl implements ListFavouriteRepository {
             @Override
             public void onFailure(@NonNull Exception e) {
                 e.printStackTrace();
-                postEvent(ListFavouriteEvent.ON_ERROR, "Error al eliminar");
+                postEvent(ListFavouriteEvent.ON_ERROR, "Error al eliminar favorito");
             }
         });
     }

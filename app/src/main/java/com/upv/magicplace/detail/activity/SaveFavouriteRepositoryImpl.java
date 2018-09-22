@@ -56,13 +56,13 @@ public class SaveFavouriteRepositoryImpl implements SaveFavouriteRepository {
                         .set(datos).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        postEvent(SaveFavouriteEvent.ON_SUCCESS, "success save favourite");
+                        postEvent(SaveFavouriteEvent.ON_SUCCESS, "Agregado a favoritos");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         e.printStackTrace();
-                        postEvent(SaveFavouriteEvent.ON_ERROR, "failure save favourite");
+                        postEvent(SaveFavouriteEvent.ON_ERROR, "Error en favoritos");
                     }
                 });
             }
@@ -70,7 +70,7 @@ public class SaveFavouriteRepositoryImpl implements SaveFavouriteRepository {
             @Override
             public void onFailure(@NonNull Exception e) {
                 e.printStackTrace();
-                postEvent(SaveFavouriteEvent.ON_ERROR, "failure save favourite");
+                postEvent(SaveFavouriteEvent.ON_ERROR, "Error en favoritos");
             }
         });
     }

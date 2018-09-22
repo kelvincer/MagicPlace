@@ -93,7 +93,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
         Intent intent = getIntent();
         String place_id = intent.getStringExtra(CommonHelper.PLACE_ID);
-        Toast.makeText(this, place_id, Toast.LENGTH_SHORT).show();
 
         setupTabLayout();
         setupInjection();
@@ -272,7 +271,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
 
     @Override
     public void hideProgressBar() {
-
+        pgbDetail.setVisibility(View.GONE);
     }
 
     @Override
@@ -296,6 +295,7 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
         }
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), pageTitle.length, result, imageLoader);
         pager.setAdapter(adapter);
+        pager.setVisibility(View.VISIBLE);
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             presenter.checkIfFavourite(result);
@@ -307,8 +307,6 @@ public class DetailActivity extends AppCompatActivity implements DetailActivityV
     @Override
     public void seFavourite(boolean isFavourite) {
         setupSpeedDial(isFavourite);
-        pgbDetail.setVisibility(View.GONE);
-        pager.setVisibility(View.VISIBLE);
     }
 
     private void setupActionBar(Result result) {
