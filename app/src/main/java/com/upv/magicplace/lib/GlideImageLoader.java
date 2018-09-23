@@ -150,4 +150,11 @@ public class GlideImageLoader implements ImageLoader {
                     }
                 });
     }
+
+    @Override
+    public void loadFromResource(ImageView imageView) {
+        Glide.with(imageView)
+                .load(R.drawable.background_blur)
+                .into(imageView);
+    }
 }

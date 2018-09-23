@@ -22,7 +22,7 @@ import static android.content.Context.LOCATION_SERVICE;
 public class ApiLocationManager implements LocationListener {
 
     private static final String TAG = ApiLocationManager.class.getSimpleName();
-    private static final long TIEMPO_MIN = 30 * 1000; // 30 segundos
+    private static final long TIEMPO_MIN = 20 * 1000; // 30 segundos
     private static final long DISTANCIA_MIN = 1; // 1 metros
     private static final String[] A = {"n/d", "preciso", "impreciso"};
     private static final String[] P = {"n/d", "bajo", "medio", "alto"};

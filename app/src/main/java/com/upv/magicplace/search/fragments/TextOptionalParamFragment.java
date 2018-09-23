@@ -136,6 +136,9 @@ public class TextOptionalParamFragment extends Fragment implements View.OnClickL
             @Override
             public void afterTextChanged(Editable s) {
 
+                if (s.toString().length() < 3)
+                    return;
+
                 if (!s.toString().isEmpty()) {
                     CommonHelper.radius = s.toString();
                     if (CommonHelper.location == null) {
@@ -194,7 +197,6 @@ public class TextOptionalParamFragment extends Fragment implements View.OnClickL
                     CommonHelper.minprice = textBelowTick;
                     newSearch();
                 } else {
-                    Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -220,7 +222,7 @@ public class TextOptionalParamFragment extends Fragment implements View.OnClickL
         if (CommonHelper.MY_LOCATION != null) {
             etxLocation.setText(String.format("%1$.5f,%2$.5f", CommonHelper.MY_LOCATION.getLatitude(), CommonHelper.MY_LOCATION.getLongitude()));
         } else {
-            Toast.makeText(getActivity(), "MY LOCATION IS NULL", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "No es posible ubicarte", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -228,8 +230,6 @@ public class TextOptionalParamFragment extends Fragment implements View.OnClickL
 
         if (CommonHelper.QUERY != null) {
             ((SearchActivity) getActivity()).newSearch(CommonHelper.QUERY);
-        } else {
-            Toast.makeText(getActivity(), "QUERY IS NULL", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -38,7 +38,7 @@ public class SearchActivityPresenterImpl implements SearchActivityPresenter {
     public void newSearch(String query) {
         searchActivityView.clearData();
         searchActivityView.hideInfoText();
-        searchActivityView.hideKeyboard();
+        //searchActivityView.hideKeyboard();
         searchActivityView.showProgressBar();
         searchActivityInteractor.execute(query);
     }

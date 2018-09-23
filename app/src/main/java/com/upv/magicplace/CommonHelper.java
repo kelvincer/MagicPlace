@@ -20,7 +20,6 @@ public class CommonHelper {
     public static final String FROM_ACTIVITY = "from_activity";
     public static Location MY_LOCATION;
     public static Location SEARCH_QUERY_LOCATION;
-    public static int SOURCE_MODE = 1;
     public static int SEARCH_MODE = 1;
 
     //required parameters

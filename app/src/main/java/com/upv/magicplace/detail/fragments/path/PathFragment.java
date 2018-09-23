@@ -54,7 +54,7 @@ public class PathFragment extends Fragment implements OnMapReadyCallback, Locati
     SupportMapFragment mapFragment;
     LatLng destino;
     boolean loadRoute = false;
-    float mapZoom = 18f;
+    float mapZoom = 12f;
     Result result;
     ApiLocationManager locationManager;
 
@@ -102,12 +102,6 @@ public class PathFragment extends Fragment implements OnMapReadyCallback, Locati
             setPathAndPosition();
             loadRoute = true;
         }
-        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
-            @Override
-            public void onCameraIdle() {
-                mapZoom = mMap.getCameraPosition().zoom;
-            }
-        });
     }
 
     @Override
@@ -147,6 +141,12 @@ public class PathFragment extends Fragment implements OnMapReadyCallback, Locati
         options.position(myPosition);
         options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
         mMap.addMarker(options.position(myPosition).title("Mi posición"));
+        mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                mapZoom = mMap.getCameraPosition().zoom;
+            }
+        });
     }
 
     private void traceRoute() {

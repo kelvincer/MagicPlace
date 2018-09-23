@@ -17,7 +17,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -44,12 +43,7 @@ import com.upv.magicplace.search.activity.adapters.OnItemClickListener;
 import com.upv.magicplace.search.activity.adapters.RecyclerViewResultAdapter;
 import com.upv.magicplace.search.activity.di.SearchActivityModule;
 import com.upv.magicplace.search.entities.Result;
-import com.upv.magicplace.search.fragments.filter.SideFilterFragment;
-import com.upv.magicplace.location.ApiLocationManager;
-import com.upv.magicplace.location.LocationCallback;
-import com.upv.magicplace.search.activity.adapters.OnItemClickListener;
-import com.upv.magicplace.search.activity.adapters.RecyclerViewResultAdapter;
-import com.upv.magicplace.search.entities.Result;
+import com.upv.magicplace.search.fragments.SideFilterFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -184,11 +178,6 @@ public class SearchActivity extends AppCompatActivity implements
 
     private void setupInjection() {
 
-        /*DaggerSearchActivityComponent.builder()
-                .libsModule(new LibsModule(this))
-                .searchActivityModule(new SearchActivityModule(this, this))
-                .build()
-                .inject(this);*/
         MainApplication.getAppComponent()
                 .newSearchActivityComponent(new SearchActivityModule(this, this))
                 .inject(this);
@@ -205,8 +194,6 @@ public class SearchActivity extends AppCompatActivity implements
 
                 if (CommonHelper.NEXT_PAGE_TOKEN != null) {
                     getNextTokenResult();
-                } else {
-                    Toast.makeText(SearchActivity.this, "TOKEN == NULL", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -250,20 +237,25 @@ public class SearchActivity extends AppCompatActivity implements
                             return false;
                         }
                         newSearch(searchTextView.getText().toString());
+                        hideKeyboard();
                         return true;
                     } else if (CommonHelper.SEARCH_MODE == 2) {
 
-                        if (!isValidLocationInput(searchTextView.getText().toString()))
+                        if (!isValidLocationInput(searchTextView.getText().toString())) {
+                            Toast.makeText(SearchActivity.this, "Entrada no válida", Toast.LENGTH_SHORT).show();
                             return false;
+                        }
+
                         saveQueryLocation();
                         newSearch(searchTextView.getText().toString());
+                        hideKeyboard();
                         return true;
                     }
                 }
                 return false;
             }
         });
-        searchTextView.setText("restaurants in new York");
+
         actionEmptyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,6 +269,27 @@ public class SearchActivity extends AppCompatActivity implements
             }
         });
         searchTextView.setSelection(searchTextView.getText().length());
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                Helper.hideKeyboard(getApplicationContext(), drawerLayout.getWindowToken());
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     private void saveQueryLocation() {
@@ -306,8 +319,9 @@ public class SearchActivity extends AppCompatActivity implements
 
     @Override
     public void updatePlaces(List<Result> data) {
-        if (CommonHelper.SEARCH_MODE == 2)
-            placesRecycler.requestFocus();
+        if (CommonHelper.SEARCH_MODE == 2) {
+            searchTextView.clearFocus();
+        }
         adapter.updateData(data);
     }
 
@@ -380,16 +394,6 @@ public class SearchActivity extends AppCompatActivity implements
         CommonHelper.minprice = null;
     }
 
-    /*private void newSearch() {
-
-        Log.d(TAG, "query " + CommonHelper.QUERY);
-        if (CommonHelper.QUERY != null) {
-            newSearch(CommonHelper.QUERY);
-        } else {
-            Toast.makeText(getApplicationContext(), "QUERY IS NULL", Toast.LENGTH_SHORT).show();
-        }
-    }*/
-
     @Override
     public void onItemClick(String placeId) {
 
@@ -400,7 +404,7 @@ public class SearchActivity extends AppCompatActivity implements
 
     public void newSearch(String currentQuery) {
 
-        if(!Helper.isNetworkAvailable(this)){
+        if (!Helper.isNetworkAvailable(this)) {
             Toast.makeText(this, "No tienes conexión a la red", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -419,19 +423,17 @@ public class SearchActivity extends AppCompatActivity implements
 
     public void changeSearchBarHint() {
         if (CommonHelper.SEARCH_MODE == 1) {
-            searchTextView.setText("restaurants in new york");
-            searchTextView.setSelection(searchTextView.getText().length());
-            /*searchTextView.setInputType(InputType.TYPE_CLASS_TEXT);
-            searchTextView.setSingleLine();
-            searchTextView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);*/
-            //searchTextView.setEnabled(true);
-        } else if (CommonHelper.SEARCH_MODE == 2) {
-            searchTextView.setText("40.730610,-73.935242");
-            searchTextView.setSelection(searchTextView.getText().length());
-            placesRecycler.requestFocus();
+            //searchTextView.setText("restaurants in new york");
             //searchTextView.setSelection(searchTextView.getText().length());
-            //searchTextView.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-            //searchTextView.setKeyListener(DigitsKeyListener.getInstance("0123456789.,-"));
+            searchTextView.setText(null);
+        } else if (CommonHelper.SEARCH_MODE == 2) {
+            if (CommonHelper.MY_LOCATION != null) {
+                searchTextView.setText(String.format("%1$.6f,%2$.6f", CommonHelper.MY_LOCATION.getLatitude(), CommonHelper.MY_LOCATION.getLongitude()));
+                //searchTextView.setSelection(searchTextView.getText().length());
+                searchTextView.clearFocus();
+            } else {
+                Toast.makeText(this, "No es posible ubicarte", Toast.LENGTH_LONG).show();
+            }
         } else {
             throw new IllegalArgumentException("Invalid search mode");
         }

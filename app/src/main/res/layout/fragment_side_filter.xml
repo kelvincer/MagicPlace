@@ -8,7 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:padding="4dp"
-    tools:context=".search.fragments.filter.SideFilterFragment">
+    tools:context=".search.fragments.SideFilterFragment">
 
 
     <LinearLayout

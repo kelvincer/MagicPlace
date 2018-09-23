@@ -1,4 +1,4 @@
-package com.upv.magicplace.search.fragments.filter;
+package com.upv.magicplace.search.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -12,11 +12,6 @@ import android.widget.RadioGroup;
 import com.upv.magicplace.CommonHelper;
 import com.upv.magicplace.R;
 import com.upv.magicplace.search.activity.ui.SearchActivity;
-import com.upv.magicplace.search.fragments.LocOptionalParamFragment;
-import com.upv.magicplace.search.fragments.TextOptionalParamFragment;
-import com.upv.magicplace.search.activity.ui.SearchActivity;
-import com.upv.magicplace.search.fragments.LocOptionalParamFragment;
-import com.upv.magicplace.search.fragments.TextOptionalParamFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

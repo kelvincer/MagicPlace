@@ -23,4 +23,6 @@ public interface ImageLoader {
     void setOnFinishedImageLoadingListener(Object object);
 
     void load(ImageView imageView, CollapsingToolbarLayout collapsingToolbarLayout, String url);
+
+    void loadFromResource(ImageView imageView);
 }

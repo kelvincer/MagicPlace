@@ -96,6 +96,8 @@ public class RecyclerViewResultAdapter extends RecyclerView.Adapter<RecyclerView
                     if (!result.getPhotos().isEmpty()) {
                         imageLoader.load(igvPhotoItem, Helper.generateUrl(result.getPhotos().get(0).getPhotoReference()));
                     }
+                } else {
+                    imageLoader.loadFromResource(igvPhotoItem);
                 }
 
             } else if (CommonHelper.SEARCH_MODE == 2) {
@@ -105,6 +107,8 @@ public class RecyclerViewResultAdapter extends RecyclerView.Adapter<RecyclerView
                     if (!result.getPhotos().isEmpty()) {
                         imageLoader.load(igvPhotoItem, Helper.generateUrl(result.getPhotos().get(0).getPhotoReference()));
                     }
+                } else {
+                    imageLoader.loadFromResource(igvPhotoItem);
                 }
             } else {
                 throw new RuntimeException("Illegal SEARCH_MODE");

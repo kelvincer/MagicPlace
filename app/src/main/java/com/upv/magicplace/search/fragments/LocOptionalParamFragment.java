@@ -82,6 +82,10 @@ public class LocOptionalParamFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                if (s.toString().length() < 3)
+                    return;
+
                 if (s.toString().isEmpty()) {
                     CommonHelper.radius = null;
                     if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
@@ -112,6 +116,10 @@ public class LocOptionalParamFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                if (s.toString().length() <= 3)
+                    return;
+
                 if (s.toString().isEmpty()) {
                     CommonHelper.KEYWORD = null;
                     if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
@@ -223,7 +231,6 @@ public class LocOptionalParamFragment extends Fragment {
                     Toast.makeText(getActivity(), textBelowTick, Toast.LENGTH_SHORT).show();
                     CommonHelper.minprice = textBelowTick;
                 } else {
-                    Toast.makeText(getActivity(), "null", Toast.LENGTH_SHORT).show();
                 }
                 if (CommonHelper.RANKYBY.equalsIgnoreCase("prominence")) {
                     newSearchWithRadius();
@@ -253,8 +260,6 @@ public class LocOptionalParamFragment extends Fragment {
 
         if (CommonHelper.QUERY != null) {
             ((SearchActivity) getActivity()).newSearch(CommonHelper.QUERY);
-        } else {
-            Toast.makeText(getActivity(), "QUERY IS NULL", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -262,8 +267,6 @@ public class LocOptionalParamFragment extends Fragment {
 
         if (CommonHelper.QUERY != null) {
             ((SearchActivity) getActivity()).newSearch(CommonHelper.QUERY);
-        } else {
-            Toast.makeText(getActivity(), "QUERY IS NULL", Toast.LENGTH_SHORT).show();
         }
     }
 }
