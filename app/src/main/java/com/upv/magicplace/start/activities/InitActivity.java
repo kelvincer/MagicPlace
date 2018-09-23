@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.crashlytics.android.Crashlytics;
 import com.upv.magicplace.R;
 import com.upv.magicplace.start.fragments.AccountFragment;
 import com.upv.magicplace.start.fragments.favourites.ui.FavouritesFragment;
@@ -24,7 +25,6 @@ public class InitActivity extends AppCompatActivity implements BottomNavigationV
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigation;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
