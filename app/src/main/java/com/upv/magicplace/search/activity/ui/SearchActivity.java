@@ -89,7 +89,7 @@ public class SearchActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_demo);
+        setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
 
         initVariables();
