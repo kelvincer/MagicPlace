@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="fab_photo_label" type="id">1</item>
-    <item name="fab_note_label" type="id">2</item>
-    <item name="fab_favorite_label" type="id">3</item>
+    <item name="fab_photo_label" type="id"/>
+    <item name="fab_note_label" type="id"/>
+    <item name="fab_favorite_label" type="id"/>
 </resources>
